@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/home"
+        android:title="Home"
+        android:color="@color/white">
+    </item>
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/search"
+        android:title="Search"
+        android:color="@color/white">
+    </item>
+
+    <item
+        android:id="@+id/community"
+        android:icon="@drawable/community"
+        android:title="Community"
+        android:color="@color/white">
+    </item>
+
+    <item
+        android:id="@+id/notification"
+        android:icon="@drawable/bell"
+        android:title="Notification"
+        android:color="@color/white">
+    </item>
+
+    <item
+        android:id="@+id/mail"
+        android:icon="@drawable/mail"
+        android:title="Mail"
+        android:color="@color/white">
+    </item>
+
+</menu>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:background="@color/black">
+
+
+    <!-- Profile Image -->
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/avatar" />
+
+    <!-- Tweet Content -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- Username and Timestamp -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Username -->
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Elon Mút"
+                android:textStyle="bold"
+                android:textColor="@color/white" />
+
+            <!-- Timestamp -->
+            <TextView
+                android:id="@+id/timestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="• 2h"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <!-- Tweet Text -->
+        <TextView
+            android:id="@+id/tweet_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="This is an example tweet with long content to test scrolling in the feed"
+            tools:ignore="HardcodedText">
+        </TextView>
+
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,10 @@
+<resources>
+    <style name="BottomNavigationViewStyle" parent="Widget.Design.BottomNavigationView">
+        <item name="itemTextAppearanceActive">@style/BottomNavigationViewTextStyle</item>
+        <item name="itemTextAppearanceInactive">@style/BottomNavigationViewTextStyle</item>
+    </style>
+
+    <style name="BottomNavigationViewTextStyle">
+        <item name="android:textSize">0sp</item>
+    </style>
+</resources>
