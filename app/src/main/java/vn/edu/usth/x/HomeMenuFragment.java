@@ -44,8 +44,8 @@ public class HomeMenuFragment extends Fragment {
     private List<Tweet> getTweetData() {
         // Return a list of tweets
         return Arrays.asList(
-                new Tweet("Elon Mút", "This is an example tweet with long content to test scrolling in the feed"),
-                new Tweet("Jeff Bezos", "I'm stepping down as CEO of Amazon to spend more time with my rocket")
+                new Tweet( R.drawable.avatar,"Elon Musk", "elonmusk", "Doge",  "2h",R.drawable.avatar),
+                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", R.drawable.johnnysins)
         );
     }
 }
