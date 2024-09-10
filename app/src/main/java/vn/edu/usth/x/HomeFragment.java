@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import vn.edu.usth.x.databinding.ActivityHomeBinding;
 
-public class HomeFragment extends AppCompatActivity {
+public class    HomeFragment extends AppCompatActivity {
 
     private ActivityHomeBinding binding;
     private FrameLayout frameLayout;
