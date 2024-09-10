@@ -8,6 +8,7 @@
     tools:context=".MainActivity">
 
 
+
     <ImageView
         android:id="@+id/x_icon"
         android:layout_width="100dp"
