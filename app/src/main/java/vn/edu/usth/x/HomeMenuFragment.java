@@ -1,5 +1,7 @@
 package vn.edu.usth.x;
 
+import static java.util.Arrays.*;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -43,9 +45,10 @@ public class HomeMenuFragment extends Fragment {
     // Example method to get data for the adapter
     private List<Tweet> getTweetData() {
         // Return a list of tweets
-        return Arrays.asList(
-                new Tweet( R.drawable.avatar,"Elon Musk", "elonmusk", "Doge",  "2h",R.drawable.avatar),
-                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", R.drawable.johnnysins)
+        return asList(
+                new Tweet(R.drawable.avatar,"Elon Musk", "elonmusk", "Doge",  "2h",R.drawable.avatar),
+                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", R.drawable.johnnysins),
+                new Tweet(R.drawable.tokuda, "Tokuda", "tokuda123", "Weekend with my grandchild 🥰😘", "3h", R.drawable.tokuda)
         );
     }
 }

@@ -7,18 +7,6 @@
     tools:context=".HomeMenuFragment">
 
     <!-- Header TextView for Home Fragment -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Home Fragment"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:textColor="@color/white"
-        android:textAllCaps="true"
-        android:padding="16dp"
-        android:background="@color/black"
-        tools:ignore="HardcodedText" />
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

@@ -1,5 +1,7 @@
 package vn.edu.usth.x;
 
+import static java.sql.Types.NULL;
+
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -26,6 +28,11 @@ public class    HomeFragment extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         frameLayout = findViewById(R.id.frameLayout);
+
+        // Set default selected item
+        bottomNavigationView.setSelectedItemId(R.id.home);
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeMenuFragment()).commit();
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
