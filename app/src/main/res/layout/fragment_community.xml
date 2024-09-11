@@ -9,6 +9,13 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+    <View
+        android:id="@+id/firstgraybar"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_bar"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <Button
         android:id="@+id/btnhome"
         android:layout_width="0dp"
@@ -16,7 +23,7 @@
         android:text="Home"
         app:layout_constraintEnd_toStartOf="@+id/btnexplore"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/firstgraybar"
         app:layout_constraintWidth_percent="0.5" />
 
     <Button
@@ -26,14 +33,14 @@
         android:text="Explore"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnhome"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/firstgraybar"
         app:layout_constraintWidth_percent="0.5" />
 
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#060270"
+        android:layout_height="1dp"
+        android:background="@color/gray_bar"
         app:layout_constraintTop_toBottomOf="@+id/btnhome"
         app:layout_constraintBottom_toTopOf="@id/cm_parentfragment"/>
 
