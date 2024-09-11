@@ -1,19 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".SearchFragment"
+    android:background="@color/black"
+    android:orientation="vertical"
+    >
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Search Fragment"
-        android:textColor="@color/white"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:textAllCaps="true"
-        tools:ignore="HardcodedText" />
 
-</FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_margin="6dp"
+            android:background="@drawable/round_button"
+            android:gravity="center"
+            android:scaleType="fitCenter"
+            android:src="@drawable/avatar"
+            android:clipToOutline="true"
+            android:contentDescription="Avata"/>
+
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="253dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:clipToOutline="true"
+            android:searchIcon="@null"
+            android:background="@drawable/search_view_bg"
+            android:backgroundTint="@color/gray"
+            android:iconifiedByDefault="false"
+            android:queryHint="Search X"
+            android:queryBackground="@color/gray"
+            style="@style/CustomSearchView" />
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:src="@drawable/baseline_settings_24"
+            android:visibility="visible"
+            android:clipToOutline="true"
+            android:background="@color/transparent"
+            android:contentDescription="setting button"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.tabs.TabLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black"
+            app:tabIndicatorColor="#2BA2EA"
+            android:id="@+id/searchTabLayout"
+            app:tabSelectedTextColor="@color/white">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="For You" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trending" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="News" />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sport" />
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Entertainment" />
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/SearchViewPager"
+            />
+    </LinearLayout>
+
+</LinearLayout>

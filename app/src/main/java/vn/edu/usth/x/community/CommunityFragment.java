@@ -2,42 +2,50 @@ package vn.edu.usth.x.community;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import java.util.ArrayList;
-import java.util.Arrays;
+import android.widget.Button;
+
 import vn.edu.usth.x.R;
 
 public class CommunityFragment extends Fragment {
+    private Button btnHome,btnExplore;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_community, container, false);
 
-        // Set up the RecyclerView
-        RecyclerView recyclerView = view.findViewById(R.id.Community_recyclerView);
+        btnHome = view.findViewById(R.id.btnhome);
+        btnExplore = view.findViewById(R.id.btnexplore);
 
-        // Set a layout manager for the RecyclerView
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        loadFragment(new ExploreFragment());
 
-        // Initialize the adapter and set it to the RecyclerView
-        CommunityTweetAdapter adapter = new CommunityTweetAdapter(getTweetData());
-        recyclerView.setAdapter(adapter);
+        btnHome.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                loadFragment(new Cm_HomeFragment());
+            }
+        });
 
-        return view; // Return the inflated view
+        btnExplore.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                loadFragment(new ExploreFragment());
+            }
+        });
+
+        return view;
     }
 
-    private ArrayList<CommunityTweet> getTweetData() {
-        // Return an ArrayList of tweets
-        return new ArrayList<>(
-                Arrays.asList(
-                        new CommunityTweet("Football", R.drawable.avatar, "Elon Musk", "elonmusk", "Doge", "2h", R.drawable.avatar),
-                        new CommunityTweet("Book Club", R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", R.drawable.johnnysins)
-                )
-        );
+    private void loadFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.cm_parentfragment, fragment);
+        fragmentTransaction.commit(); // Commit the transaction
     }
 }

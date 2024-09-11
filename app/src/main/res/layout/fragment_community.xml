@@ -29,20 +29,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.5" />
 
-    <FrameLayout
+
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/btnhome">
+        android:layout_height="2dp"
+        android:background="#060270"
+        app:layout_constraintTop_toBottomOf="@+id/btnhome"
+        app:layout_constraintBottom_toTopOf="@id/cm_parentfragment"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/Community_recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="50dp"
-            android:scrollbars="vertical"
-            tools:listitem="@layout/item_community_tweet" />
-
-    </FrameLayout>
-
+    <FrameLayout
+        android:id="@+id/cm_parentfragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnhome"
+        tools:layout_editor_absoluteX="-29dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
