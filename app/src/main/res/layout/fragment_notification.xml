@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#000000"
     android:orientation="vertical"
     tools:context=".NotificationFragment">
@@ -31,7 +32,6 @@
             android:gravity="center"
             android:text="Notifications"
             android:textAlignment="center"
-            android:textAllCaps="true"
             android:textColor="#FFFFFFFF"
             android:textSize="24sp" />
 
@@ -48,111 +48,56 @@
 
     </LinearLayout>
 
-
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="16dp"
-        android:orientation="horizontal"
-        android:padding="8dp">
+        android:orientation="horizontal">
 
         <Button
-
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_background"
-            android:padding="8dp"
-            android:text="All" />
+            android:text="All"
+            android:layout_weight="1"/>
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/button_background"
-            android:padding="8dp"
-            android:text="Verified" />
+            android:text="Verified"
+            android:layout_weight="1"/>
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/button_background"
-            android:padding="8dp"
-            android:text="Mentions" />
+            android:text="Mentions"
+            android:layout_weight="1" />
 
     </LinearLayout>
-
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/darker_gray" />
 
+
+
     <!-- Recent Notifications -->
     <TextView
+        android:id="@+id/recent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:text="RECENT"
         android:textColor="#FFFFFFFF" />
 
-    <!--    <View-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="1dp"-->
-    <!--        android:background="@android:color/darker_gray"/>-->
-
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp">
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/johnnysins" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingStart="8dp"
-            android:text="You have a new follower!"
-            android:textColor="#FFFFFFFF" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2m ago"
-            android:textColor="#bfbaba" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp">
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/johnnysins" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingStart="8dp"
-            android:text="Your post received a new comment."
-            android:textColor="#FFFFFFFF" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="10m ago"
-            android:textColor="#bfbaba" />
-    </LinearLayout>
+        android:scrollbars="vertical"
+        tools:listitem="@layout/item_notification"
+        android:paddingBottom="50dp"/>
 
     <View
         android:layout_width="match_parent"
@@ -165,10 +110,6 @@
         android:padding="8dp"
         android:text="EARLIER"
         android:textColor="#FFFFFFFF" />
-    <!--    <View-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="1dp"-->
-    <!--        android:background="@android:color/darker_gray"/>-->
 
     <!-- Earlier Notifications -->
     <LinearLayout
@@ -223,6 +164,19 @@
             android:textColor="#bfbaba" />
     </LinearLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/button123"
+            android:layout_width="57dp"
+            android:layout_height="61dp"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="27dp"
+            android:backgroundTint="@color/white"
+            android:text="+"
+            android:textColor="#000000"
+            android:textSize="50px" />
+    </FrameLayout>
 </LinearLayout>
-
-

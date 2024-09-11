@@ -35,6 +35,7 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
+
         tabLayout = view.findViewById(R.id.searchTabLayout);
         viewPager2 = view.findViewById(R.id.SearchViewPager);
         searchFragmentAdapter = new SearchFragmentAdapter(requireActivity());

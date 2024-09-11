@@ -1,7 +1,6 @@
 package vn.edu.usth.x;
 
 import static java.sql.Types.NULL;
-import static java.util.Arrays.*;
 
 import android.os.Bundle;
 
@@ -17,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 // HomeMenuFragment.java
-public class HomeMenuFragment extends Fragment {
+public class NotificationMenuFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -46,10 +45,8 @@ public class HomeMenuFragment extends Fragment {
     // Example method to get data for the adapter
     private List<Tweet> getTweetData() {
         // Return a list of tweets
-        return asList(
-                new Tweet(R.drawable.avatar,"Elon Musk", "elonmusk", "Doge",  "2h",R.drawable.avatar),
-                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", R.drawable.johnnysins),
-                new Tweet(R.drawable.tokuda, "Tokuda", "tokuda123", "Weekend with my grandchild 🥰😘", "3h", R.drawable.tokuda)
+        return Arrays.asList(
+                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", NULL)
         );
     }
 }
