@@ -11,50 +11,52 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:scrollbars="none">
 
         <LinearLayout
+            style="?android:attr/buttonBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+
             <Button
                 android:id="@+id/btn_sports"
+                android:background="@drawable/button_border_custom"
                 android:layout_width="wrap_content"
+                app:backgroundTint="@null"
                 android:layout_height="wrap_content"
                 android:text="Sports"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/button_border" />
+                android:layout_marginEnd="8dp" />
 
             <Button
                 android:id="@+id/btn_technology"
+                android:background="@drawable/button_border_custom"
                 android:layout_width="wrap_content"
+                app:backgroundTint="@null"
                 android:layout_height="wrap_content"
                 android:text="Technology"
-                android:textColor="@color/gray"
-                android:background="@drawable/button_border"
                 android:layout_marginEnd="8dp" />
 
             <Button
                 android:id="@+id/btn_art"
+                android:background="@drawable/button_border_custom"
                 android:layout_width="wrap_content"
+                app:backgroundTint="@null"
                 android:layout_height="wrap_content"
                 android:text="Art"
-                android:textColor="@color/gray"
-                android:background="@drawable/button_border"
                 android:layout_marginEnd="8dp" />
 
             <Button
                 android:id="@+id/btn_entertainment"
+                android:background="@drawable/button_border_custom"
                 android:layout_width="wrap_content"
+                app:backgroundTint="@null"
                 android:layout_height="wrap_content"
                 android:text="Entertainment"
-                android:textColor="@color/gray"
-                android:background="@drawable/button_border"
                 android:layout_marginEnd="8dp" />
 
         </LinearLayout>
