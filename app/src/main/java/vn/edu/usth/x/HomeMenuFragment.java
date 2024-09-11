@@ -1,5 +1,7 @@
 package vn.edu.usth.x;
 
+import static java.sql.Types.NULL;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -45,7 +47,8 @@ public class HomeMenuFragment extends Fragment {
         // Return a list of tweets
         return Arrays.asList(
                 new Tweet( R.drawable.avatar,"Elon Musk", "elonmusk", "Doge",  "2h",R.drawable.avatar),
-                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", R.drawable.johnnysins)
+                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", R.drawable.johnnysins),
+                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", NULL)
         );
     }
 }
