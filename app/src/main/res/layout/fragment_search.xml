@@ -11,50 +11,6 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_margin="6dp"
-            android:background="@drawable/round_button"
-            android:gravity="center"
-            android:scaleType="fitCenter"
-            android:src="@drawable/avatar"
-            android:clipToOutline="true"
-            android:contentDescription="Avata"/>
-
-        <SearchView
-            android:id="@+id/searchView"
-            android:layout_width="253dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:clipToOutline="true"
-            android:searchIcon="@null"
-            android:background="@drawable/search_view_bg"
-            android:backgroundTint="@color/gray"
-            android:iconifiedByDefault="false"
-            android:queryHint="Search X"
-            android:queryBackground="@color/gray"
-            style="@style/CustomSearchView" />
-
-        <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:gravity="center"
-            android:src="@drawable/baseline_settings_24"
-            android:visibility="visible"
-            android:clipToOutline="true"
-            android:background="@color/transparent"
-            android:contentDescription="setting button"/>
-
-    </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

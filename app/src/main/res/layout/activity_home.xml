@@ -14,32 +14,10 @@
         android:orientation="vertical">
 
         <FrameLayout
+            android:paddingTop="5dp"
             android:id="@+id/home_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize">
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/avatar"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_gravity="center|start"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/avatar" />
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/x_icon"
-                android:layout_gravity="center|center_vertical"
-                tools:ignore="ContentDescription">
-            </ImageView>
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center|end"
-                android:layout_margin="5dp"
-                android:src="@drawable/threedot_icon"
-                app:tint="@color/white" >
-            </ImageView>
-
         </FrameLayout>
 
 

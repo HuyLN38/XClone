@@ -1,7 +1,5 @@
 package vn.edu.usth.x;
 
-import static java.sql.Types.NULL;
-
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -31,7 +29,8 @@ public class HomeFragment extends AppCompatActivity {
 
         // Set default selected item
         bottomNavigationView.setSelectedItemId(R.id.home);
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeMenuFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeMenuFragment()).commitNow();
+        replaceTopBar(R.layout.fragment_home_top_bar);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -40,23 +39,31 @@ public class HomeFragment extends AppCompatActivity {
                 bottomNavigationView.setItemIconTintList(null);
 
                 if (id == R.id.home) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeMenuFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeMenuFragment()).commitNow();
+                    replaceTopBar(R.layout.fragment_home_top_bar);
                     return true;
                 } else if (id == R.id.search) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new SearchFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new SearchFragment()).commitNow();
+                    replaceTopBar(R.layout.fragment_search_top_bar);
                     return true;
                 } else if (id == R.id.notification) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new NotificationFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new NotificationFragment()).commitNow();
                     return true;
                 } else if (id == R.id.mail) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new InboxFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new InboxFragment()).commitNow();
                     return true;
                 } else if (id == R.id.community) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new CommunityFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new CommunityFragment()).commitNow();
                     return true;
                 }
                 return false;
             }
         });
+    }
+
+    private void replaceTopBar(int layoutId) {
+        FrameLayout topBar = findViewById(R.id.home_toolbar);
+        topBar.removeAllViews(); // Clear previous views
+        getLayoutInflater().inflate(layoutId, topBar, true);
     }
 }
