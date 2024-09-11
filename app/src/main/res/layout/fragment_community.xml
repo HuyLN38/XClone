@@ -5,51 +5,52 @@
     android:id="@+id/community_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".community.CommunityFragment">
+    tools:context=".CommunityPage.CommunityFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
     <View
-        android:id="@+id/firstgraybar"
+        android:id="@+id/first_gray_bar"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/gray_bar"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <Button
-        android:id="@+id/btnhome"
-        android:layout_width="0dp"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/CommunityTabLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Home"
-        app:layout_constraintEnd_toStartOf="@+id/btnexplore"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/firstgraybar"
-        app:layout_constraintWidth_percent="0.5" />
+        android:background="@color/black"
+        app:layout_constraintTop_toTopOf="@+id/first_gray_bar"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="#2BA2EA"
+        app:tabSelectedTextColor="@color/white"
+        app:tabMode="fixed">
 
-    <Button
-        android:id="@+id/btnexplore"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Explore"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnhome"
-        app:layout_constraintTop_toBottomOf="@+id/firstgraybar"
-        app:layout_constraintWidth_percent="0.5" />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Home" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Explore" />
+    </com.google.android.material.tabs.TabLayout>
 
 
     <View
+        android:id="@+id/second_gray_bar"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/gray_bar"
-        app:layout_constraintTop_toBottomOf="@+id/btnhome"
-        app:layout_constraintBottom_toTopOf="@id/cm_parentfragment"/>
+        app:layout_constraintTop_toBottomOf="@+id/CommunityTabLayout" />
 
-    <FrameLayout
-        android:id="@+id/cm_parentfragment"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/CommunityViewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnhome"
-        tools:layout_editor_absoluteX="-29dp" />
+        app:layout_constraintTop_toBottomOf="@+id/second_gray_bar"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

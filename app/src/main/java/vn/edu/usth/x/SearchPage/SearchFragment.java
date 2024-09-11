@@ -1,27 +1,20 @@
-package vn.edu.usth.x;
+package vn.edu.usth.x.SearchPage;
 
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
 
-import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 
 import java.util.Objects;
 
 import vn.edu.usth.x.R;
-import vn.edu.usth.x.SearchFragmentAdapter;
 
 public class SearchFragment extends Fragment {
 

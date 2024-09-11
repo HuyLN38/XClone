@@ -1,4 +1,4 @@
-package vn.edu.usth.x.community;
+package vn.edu.usth.x.CommunityPage;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;

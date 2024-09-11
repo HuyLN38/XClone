@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/PageEntertainment"
@@ -7,17 +7,13 @@
     android:layout_height="match_parent"
     android:background="@color/black"
     android:orientation="vertical"
-    tools:context=".PageEntertainment">
+    tools:context=".SearchPage.PageEntertainment">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -35,12 +31,12 @@
                         android:layout_height="wrap_content"
                         android:text="Only on X Trending"
                         android:textColor="#808080"
-                        android:textSize="10sp" />
+                        android:textSize="10sp"
+                        tools:ignore="SmallSp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
                         android:text="Yagi"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
@@ -48,7 +44,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
                         android:text="39.6K post"
                         android:textColor="#808080"
                         android:textSize="10sp" />
@@ -57,10 +52,10 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_margin="5dp"
                     android:src="@drawable/threedot_icon"
-                    app:tint="@color/white"/>
+                    app:tint="@color/white" />
 
             </RelativeLayout>
 
@@ -84,7 +79,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
                         android:text="Yagi"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
@@ -92,7 +86,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
                         android:text="39.6K post"
                         android:textColor="#808080"
                         android:textSize="10sp" />
@@ -101,10 +94,10 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_margin="5dp"
                     android:src="@drawable/threedot_icon"
-                    app:tint="@color/white"/>
+                    app:tint="@color/white" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -127,7 +120,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
                         android:text="Yagi"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
@@ -135,7 +127,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
                         android:text="39.6K post"
                         android:textColor="#808080"
                         android:textSize="10sp" />
@@ -144,10 +135,10 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_margin="5dp"
                     android:src="@drawable/threedot_icon"
-                    app:tint="@color/white"/>
+                    app:tint="@color/white" />
             </RelativeLayout>
 
             <TextView
@@ -158,16 +149,14 @@
                 android:padding="10dp"
                 android:text="Show more"
                 android:textColor="#2BA2EA"
-                android:textSize="10sp"
-                />
+                android:textSize="10sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:orientation="vertical"
-                android:background="@color/gray">
-            </LinearLayout>
+                android:background="@color/gray"
+                android:orientation="vertical" />
 
         </LinearLayout>
 
-    </ScrollView>
-</LinearLayout>
+</ScrollView>

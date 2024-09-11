@@ -1,4 +1,4 @@
-package vn.edu.usth.x.community;
+package vn.edu.usth.x.CommunityPage;
 
 public class CommunityTweet {
     private String community;

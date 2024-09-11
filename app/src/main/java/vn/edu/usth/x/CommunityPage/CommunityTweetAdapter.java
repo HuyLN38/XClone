@@ -1,6 +1,5 @@
-package vn.edu.usth.x.community;
+package vn.edu.usth.x.CommunityPage;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import vn.edu.usth.x.R;
+
 
 public class CommunityTweetAdapter extends RecyclerView.Adapter<CommunityTweetAdapter.MyCommunityHolder> {
     private ArrayList<CommunityTweet> communityList;
