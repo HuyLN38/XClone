@@ -238,14 +238,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-<<<<<<< HEAD
             android:src="@drawable/direct_msg"/>
     </RelativeLayout>
-
-=======
-            android:src="@drawable/direct_msg" />
-    </RelativeLayout>
->>>>>>> d044c0b8e23123e8c132e55c1efa8ce4b5280753
-
 
 </LinearLayout>
