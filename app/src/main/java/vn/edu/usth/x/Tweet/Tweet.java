@@ -1,4 +1,4 @@
-package vn.edu.usth.x;
+package vn.edu.usth.x.Tweet;
 
 // Tweet.java
 public class Tweet {

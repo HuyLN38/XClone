@@ -1,4 +1,4 @@
-package vn.edu.usth.x;
+package vn.edu.usth.x.HomePage;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import vn.edu.usth.x.R;
 
 public class HomeTopBar extends Fragment {
     @Override

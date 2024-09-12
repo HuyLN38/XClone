@@ -1,7 +1,5 @@
-package vn.edu.usth.x;
+package vn.edu.usth.x.Tweet;
 
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
@@ -11,10 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.time.Instant;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import vn.edu.usth.x.R;
 
 // TweetAdapter.java
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHolder> {

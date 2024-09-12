@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import vn.edu.usth.x.CommunityPage.CommunityFragment;
+import vn.edu.usth.x.HomePage.HomeMenuFragment;
+import vn.edu.usth.x.InboxPage.InboxFragment;
+import vn.edu.usth.x.NotificationPage.NotificationFragment;
 import vn.edu.usth.x.SearchPage.SearchFragment;
 import vn.edu.usth.x.databinding.ActivityHomeBinding;
 

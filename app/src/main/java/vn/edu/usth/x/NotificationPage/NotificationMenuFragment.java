@@ -1,4 +1,4 @@
-package vn.edu.usth.x;
+package vn.edu.usth.x.NotificationPage;
 
 import static java.sql.Types.NULL;
 
@@ -14,6 +14,10 @@ import android.view.ViewGroup;
 
 import java.util.Arrays;
 import java.util.List;
+
+import vn.edu.usth.x.R;
+import vn.edu.usth.x.Tweet.Tweet;
+import vn.edu.usth.x.Tweet.TweetAdapter;
 
 // HomeMenuFragment.java
 public class NotificationMenuFragment extends Fragment {

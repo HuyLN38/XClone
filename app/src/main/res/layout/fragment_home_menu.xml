@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".HomeMenuFragment">
+    tools:context=".HomePage.HomeMenuFragment">
 
     <!-- Header TextView for Home Fragment -->
     <FrameLayout

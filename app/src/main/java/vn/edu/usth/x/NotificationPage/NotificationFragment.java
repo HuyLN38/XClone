@@ -1,10 +1,13 @@
-package vn.edu.usth.x;
+package vn.edu.usth.x.NotificationPage;
 
 import static java.sql.Types.NULL;
 
 import android.os.Bundle;
 
-import vn.edu.usth.x.Tweet;
+import vn.edu.usth.x.R;
+import vn.edu.usth.x.Tweet.Tweet;
+import vn.edu.usth.x.Tweet.TweetAdapter;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
