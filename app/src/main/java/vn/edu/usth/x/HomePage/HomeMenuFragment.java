@@ -5,53 +5,60 @@ import static java.util.Arrays.*;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
+import com.google.android.material.tabs.TabLayout;
+
+import java.util.Objects;
 
 import vn.edu.usth.x.R;
-import vn.edu.usth.x.Tweet.Tweet;
-import vn.edu.usth.x.Tweet.TweetAdapter;
+
 
 // HomeMenuFragment.java
 public class HomeMenuFragment extends Fragment {
 
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
-
+    TabLayout tabLayout;
+    ViewPager2 viewPager2;
+    HomeAdapter homeAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home_menu, container, false);
+        View view= inflater.inflate(R.layout.fragment_home_menu, container, false);
 
-        // Initialize RecyclerView
-        recyclerView = view.findViewById(R.id.recyclerView);
+        tabLayout = view.findViewById(R.id.homeTabLayout);
+        viewPager2 = view.findViewById(R.id.homeViewPager);
+        homeAdapter = new HomeAdapter(requireActivity());
+        viewPager2.setAdapter(homeAdapter);
 
-        // Use a linear layout manager
-        layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager2.setCurrentItem(tab.getPosition());
+            }
 
-        // Specify an adapter (you need to implement your own adapter)
-        adapter = new TweetAdapter(getTweetData());
-        recyclerView.setAdapter(adapter);
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                Objects.requireNonNull(tabLayout.getTabAt(position)).select();
+            }
+        });
         return view;
-    }
-
-    // Example method to get data for the adapter
-    private List<Tweet> getTweetData() {
-        // Return a list of tweets
-        return asList(
-                new Tweet(R.drawable.avatar,"Elon Musk", "elonmusk", "Doge",  "2h",R.drawable.avatar),
-                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", R.drawable.johnnysins),
-                new Tweet(R.drawable.tokuda, "Tokuda", "tokuda123", "Weekend with my grandchild 🥰😘", "3h", R.drawable.tokuda)
-        );
     }
 }
