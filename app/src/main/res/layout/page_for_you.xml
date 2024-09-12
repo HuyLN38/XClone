@@ -294,45 +294,98 @@
                         android:divider="@drawable/border_image"
                         >
 
-                        <VideoView
-                            android:layout_width="100dp"
-                            android:layout_height="150dp" />
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
 
-                        <Space
-                            android:layout_width="8dp"
-                            android:layout_height="0dp" />
+                            <ImageButton
+                                android:layout_width="100dp"
+                                android:layout_height="150dp"
+                                android:src="@drawable/messi"
+                                android:scaleType="fitXY"/>
 
-                        <VideoView
-                            android:layout_width="100dp"
-                            android:layout_height="150dp" />
+                            <ImageButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/round_button"
+                                android:src="@drawable/baseline_play_circle_filled_24"
+                                android:layout_gravity="center"/>
+                        </FrameLayout>
 
-                        <Space
-                            android:layout_width="8dp"
-                            android:layout_height="0dp" />
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
 
-                        <VideoView
-                            android:layout_width="100dp"
-                            android:layout_height="150dp" />
+                            <ImageButton
+                                android:layout_width="100dp"
+                                android:layout_height="150dp"
+                                android:src="@drawable/avatar_2"
+                                android:scaleType="fitXY"/>
 
-                        <Space
-                            android:layout_width="8dp"
-                            android:layout_height="0dp" />
+                            <ImageButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/round_button"
+                                android:src="@drawable/baseline_play_circle_filled_24"
+                                android:layout_gravity="center"/>
+                        </FrameLayout>
 
-                        <VideoView
-                            android:layout_width="100dp"
-                            android:layout_height="150dp" />
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
 
-                        <Space
-                            android:layout_width="8dp"
-                            android:layout_height="0dp" />
+                            <ImageButton
+                                android:layout_width="100dp"
+                                android:layout_height="150dp"
+                                android:src="@drawable/avatar"
+                                android:scaleType="fitXY"/>
 
-                        <VideoView
-                            android:layout_width="100dp"
-                            android:layout_height="150dp" />
+                            <ImageButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/round_button"
+                                android:src="@drawable/baseline_play_circle_filled_24"
+                                android:layout_gravity="center"/>
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageButton
+                                android:layout_width="100dp"
+                                android:layout_height="150dp"
+                                android:src="@drawable/avatar3"
+                                android:scaleType="fitXY"/>
+
+                            <ImageButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/round_button"
+                                android:src="@drawable/baseline_play_circle_filled_24"
+                                android:layout_gravity="center"/>
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageButton
+                                android:layout_width="100dp"
+                                android:layout_height="150dp"
+                                android:src="@drawable/messi"
+                                android:scaleType="fitXY"/>
+
+                            <ImageButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/round_button"
+                                android:src="@drawable/baseline_play_circle_filled_24"
+                                android:layout_gravity="center"/>
+                        </FrameLayout>
                     </LinearLayout>
                 </HorizontalScrollView>
             </LinearLayout>
         </LinearLayout>
-
     </ScrollView>
 </LinearLayout>
