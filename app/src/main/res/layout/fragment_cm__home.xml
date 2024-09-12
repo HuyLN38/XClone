@@ -20,9 +20,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
@@ -32,7 +33,7 @@
             android:layout_margin="12dp">
 
             <ImageView
-                android:id="@+id/community_icon"
+                android:id="@+id/community_icon_apple"
                 android:layout_width="90dp"
                 android:layout_height="90dp"
                 android:src="@drawable/icon_apple_192"
@@ -42,17 +43,17 @@
 
             <!-- Text Block -->
             <LinearLayout
-                android:id="@+id/text_block"
+                android:id="@+id/text_block_apple"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintStart_toEndOf="@id/community_icon"
+                app:layout_constraintStart_toEndOf="@id/community_icon_apple"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp">
 
                 <TextView
-                    android:id="@+id/community_title"
+                    android:id="@+id/community_title_apple"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Apple"
@@ -61,7 +62,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/community_members"
+                    android:id="@+id/community_members_apple"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="395K Members"
@@ -69,7 +70,7 @@
                     android:textSize="14sp" />
 
                 <TextView
-                    android:id="@+id/community_category"
+                    android:id="@+id/community_category_apple"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Technology"
@@ -78,7 +79,6 @@
             </LinearLayout>
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/user_avatar1"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:orientation="horizontal"
@@ -86,11 +86,10 @@
                 android:paddingEnd="8dp"
                 android:src="@drawable/avatar"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/text_block"
-                app:layout_constraintTop_toBottomOf="@+id/text_block" />
+                app:layout_constraintStart_toStartOf="@+id/text_block_apple"
+                app:layout_constraintTop_toBottomOf="@+id/text_block_apple" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/user_avatar2"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="16dp"
@@ -99,11 +98,10 @@
                 android:paddingEnd="8dp"
                 android:src="@drawable/avatar_2"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/text_block"
-                app:layout_constraintTop_toBottomOf="@+id/text_block" />
+                app:layout_constraintStart_toStartOf="@+id/text_block_apple"
+                app:layout_constraintTop_toBottomOf="@+id/text_block_apple" />
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/user_avatar3"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="32dp"
@@ -112,10 +110,204 @@
                 android:paddingEnd="8dp"
                 android:src="@drawable/avatar3"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/text_block"
-                app:layout_constraintTop_toBottomOf="@+id/text_block" />
+                app:layout_constraintStart_toStartOf="@+id/text_block_apple"
+                app:layout_constraintTop_toBottomOf="@+id/text_block_apple" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </FrameLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp">
+
+            <ImageView
+                android:id="@+id/community_icon_androidstudio"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:src="@drawable/icon_android_studio_256"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Text Block -->
+            <LinearLayout
+                android:id="@+id/text_block_androidstudio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintStart_toEndOf="@id/community_icon_androidstudio"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp">
+
+                <TextView
+                    android:id="@+id/community_title_androidstudio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Android Studio"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/community_members_androidstudio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="395K Members"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/community_category_androidstudio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Development"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:src="@drawable/avatar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/text_block_androidstudio"
+                app:layout_constraintTop_toBottomOf="@+id/text_block_androidstudio" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:src="@drawable/avatar_2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/text_block_androidstudio"
+                app:layout_constraintTop_toBottomOf="@+id/text_block_androidstudio" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="32dp"
+                android:orientation="horizontal"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:src="@drawable/avatar3"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/text_block_androidstudio"
+                app:layout_constraintTop_toBottomOf="@+id/text_block_androidstudio" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp">
+
+            <ImageView
+                android:id="@+id/community_icon_marvel"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:src="@drawable/icon_marvel_250"
+                android:background="#FFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Text Block -->
+            <LinearLayout
+                android:id="@+id/text_block_marvel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintStart_toEndOf="@id/community_icon_marvel"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp">
+
+                <TextView
+                    android:id="@+id/community_title_marvel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Marvel"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/community_members_marvel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="395K Members"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/community_category_marvel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Entertainment"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:src="@drawable/avatar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/text_block_marvel"
+                app:layout_constraintTop_toBottomOf="@+id/text_block_marvel" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:src="@drawable/avatar_2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/text_block_marvel"
+                app:layout_constraintTop_toBottomOf="@+id/text_block_marvel" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="32dp"
+                android:orientation="horizontal"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:src="@drawable/avatar3"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/text_block_marvel"
+                app:layout_constraintTop_toBottomOf="@+id/text_block_marvel" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Show more"
+            android:textColor="#2BA2EA"
+            android:textSize="10sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray"
+            android:orientation="vertical"/>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
