@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/actionBarSize"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/searchTopBar">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/avatar"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:background="@drawable/round_button"
+            android:layout_gravity="start|center"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/avatar" />
+
+        <SearchView
+            android:id="@+id/searchView_search"
+            android:layout_width="253dp"
+            android:layout_height="37dp"
+            android:layout_gravity="center"
+            android:searchIcon="@null"
+            android:background="@drawable/search_view_bg"
+            android:queryBackground="@android:color/transparent"
+            android:queryHint="Search X"
+            android:iconifiedByDefault="false"
+            app:backgroundTint="@null"
+            app:theme="@style/CustomSearchView" />
+
+        <ImageView
+            android:id="@+id/settings_search"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginEnd= "10dp"
+            android:layout_gravity="center|end"
+            android:src="@drawable/settings"
+            app:tint="@color/white"/>
+
+
+</FrameLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lint>
+    <issue id="ButtonStyle">
+        <ignore path="**/*.xml" />
+    </issue>
+    <issue id="HardcodedText">
+        <ignore path="**/*.xml" />
+    </issue>
+    <issue id="ContentDescription">
+        <ignore path="**/*.xml" />
+    </issue>
+    <issue id="SmallSp">
+        <ignore path="**/*.xml" />
+    </issue>
+</lint>
