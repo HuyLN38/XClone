@@ -9,7 +9,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import vn.edu.usth.x.community.CommunityFragment;
+import vn.edu.usth.x.CommunityPage.CommunityFragment;
+import vn.edu.usth.x.HomePage.HomeMenuFragment;
+import vn.edu.usth.x.InboxPage.InboxFragment;
+import vn.edu.usth.x.NotificationPage.NotificationFragment;
+import vn.edu.usth.x.SearchPage.SearchFragment;
 import vn.edu.usth.x.databinding.ActivityHomeBinding;
 
 public class HomeFragment extends AppCompatActivity {
@@ -30,7 +34,7 @@ public class HomeFragment extends AppCompatActivity {
         // Set default selected item
         bottomNavigationView.setSelectedItemId(R.id.home);
         getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeMenuFragment()).commitNow();
-        replaceTopBar(R.layout.fragment_home_top_bar);
+        replaceTopBar(R.layout.topbar_home);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -40,20 +44,23 @@ public class HomeFragment extends AppCompatActivity {
 
                 if (id == R.id.home) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new HomeMenuFragment()).commitNow();
-                    replaceTopBar(R.layout.fragment_home_top_bar);
+                    replaceTopBar(R.layout.topbar_home);
                     return true;
                 } else if (id == R.id.search) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new SearchFragment()).commitNow();
-                    replaceTopBar(R.layout.fragment_search_top_bar);
+                    replaceTopBar(R.layout.topbar_search);
                     return true;
                 } else if (id == R.id.notification) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new NotificationFragment()).commitNow();
+                    replaceTopBar(R.layout.topbar_notification);
                     return true;
                 } else if (id == R.id.mail) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new InboxFragment()).commitNow();
+                    replaceTopBar(R.layout.topbar_inbox);
                     return true;
                 } else if (id == R.id.community) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new CommunityFragment()).commitNow();
+                    replaceTopBar(R.layout.topbar_community);
                     return true;
                 }
                 return false;

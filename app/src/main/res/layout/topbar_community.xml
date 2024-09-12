@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".HomePage.HomeTopBar">
+
+
+    <!-- TODO: Update blank fragment layout -->
+    <FrameLayout
+        android:id="@+id/home_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center|start"
+            android:gravity="center_vertical"
+            android:layout_marginStart="10dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/avatar"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/avatar" />
+
+            <Space
+                android:layout_width="25dp"
+                android:layout_height="match_parent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Communities"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:fontFamily="arial"
+                android:gravity="top|center" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+            android:orientation="horizontal"
+            android:layout_margin="5dp">
+
+            <ImageView
+                android:id="@+id/search_community"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/search"
+                app:tint="@color/white" />
+            <Space
+                android:layout_width="15dp"
+                android:layout_height="match_parent"/>
+            <ImageView
+                android:id="@+id/add_friend_community"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/add_friend"
+                app:tint="@color/white" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+</FrameLayout>
