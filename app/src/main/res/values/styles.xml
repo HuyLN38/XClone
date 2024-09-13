@@ -23,5 +23,5 @@
         <item name="android:background">@android:color/transparent</item>
         <item name="android:textColorHint">@color/hint_text</item>
     </style>
-
+    
 </resources>
