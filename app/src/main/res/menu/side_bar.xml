@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/side_profile"
+            android:icon="@drawable/profile"
+            android:title="@string/profile"
+            android:checkable="true"
+            />
+        <item
+            android:id="@+id/side_bookmark"
+            android:icon="@drawable/bookmark"
+            android:title="@string/bookmark"
+            android:checkable="true"
+            />
+        <item
+            android:id="@+id/side_list"
+            android:icon="@drawable/sheet"
+            android:title="@string/list"
+            android:checkable="true"
+            />
+        <item
+            android:id="@+id/side_space"
+            android:icon="@drawable/live"
+            android:title="@string/space"
+            android:checkable="true"
+            />
+        <item
+            android:id="@+id/side_money"
+            android:icon="@drawable/money"
+            android:title="@string/money"
+            android:checkable="true"
+            />
+
+    </group>
+
+    <item
+        android:title="@string/settings_and_support">
+        <menu>
+            <item
+                android:id="@+id/side_settings"
+                android:icon="@drawable/settings"
+                android:title="@string/settings_and_privacy"
+                android:checkable="true"
+                />
+            <item
+                android:id="@+id/side_help"
+                android:icon="@drawable/help"
+                android:title="@string/help"
+                android:checkable="true"
+                />
+        </menu>
+    </item>
+</menu>

@@ -2,12 +2,16 @@ package vn.edu.usth.x;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import vn.edu.usth.x.CommunityPage.CommunityFragment;
 import vn.edu.usth.x.HomePage.HomeMenuFragment;
@@ -16,10 +20,11 @@ import vn.edu.usth.x.NotificationPage.NotificationFragment;
 import vn.edu.usth.x.SearchPage.SearchFragment;
 import vn.edu.usth.x.databinding.ActivityHomeBinding;
 
-public class HomeFragment extends AppCompatActivity {
+public class HomeFragment extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private ActivityHomeBinding binding;
     private FrameLayout frameLayout;
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +35,8 @@ public class HomeFragment extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         frameLayout = findViewById(R.id.frameLayout);
+        NavigationView navigationView = findViewById(R.id.sidebar_view);
+        drawerLayout = findViewById(R.id.drawer_layout);
 
         // Set default selected item
         bottomNavigationView.setSelectedItemId(R.id.home);
@@ -70,7 +77,34 @@ public class HomeFragment extends AppCompatActivity {
 
     private void replaceTopBar(int layoutId) {
         FrameLayout topBar = findViewById(R.id.home_toolbar);
-        topBar.removeAllViews(); // Clear previous views
+        topBar.removeAllViews();
         getLayoutInflater().inflate(layoutId, topBar, true);
+
+        ImageView avatar = findViewById(R.id.avatar);
+        avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(binding.sidebarView);
+            }
+        });
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(binding.sidebarView)) {
+            drawerLayout.closeDrawer(binding.sidebarView);
+        } else {
+            int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
+            if (backStackEntryCount > 0) {
+                getSupportFragmentManager().popBackStack();
+            } else {
+                drawerLayout.openDrawer(binding.sidebarView);
+            }
+        }
     }
 }

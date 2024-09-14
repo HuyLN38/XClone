@@ -107,6 +107,14 @@
     <string name="the_boy_who_lived">The boy who lived.</string>
     <string name="you_i_m_gonna_block_your_account_for_no_reason">You: I\'m gonna block your account for no reason.</string>
     <string name="jack_dorsey">Jack Dorsey</string>
+    <string name="profile">Profile</string>
+    <string name="bookmark">Bookmarks</string>
+    <string name="list">Lists</string>
+    <string name="space">Spaces</string>
+    <string name="money">Monetization\n</string>
+    <string name="help">Help Center</string>
+    <string name="settings_and_privacy">Settings and Privacy</string>
+    <string name="settings_and_support">Settings and Support</string>
 
 
 </resources>
