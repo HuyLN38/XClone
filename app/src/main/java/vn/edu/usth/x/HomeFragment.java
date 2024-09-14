@@ -1,5 +1,6 @@
 package vn.edu.usth.x;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -94,6 +95,7 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(binding.sidebarView)) {
