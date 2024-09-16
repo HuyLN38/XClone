@@ -48,9 +48,10 @@ public class HomeForYou extends Fragment {
     private List<Tweet> getTweetData() {
         // Return a list of tweets
         return asList(
-                new Tweet(R.drawable.avatar,"Elon Musk", "elonmusk", "Doge",  "2h",R.drawable.avatar),
-                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", R.drawable.johnnysins),
-                new Tweet(R.drawable.tokuda, "Tokuda", "tokuda123", "Weekend with my grandchild 🥰😘", "3h", R.drawable.tokuda)
+                new Tweet(R.drawable.avatar_bcc, "BCCNEWS", "bccnews",getString(R.string.description_yagiQN), "1h", R.drawable.img_yagiqn),
+                new Tweet(R.drawable.avatar_vtv, "VTV24", "vtv24",getString(R.string.description_flood2), "2h", R.drawable.img_flood2),
+                new Tweet(R.drawable.avatar_bcc, "BCCNEWS", "bccnews",getString(R.string.description_traffic), "3h", R.drawable.img_traffic),
+                new Tweet(R.drawable.avatar_vtv, "VTV24", "vtv24",getString(R.string.description_flood1), "5h", R.drawable.img_flood1)
         );
     }
 }

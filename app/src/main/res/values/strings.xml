@@ -115,6 +115,9 @@
     <string name="help">Help Center</string>
     <string name="settings_and_privacy">Settings and Privacy</string>
     <string name="settings_and_support">Settings and Support</string>
-
+    <string name="description_flood1">The process of flood drainage and reduction on the Red River system is progressing slowly, resulting in continued flooding in low-lying areas, floodplains outside the main dikes in the provinces/cities of: Hanoi, Ninh Binh, Hai Duong...</string>
+    <string name="description_traffic">Hanoi after the rain is... traffic jams.</string>
+    <string name="description_flood2">The extended swimming race begins...on Thai Ha Street after a night of heavy rain in Hanoi.</string>
+    <string name="description_yagiQN">After Typhoon No. 3, preliminary estimates suggest that Quang Ninh suffered losses of about 23.770 trillion VND, accounting for more than half of the total damage nationwide.</string>
 
 </resources>
