@@ -19,8 +19,8 @@ import vn.edu.usth.x.R;
 import vn.edu.usth.x.Tweet.Tweet;
 import vn.edu.usth.x.Tweet.TweetAdapter;
 
-// HomeMenuFragment.java
-public class NotificationMenuFragment extends Fragment {
+
+public class NotificationAll extends Fragment {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -30,7 +30,7 @@ public class NotificationMenuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_notification_menu, container, false);
+        View view = inflater.inflate(R.layout.fragment_notification_all, container, false);
 
         // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -52,6 +52,7 @@ public class NotificationMenuFragment extends Fragment {
         return Arrays.asList(
                 new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", NULL),
                 new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", NULL)
+
         );
     }
 }

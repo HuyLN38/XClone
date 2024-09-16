@@ -1,0 +1,111 @@
+Index: app/src/main/res/layout/fragment_notification.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    android:background=\"#000000\"\r\n    android:orientation=\"vertical\"\r\n    tools:context=\".NotificationFragment\">\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:background=\"#000000\"\r\n        android:orientation=\"horizontal\"\r\n        android:padding=\"16dp\">\r\n\r\n        <ImageView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:paddingEnd=\"8dp\"\r\n            android:src=\"@drawable/icon_before\" />\r\n\r\n        <Space\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"1\" />\r\n\r\n        <TextView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:gravity=\"center\"\r\n            android:text=\"Notifications\"\r\n            android:textAlignment=\"center\"\r\n            android:textColor=\"#FFFFFFFF\"\r\n            android:textSize=\"24sp\" />\r\n\r\n        <Space\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"1\" />\r\n\r\n        <ImageView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:paddingStart=\"8dp\"\r\n            android:src=\"@drawable/icon_after\" />\r\n\r\n    </LinearLayout>\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:layout_gravity=\"center\"\r\n        android:layout_marginBottom=\"16dp\"\r\n        android:orientation=\"horizontal\">\r\n\r\n        <Button\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"All\"\r\n            android:layout_weight=\"1\"/>\r\n\r\n        <Button\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Verified\"\r\n            android:layout_weight=\"1\"/>\r\n\r\n        <Button\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Mentions\"\r\n            android:layout_weight=\"1\" />\r\n\r\n    </LinearLayout>\r\n\r\n    <View\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"1dp\"\r\n        android:background=\"@android:color/darker_gray\" />\r\n\r\n\r\n\r\n    <!-- Recent Notifications -->\r\n    <TextView\r\n        android:id=\"@+id/recent\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:padding=\"8dp\"\r\n        android:text=\"RECENT\"\r\n        android:textColor=\"#FFFFFFFF\" />\r\n\r\n    <androidx.recyclerview.widget.RecyclerView\r\n        android:id=\"@+id/recyclerView\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:scrollbars=\"vertical\"\r\n        tools:listitem=\"@layout/item_notification\"\r\n        android:paddingBottom=\"50dp\"/>\r\n\r\n    <View\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"1dp\"\r\n        android:background=\"@android:color/darker_gray\" />\r\n\r\n    <TextView\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:padding=\"8dp\"\r\n        android:text=\"EARLIER\"\r\n        android:textColor=\"#FFFFFFFF\" />\r\n\r\n    <!-- Earlier Notifications -->\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\"\r\n        android:padding=\"8dp\">\r\n\r\n        <ImageView\r\n            android:layout_width=\"40dp\"\r\n            android:layout_height=\"40dp\"\r\n            android:src=\"@drawable/johnnysins\" />\r\n\r\n        <TextView\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"1\"\r\n            android:paddingStart=\"8dp\"\r\n            android:text=\"Your friend liked your post.\"\r\n            android:textColor=\"#FFFFFFFF\" />\r\n\r\n        <TextView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"1h ago\"\r\n            android:textColor=\"#bfbaba\" />\r\n    </LinearLayout>\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\"\r\n        android:padding=\"8dp\">\r\n\r\n        <ImageView\r\n            android:layout_width=\"40dp\"\r\n            android:layout_height=\"40dp\"\r\n            android:src=\"@drawable/johnnysins\" />\r\n\r\n        <TextView\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"1\"\r\n            android:paddingStart=\"8dp\"\r\n            android:text=\"You have a new message.\"\r\n            android:textColor=\"#FFFFFFFF\" />\r\n\r\n        <TextView\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"3h ago\"\r\n            android:textColor=\"#bfbaba\" />\r\n    </LinearLayout>\r\n\r\n    <FrameLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\">\r\n\r\n        <Button\r\n            android:id=\"@+id/button123\"\r\n            android:layout_width=\"57dp\"\r\n            android:layout_height=\"61dp\"\r\n            android:layout_gravity=\"bottom|right\"\r\n            android:layout_margin=\"27dp\"\r\n            android:backgroundTint=\"@color/white\"\r\n            android:text=\"+\"\r\n            android:textColor=\"#000000\"\r\n            android:textSize=\"50px\" />\r\n    </FrameLayout>\r\n</LinearLayout>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_notification.xml b/app/src/main/res/layout/fragment_notification.xml
+--- a/app/src/main/res/layout/fragment_notification.xml	(revision 331210272e125585d342e337055947aa4bd2a42a)
++++ b/app/src/main/res/layout/fragment_notification.xml	(date 1726281636263)
+@@ -1,9 +1,9 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+-    xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:background="#000000"
+     android:orientation="vertical"
+     tools:context=".NotificationFragment">
+@@ -58,20 +58,20 @@
+         <Button
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+-            android:text="All"
+-            android:layout_weight="1"/>
++            android:layout_weight="1"
++            android:text="All" />
+ 
+         <Button
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+-            android:text="Verified"
+-            android:layout_weight="1"/>
++            android:layout_weight="1"
++            android:text="Verified" />
+ 
+         <Button
+             android:layout_width="0dp"
+             android:layout_height="wrap_content"
+-            android:text="Mentions"
+-            android:layout_weight="1" />
++            android:layout_weight="1"
++            android:text="Mentions" />
+ 
+     </LinearLayout>
+ 
+@@ -81,7 +81,6 @@
+         android:background="@android:color/darker_gray" />
+ 
+ 
+-
+     <!-- Recent Notifications -->
+     <TextView
+         android:id="@+id/recent"
+@@ -95,9 +94,9 @@
+         android:id="@+id/recyclerView"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
++        android:paddingBottom="50dp"
+         android:scrollbars="vertical"
+-        tools:listitem="@layout/item_notification"
+-        android:paddingBottom="50dp"/>
++        tools:listitem="@layout/item_notification" />
+ 
+     <View
+         android:layout_width="match_parent"
+Index: .idea/deploymentTargetSelector.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"deploymentTargetSelector\">\r\n    <selectionStates>\r\n      <SelectionState runConfigName=\"app\">\r\n        <option name=\"selectionMode\" value=\"DROPDOWN\" />\r\n      </SelectionState>\r\n    </selectionStates>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/deploymentTargetSelector.xml b/.idea/deploymentTargetSelector.xml
+--- a/.idea/deploymentTargetSelector.xml	(revision 331210272e125585d342e337055947aa4bd2a42a)
++++ b/.idea/deploymentTargetSelector.xml	(date 1726051478470)
+@@ -4,6 +4,14 @@
+     <selectionStates>
+       <SelectionState runConfigName="app">
+         <option name="selectionMode" value="DROPDOWN" />
++        <DropdownSelection timestamp="2024-09-11T10:40:47.406177100Z">
++          <Target type="DEFAULT_BOOT">
++            <handle>
++              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\NTS\.android\avd\Pixel_8_API_35_fl.avd" />
++            </handle>
++          </Target>
++        </DropdownSelection>
++        <DialogSelection />
+       </SelectionState>
+     </selectionStates>
+   </component>
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"GradleMigrationSettings\" migrationVersion=\"1\" />\r\n  <component name=\"GradleSettings\">\r\n    <option name=\"linkedExternalProjectsSettings\">\r\n      <GradleProjectSettings>\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\r\n        <option name=\"gradleJvm\" value=\"#GRADLE_LOCAL_JAVA_HOME\" />\r\n        <option name=\"modules\">\r\n          <set>\r\n            <option value=\"$PROJECT_DIR$\" />\r\n            <option value=\"$PROJECT_DIR$/app\" />\r\n          </set>\r\n        </option>\r\n        <option name=\"resolveExternalAnnotations\" value=\"false\" />\r\n      </GradleProjectSettings>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+--- a/.idea/gradle.xml	(revision 331210272e125585d342e337055947aa4bd2a42a)
++++ b/.idea/gradle.xml	(date 1726198911989)
+@@ -4,6 +4,7 @@
+   <component name="GradleSettings">
+     <option name="linkedExternalProjectsSettings">
+       <GradleProjectSettings>
++        <option name="testRunner" value="CHOOSE_PER_TEST" />
+         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+         <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
+         <option name="modules">
