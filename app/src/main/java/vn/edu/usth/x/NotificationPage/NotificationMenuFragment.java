@@ -30,7 +30,7 @@ public class NotificationMenuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home_menu, container, false);
+        View view = inflater.inflate(R.layout.fragment_notification_menu, container, false);
 
         // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -50,6 +50,7 @@ public class NotificationMenuFragment extends Fragment {
     private List<Tweet> getTweetData() {
         // Return a list of tweets
         return Arrays.asList(
+                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", NULL),
                 new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", NULL)
         );
     }

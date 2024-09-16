@@ -4,6 +4,7 @@ import static java.sql.Types.NULL;
 
 import android.os.Bundle;
 
+import vn.edu.usth.x.HomePage.HomeAdapter;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Tweet.Tweet;
 import vn.edu.usth.x.Tweet.TweetAdapter;
@@ -11,46 +12,58 @@ import vn.edu.usth.x.Tweet.TweetAdapter;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.tabs.TabLayout;
+
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class NotificationFragment extends Fragment {
 
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
-
+    TabLayout tabLayout;
+    ViewPager2 viewPager2;
+    NotificationApdapter notificationApdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_notification, container, false);
+        // Inflate the layout for this fragment
+        View view= inflater.inflate(R.layout.fragment_notification, container, false);
 
-        recyclerView = view.findViewById(R.id.recyclerView);
+        tabLayout = view.findViewById(R.id.tab_layout);
+        viewPager2 = view.findViewById(R.id.view_pager);
+        notificationApdapter = new NotificationApdapter(requireActivity());
+        viewPager2.setAdapter(notificationApdapter);
 
-        layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager2.setCurrentItem(tab.getPosition());
+            }
 
-        adapter = new TweetAdapter(getTweetData());
-        recyclerView.setAdapter(adapter);
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                Objects.requireNonNull(tabLayout.getTabAt(position)).select();
+            }
+        });
         return view;
-    }
-
-    private List<Tweet> getTweetData() {
-        return Arrays.asList(
-                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", NULL),
-                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", NULL),
-                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", NULL),
-                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", NULL),
-                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", NULL),
-                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", NULL),
-                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", NULL),
-                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", NULL)
-        );
     }
 }
