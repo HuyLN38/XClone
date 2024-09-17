@@ -300,7 +300,7 @@
             android:padding="10dp"
             android:text="Show more"
             android:textColor="#2BA2EA"
-            android:textSize="10sp" />
+            android:textSize="14sp" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -48,9 +48,11 @@ public class HomeFollowing extends Fragment {
     private List<Tweet> getTweetData() {
         // Return a list of tweets
         return asList(
-                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", R.drawable.johnnysins),
-                new Tweet(R.drawable.avatar,"Elon Musk", "elonmusk", "Doge",  "2h",R.drawable.avatar),
-                new Tweet(R.drawable.tokuda, "Tokuda", "tokuda123", "Weekend with my grandchild 🥰😘", "3h", R.drawable.tokuda)
+                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "\"I'm Johnny Sins, and I'm not just a plumber.\"\n" +
+                        "\n" +
+                        "Life is full of surprises, and you never know what role you’ll need to play next. But me? I’m always ready. Whether I’m called to a hospital room, a burning building, or a space station, I’ll show up, ready to give my all. Because that’s what I do.", "3h", R.drawable.johnnysins),
+                new Tweet(R.drawable.avatar,"Elon Musk", "elonmusk",  getString(R.string.ElonMusk),  "2h",R.drawable.avatar),
+                new Tweet(R.drawable.tokuda, "Tokuda", "tokuda123", getString(R.string.tokuda), "3h", R.drawable.tokuda)
         );
     }
 }

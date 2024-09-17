@@ -12,7 +12,7 @@ public class Tweet {
     public Tweet(int avatar, String username, String tweetlink, String tweetText, String time, int image) {
         this.avatar = avatar;
         this.username = username;
-        this.tweetlink = tweetlink;
+        this.tweetlink = "@"+ tweetlink;
         this.tweetText = tweetText;
         this.time = time;
         this.image = image;

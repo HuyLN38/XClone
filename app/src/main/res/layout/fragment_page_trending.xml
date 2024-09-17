@@ -14,8 +14,10 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="8dp"
         android:text="Vietnam trends"
+        android:textSize="18sp"
+        android:textStyle="bold"
         android:textColor="@color/white" />
 
     <ScrollView
@@ -28,6 +30,7 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:layout_marginStart="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="70dp">
 
@@ -35,20 +38,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    >
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Only on X Trending"
+                        android:textStyle="bold"
                         android:textColor="#808080"
-                        android:textSize="10sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:text="Yagi"
+                        android:textSize="16sp"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
 
@@ -58,7 +63,7 @@
                         android:layout_alignParentLeft="true"
                         android:text="39.6K post"
                         android:textColor="#808080"
-                        android:textSize="10sp" />
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <ImageView
@@ -67,11 +72,12 @@
                     android:layout_alignParentRight="true"
                     android:layout_margin="5dp"
                     android:src="@drawable/threedot_icon"
-                    app:tint="@color/white"/>
+                    app:tint="@color/white" />
 
             </RelativeLayout>
 
             <RelativeLayout
+                android:layout_marginStart="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="70dp">
 
@@ -79,20 +85,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    >
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Only on X Trending"
+                        android:textStyle="bold"
                         android:textColor="#808080"
-                        android:textSize="10sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:text="Yagi"
+                        android:textSize="16sp"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
 
@@ -102,7 +110,7 @@
                         android:layout_alignParentLeft="true"
                         android:text="39.6K post"
                         android:textColor="#808080"
-                        android:textSize="10sp" />
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <ImageView
@@ -111,10 +119,12 @@
                     android:layout_alignParentRight="true"
                     android:layout_margin="5dp"
                     android:src="@drawable/threedot_icon"
-                    app:tint="@color/white"/>
+                    app:tint="@color/white" />
+
             </RelativeLayout>
 
             <RelativeLayout
+                android:layout_marginStart="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="70dp">
 
@@ -122,20 +132,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    >
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Only on X Trending"
+                        android:textStyle="bold"
                         android:textColor="#808080"
-                        android:textSize="10sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:text="Yagi"
+                        android:textSize="16sp"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
 
@@ -145,7 +157,7 @@
                         android:layout_alignParentLeft="true"
                         android:text="39.6K post"
                         android:textColor="#808080"
-                        android:textSize="10sp" />
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <ImageView
@@ -154,7 +166,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_margin="5dp"
                     android:src="@drawable/threedot_icon"
-                    app:tint="@color/white"/>
+                    app:tint="@color/white" />
+
             </RelativeLayout>
 
             <TextView
@@ -165,7 +178,7 @@
                 android:padding="10dp"
                 android:text="Show more"
                 android:textColor="#2BA2EA"
-                android:textSize="10sp"
+                android:textSize="14sp"
                 />
             <LinearLayout
                 android:layout_width="match_parent"
