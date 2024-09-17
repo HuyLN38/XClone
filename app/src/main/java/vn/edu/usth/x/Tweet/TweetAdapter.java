@@ -47,6 +47,21 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
     public TweetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_tweet, parent, false);
+        ImageView likeButton = itemView.findViewById(R.id.like);
+        TextView likeCount = itemView.findViewById(R.id.like_count);
+        likeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.setSelected(!v.isSelected());
+                if (v.isSelected()) {
+                    likeCount.setTextColor(0xFFFF0000);
+                    likeButton.setImageResource(R.drawable.heart_after);
+                } else {
+                    likeCount.setTextColor(0xFFbfbaba);
+                    likeButton.setImageResource(R.drawable.heart);
+                }
+            }
+        });
         return new TweetViewHolder(itemView);
     }
 
