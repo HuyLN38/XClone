@@ -1,5 +1,7 @@
 package vn.edu.usth.x.Tweet;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
@@ -13,6 +15,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import vn.edu.usth.x.R;
+import vn.edu.usth.x.Tweet.comment.CommentFragment;
 
 // TweetAdapter.java
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHolder> {
@@ -65,6 +68,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
             }
         });
 
+        //BookMark
         bookmarkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,6 +78,19 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
                 } else {
                     bookmarkButton.setImageResource(R.drawable.bookmark);
                 }
+            }
+        });
+
+        // Comment
+        ImageView commentButton = itemView.findViewById(R.id.comment_button);
+        commentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentActivity activity = (FragmentActivity) v.getContext();
+                FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.replace(R.id.drawer_layout, new CommentFragment()).commit();
+
             }
         });
 
