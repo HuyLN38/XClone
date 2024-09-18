@@ -121,5 +121,7 @@
     <string name="description_yagiQN">After Typhoon No. 3, preliminary estimates suggest that Quang Ninh suffered losses of about 23.770 trillion VND, accounting for more than half of the total damage nationwide.</string>
     <string name="ElonMusk">I\'m Elon Musk, and my mission is to push humanity forward. Whether it\'s building electric cars, colonizing Mars, or revolutionizing energy, I believe in solving problems that matter. The future is ours to create, one bold step at a time.</string>
     <string name="tokuda">Life doesn\'t stop at any age, and neither should we. 🌸 I\'ve embraced every chapter, proving that passion and curiosity can last a lifetime. 🧡 No matter where you are or how old you are, always pursue what excites you. ✨ Every day is a chance to learn, grow, and inspire others. 💪 It’s never too late to chase your dreams and do what you love. 🌼</string>
+    <string name="inbox_setting_1">Allow message requests from:</string>
+    <string name="inbox_setting_2">People you follow will always be able to message you.</string>
 
 </resources>

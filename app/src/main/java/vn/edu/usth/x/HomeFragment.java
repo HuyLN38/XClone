@@ -65,7 +65,7 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
                     return true;
                 } else if (id == R.id.notification) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new NotificationFragment()).commitNow();
-                    replaceTopBar(R.layout.topbar_notification);
+                    replaceTopBar(R.layout.settings_inbox);
                     return true;
                 } else if (id == R.id.mail) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new InboxFragment()).commitNow();
