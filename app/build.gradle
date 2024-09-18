@@ -29,6 +29,25 @@ android {
     buildFeatures {
         viewBinding true
     }
+    sourceSets {
+        main {
+            res.srcDirs =
+                    [
+                            'src\\main\\res',
+                            'src\\main\\res\\layouts',
+                            'src\\main\\res\\layouts\\search',
+                            'src\\main\\res\\layouts\\home',
+                            'src\\main\\res\\layouts\\profile',
+                            'src\\main\\res\\layouts\\notification',
+                            'src\\main\\res\\layouts\\message',
+                            'src\\main\\res\\layouts\\inbox',
+                            'src\\main\\res\\layouts\\community',
+                            'src\\main\\res\\layouts\\topbar',
+                            'src\\main\\res\\layouts\\sidebar',
+                            'src\\main\\res\\layouts\\components',
+                    ]
+        }
+    }
 }
 
 dependencies {
