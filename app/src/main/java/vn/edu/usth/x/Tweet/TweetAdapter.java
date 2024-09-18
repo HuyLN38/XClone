@@ -49,6 +49,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
                 .inflate(R.layout.item_tweet, parent, false);
         ImageView likeButton = itemView.findViewById(R.id.like);
         TextView likeCount = itemView.findViewById(R.id.like_count);
+        ImageView bookmarkButton = itemView.findViewById(R.id.bookmark);
+
         likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +64,19 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
                 }
             }
         });
+
+        bookmarkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.setSelected(!v.isSelected());
+                if (v.isSelected()) {
+                    bookmarkButton.setImageResource(R.drawable.bookmark_after);
+                } else {
+                    bookmarkButton.setImageResource(R.drawable.bookmark);
+                }
+            }
+        });
+
         return new TweetViewHolder(itemView);
     }
 

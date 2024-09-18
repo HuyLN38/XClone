@@ -161,11 +161,12 @@
                 android:textColor="@color/gray"/>
             <!--bookmark-->
             <ImageView
+                android:id="@+id/bookmark"
                 android:layout_width="25dp"
                 android:layout_height="20dp"
                 android:layout_marginLeft="10dp"
                 android:src="@drawable/bookmark"
-                app:tint="@color/gray"/>
+                app:tint="@color/bookmark_tint"/>
             <!--share-->
             <ImageView
                 android:layout_width="25dp"
