@@ -71,6 +71,7 @@
 
                 <CheckBox
                     style="@style/SettingsCheckBox"
+                    android:id="@+id/no_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
@@ -94,6 +95,7 @@
 
                 <CheckBox
                     style="@style/SettingsCheckBox"
+                    android:id="@+id/verified"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
@@ -116,6 +118,7 @@
 
                 <CheckBox
                     style="@style/SettingsCheckBox"
+                    android:id="@+id/everyone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
