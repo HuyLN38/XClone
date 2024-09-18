@@ -128,5 +128,9 @@
     <string name="inbox_setting_5">Verified users</string>
     <string name="inbox_setting_6">Everyone</string>
     <string name="inbox_setting_7">Enable audio and video calling</string>
+    <string name="inbox_setting_8">Take messaging to the next level with audio and video calls. When enabled you can select who you\'re comfotable using it with.</string>
+    <string name="inbox_setting_9">Send read receipts</string>
+    <string name="inbox_setting_10">Let people you\'re messaging with know when you\'ve seen their messages. Read receipts are not shown on message requests.</string>
+    <string name="inbox_setting_11">Manage encrypted devices</string>
 
 </resources>
