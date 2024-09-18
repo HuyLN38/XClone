@@ -13,6 +13,14 @@
         android:theme="@style/Theme.X"
         tools:targetApi="31">
         <activity
+            android:name=".NotificationPage.NotificationSettings"
+            android:exported="false"
+            android:label="@string/title_activity_notification_settings" />
+        <activity
+            android:name=".SearchPage.ExploreSettings"
+            android:exported="false"
+            android:label="@string/title_activity_explore_settings" />
+        <activity
             android:name=".HomeFragment"
             android:exported="false"
             android:label="@string/title_activity_home"

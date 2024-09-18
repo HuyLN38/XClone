@@ -1,6 +1,7 @@
 package vn.edu.usth.x;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,8 @@ import vn.edu.usth.x.CommunityPage.CommunityFragment;
 import vn.edu.usth.x.HomePage.HomeMenuFragment;
 import vn.edu.usth.x.InboxPage.InboxFragment;
 import vn.edu.usth.x.NotificationPage.NotificationFragment;
+import vn.edu.usth.x.NotificationPage.NotificationSettings;
+import vn.edu.usth.x.SearchPage.ExploreSettings;
 import vn.edu.usth.x.SearchPage.SearchFragment;
 import vn.edu.usth.x.databinding.ActivityHomeBinding;
 
@@ -88,7 +91,22 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
         try {
             ImageView avatar = findViewById(R.id.avatar);
             avatar.setOnClickListener(v -> drawerLayout.openDrawer(binding.sidebarView));
+
+            ImageView settingsSearch = findViewById(R.id.settings_search);
+            settingsSearch.setOnClickListener(v -> {
+                Intent intent1 = new Intent(this, ExploreSettings.class);
+                startActivity(intent1);
+            });
         } catch (Exception ignored) {
+
+        }
+        try {
+            ImageView settingsNotification = findViewById(R.id.settings_notification);
+            settingsNotification.setOnClickListener(v -> {
+                Intent intent2 = new Intent(this, NotificationSettings.class);
+                startActivity(intent2);
+            });
+        }catch (Exception ignored) {
 
         }
     }
