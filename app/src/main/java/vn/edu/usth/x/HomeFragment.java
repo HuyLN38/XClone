@@ -85,14 +85,12 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
         FrameLayout topBar = findViewById(R.id.home_toolbar);
         topBar.removeAllViews();
         getLayoutInflater().inflate(layoutId, topBar, true);
+        try {
+            ImageView avatar = findViewById(R.id.avatar);
+            avatar.setOnClickListener(v -> drawerLayout.openDrawer(binding.sidebarView));
+        } catch (Exception ignored) {
 
-        ImageView avatar = findViewById(R.id.avatar);
-        avatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.openDrawer(binding.sidebarView);
-            }
-        });
+        }
     }
 
     @Override
