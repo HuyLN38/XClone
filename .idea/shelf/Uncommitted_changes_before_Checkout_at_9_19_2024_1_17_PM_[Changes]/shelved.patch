@@ -1,0 +1,147 @@
+Index: app/src/main/java/vn/edu/usth/x/SearchPage/ExploreSettings.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package vn.edu.usth.x.SearchPage;\r\n\r\nimport android.os.Bundle;\r\nimport android.widget.ImageView;\r\n\r\nimport androidx.appcompat.app.ActionBar;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.preference.PreferenceFragmentCompat;\r\n\r\nimport vn.edu.usth.x.R;\r\n\r\npublic class ExploreSettings extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.settings_activity);\r\n        if (savedInstanceState == null) {\r\n            getSupportFragmentManager()\r\n                    .beginTransaction()\r\n                    .replace(R.id.exploresettings, new SettingsFragment())\r\n                    .commit();\r\n        }\r\n        ActionBar actionBar = getSupportActionBar();\r\n        if (actionBar != null) {\r\n            actionBar.setDisplayHomeAsUpEnabled(true);\r\n        }\r\n\r\n        ImageView backToSearch = findViewById(R.id.back_to_search);\r\n        backToSearch.setOnClickListener(v -> {\r\n            super.onBackPressed();\r\n        });\r\n    }\r\n\r\n    public static class SettingsFragment extends PreferenceFragmentCompat {\r\n        @Override\r\n        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {\r\n            setPreferencesFromResource(R.xml.explore_preferences, rootKey);\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/app/src/main/java/vn/edu/usth/x/SearchPage/ExploreSettings.java b/app/src/main/java/vn/edu/usth/x/SearchPage/ExploreSettings.java
+--- a/app/src/main/java/vn/edu/usth/x/SearchPage/ExploreSettings.java	
++++ b/app/src/main/java/vn/edu/usth/x/SearchPage/ExploreSettings.java	
+@@ -14,7 +14,7 @@
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+-        setContentView(R.layout.settings_activity);
++        setContentView(R.layout.search_explore_settings);
+         if (savedInstanceState == null) {
+             getSupportFragmentManager()
+                     .beginTransaction()
+Index: app/src/main/res/xml/notification_preferences.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<PreferenceScreen xmlns:android=\"http://schemas.android.com/apk/res/android\">\r\n\r\n    <!-- Filters Section -->\r\n    <PreferenceCategory android:title=\"Filters\"\r\n        android:summary=\"Choose the notifications you'd like to see --- and those you don't\">\r\n        <SwitchPreference\r\n            android:key=\"quality_filter\"\r\n            android:title=\"Quality filter\"\r\n            android:summary=\"Enable or disable activity notifications\"\r\n            android:defaultValue=\"true\" />\r\n\r\n        <SwitchPreference\r\n            android:key=\"muted_notification\"\r\n            android:title=\"Muted Notification\"\r\n            android:defaultValue=\"false\" />\r\n\r\n        <SwitchPreference\r\n            android:key=\"muted_word\"\r\n            android:title=\"Muted Word\"\r\n            android:defaultValue=\"false\" />\r\n    </PreferenceCategory>\r\n\r\n    <!-- Preferences Section -->\r\n    <PreferenceCategory android:title=\"Preferences\">\r\n        <SwitchPreference\r\n            android:key=\"unread\"\r\n            android:title=\"Unread notification count badge\"\r\n            android:summary=\"Displays a badge with the number of notifications waiting for you inside the X app. \"\r\n            android:defaultValue=\"true\" />\r\n\r\n        <Preference\r\n            android:key=\"push_notification\"\r\n            android:title=\"Push Notification\"\r\n            android:defaultValue=\"none\" />\r\n\r\n        <Preference\r\n            android:key=\"sms_notification\"\r\n            android:title=\"SMS notification\"\r\n            android:defaultValue=\"none\" />\r\n\r\n        <Preference\r\n            android:key=\"email_notification\"\r\n            android:title=\"Email notification\"\r\n            android:defaultValue=\"none\" />\r\n    </PreferenceCategory>\r\n</PreferenceScreen>\r\n
+===================================================================
+diff --git a/app/src/main/res/xml/notification_preferences.xml b/app/src/main/res/xml/notification_preferences.xml
+--- a/app/src/main/res/xml/notification_preferences.xml	
++++ b/app/src/main/res/xml/notification_preferences.xml	
+@@ -1,47 +1,17 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+-
+-    <!-- Filters Section -->
+-    <PreferenceCategory android:title="Filters"
+-        android:summary="Choose the notifications you'd like to see --- and those you don't">
+-        <SwitchPreference
+-            android:key="quality_filter"
+-            android:title="Quality filter"
+-            android:summary="Enable or disable activity notifications"
+-            android:defaultValue="true" />
+-
+-        <SwitchPreference
+-            android:key="muted_notification"
+-            android:title="Muted Notification"
+-            android:defaultValue="false" />
+-
+-        <SwitchPreference
+-            android:key="muted_word"
+-            android:title="Muted Word"
+-            android:defaultValue="false" />
+-    </PreferenceCategory>
+-
+-    <!-- Preferences Section -->
+-    <PreferenceCategory android:title="Preferences">
+-        <SwitchPreference
+-            android:key="unread"
+-            android:title="Unread notification count badge"
+-            android:summary="Displays a badge with the number of notifications waiting for you inside the X app. "
+-            android:defaultValue="true" />
++<PreferenceScreen
++    xmlns:app="http://schemas.android.com/apk/res-auto">
+ 
+-        <Preference
+-            android:key="push_notification"
+-            android:title="Push Notification"
+-            android:defaultValue="none" />
++    <Preference
++        app:fragment="vn.edu.usth.x.NotificationPage.FilterSettingsFragment"
++        app:key="filter_category"
++        app:title="Filters"
++        app:summary="Choose the notifications you’d like to see — and those you don’t." />
+ 
+-        <Preference
+-            android:key="sms_notification"
+-            android:title="SMS notification"
+-            android:defaultValue="none" />
++    <Preference
++        app:fragment="vn.edu.usth.x.NotificationPage.PreferenceSettingsFragment"
++        app:key="preferences_category"
++        app:title="Preferences"
++        app:summary="Select your preferences by notification type." />
+ 
+-        <Preference
+-            android:key="email_notification"
+-            android:title="Email notification"
+-            android:defaultValue="none" />
+-    </PreferenceCategory>
+ </PreferenceScreen>
+Index: app/src/main/java/vn/edu/usth/x/NotificationPage/NotificationSettings.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package vn.edu.usth.x.NotificationPage;\r\n\r\nimport android.os.Bundle;\r\nimport android.widget.ImageView;\r\n\r\nimport androidx.appcompat.app.ActionBar;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.preference.PreferenceFragmentCompat;\r\n\r\nimport vn.edu.usth.x.R;\r\n\r\npublic class NotificationSettings extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.settings_activity);\r\n        if (savedInstanceState == null) {\r\n            getSupportFragmentManager()\r\n                    .beginTransaction()\r\n                    .replace(R.id.notificationsettings, new SettingsFragment())\r\n                    .commit();\r\n        }\r\n        ActionBar actionBar = getSupportActionBar();\r\n        if (actionBar != null) {\r\n            actionBar.setDisplayHomeAsUpEnabled(true);\r\n        }\r\n\r\n        ImageView backToSearch = findViewById(R.id.back_to_search);\r\n        backToSearch.setOnClickListener(v -> {\r\n            super.onBackPressed();\r\n        });\r\n    }\r\n\r\n    public static class SettingsFragment extends PreferenceFragmentCompat {\r\n        @Override\r\n        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {\r\n            setPreferencesFromResource(R.xml.notification_preferences, rootKey);\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/app/src/main/java/vn/edu/usth/x/NotificationPage/NotificationSettings.java b/app/src/main/java/vn/edu/usth/x/NotificationPage/NotificationSettings.java
+--- a/app/src/main/java/vn/edu/usth/x/NotificationPage/NotificationSettings.java	
++++ b/app/src/main/java/vn/edu/usth/x/NotificationPage/NotificationSettings.java	
+@@ -14,7 +14,7 @@
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+-        setContentView(R.layout.settings_activity);
++        setContentView(R.layout.notification_settings);
+         if (savedInstanceState == null) {
+             getSupportFragmentManager()
+                     .beginTransaction()
+Index: app/src/main/res/xml/explore_preferences.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<PreferenceScreen xmlns:android=\"http://schemas.android.com/apk/res/android\">\r\n\r\n    <PreferenceCategory\r\n        android:title=\"Location\">\r\n\r\n        <SwitchPreferenceCompat\r\n            android:key=\"location_switch\"\r\n            android:title=\"Show content in this location\"\r\n            android:summary=\"When this is on, you'll see what's happening around you right now.\"\r\n            android:defaultValue=\"true\" />\r\n    </PreferenceCategory>\r\n\r\n    <PreferenceCategory\r\n        android:title=\"Personalization\">\r\n\r\n        <SwitchPreferenceCompat\r\n            android:key=\"trends_switch\"\r\n            android:title=\"Trends for you\"\r\n            android:summary=\"You can personalize the trends for you based on your location and who you follow.\"\r\n            android:defaultValue=\"true\" />\r\n    </PreferenceCategory>\r\n\r\n</PreferenceScreen>\r\n
+===================================================================
+diff --git a/app/src/main/res/xml/explore_preferences.xml b/app/src/main/res/xml/explore_preferences.xml
+--- a/app/src/main/res/xml/explore_preferences.xml	
++++ b/app/src/main/res/xml/explore_preferences.xml	
+@@ -1,24 +1,25 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
++<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto">
+ 
+     <PreferenceCategory
+-        android:title="Location">
++        app:title="Location">
+ 
+         <SwitchPreferenceCompat
+-            android:key="location_switch"
+-            android:title="Show content in this location"
+-            android:summary="When this is on, you'll see what's happening around you right now."
+-            android:defaultValue="true" />
++            app:key="location_switch"
++            app:title="Show content in this location"
++            app:summary="When this is on, you'll see what's happening around you right now."
++            app:defaultValue="true" />
+     </PreferenceCategory>
+ 
+     <PreferenceCategory
+-        android:title="Personalization">
++        app:title="Personalization">
+ 
+         <SwitchPreferenceCompat
+-            android:key="trends_switch"
+-            android:title="Trends for you"
+-            android:summary="You can personalize the trends for you based on your location and who you follow."
+-            android:defaultValue="true" />
++            app:key="trends_switch"
++            app:title="Trends for you"
++            app:summary="You can personalize the trends for you based on your location and who you follow."
++            app:defaultValue="true" />
+     </PreferenceCategory>
+ 
+ </PreferenceScreen>

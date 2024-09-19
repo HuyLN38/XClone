@@ -16,13 +16,12 @@
             android:name=".NotificationPage.NotificationSettings"
             android:exported="false"
             android:label="@string/title_activity_notification_settings"
-            android:theme="@style/CustomPreferenceTheme"/>
-
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".SearchPage.ExploreSettings"
             android:exported="false"
-            android:label="@string/title_activity_explore_settings" />
-
+            android:label="@string/title_activity_explore_settings"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".HomeFragment"
             android:exported="false"

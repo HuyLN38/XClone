@@ -1,0 +1,23 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory app:title="Filters"
+        app:key="filter_category"
+        app:summary="Choose the notifications you'd like to see --- and those you don't">
+        <SwitchPreference
+            app:key="quality_filter"
+            app:title="Quality filter"
+            app:summary="Enable or disable activity notifications"
+            app:defaultValue="true" />
+
+        <SwitchPreference
+            app:key="muted_notification"
+            app:title="Muted Notification"
+            app:defaultValue="false" />
+
+        <SwitchPreference
+            app:key="muted_word"
+            app:title="Muted Word"
+            app:defaultValue="false" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
