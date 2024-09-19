@@ -99,9 +99,12 @@
         <!--Icons and statistic-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:layout_height="50dp"
+            android:layout_marginTop="-10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
         <!--chat-->
             <ImageView
@@ -130,24 +133,34 @@
                 android:text="1,395"
                 android:textColor="@color/gray"/>
             <!--heart-->
-            <ImageView
-                android:id="@+id/like"
+            <FrameLayout
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/heart"
-                android:layout_marginLeft="10dp"
-                app:tint="@color/heart_tint"/>
+                android:gravity="center"
+                android:elevation="10dp"
+                android:clipChildren="false"
+                android:clipToPadding="false">
+            <ImageView
+                android:id="@+id/btn_anim"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="-15dp"
+                android:layout_marginRight="-15dp"
+                android:layout_marginTop="-15dp"
+                android:src="@drawable/animation"
+                android:scaleType="centerInside"
+                />
+        </FrameLayout>
             <TextView
                 android:id="@+id/like_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="28.6K"
-                android:layout_marginLeft="3dp"
                 android:textColor="@color/gray"/>
             <!--bar-->
             <ImageView
                 android:layout_width="20dp"
-                android:layout_height="match_parent"
+                android:layout_height="20dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/bar_chart_icon"
                 android:layout_marginLeft="10dp"
@@ -162,7 +175,7 @@
             <!--bookmark-->
             <ImageView
                 android:id="@+id/bookmark"
-                android:layout_width="25dp"
+                android:layout_width="2dp"
                 android:layout_height="20dp"
                 android:layout_marginLeft="10dp"
                 android:src="@drawable/bookmark"
