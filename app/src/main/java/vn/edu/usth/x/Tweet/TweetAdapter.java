@@ -125,6 +125,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
             public void onClick(View v) {
                 FragmentActivity activity = (FragmentActivity) v.getContext();
                 FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.replace(R.id.drawer_layout, new CommentFragment()).commit();
 
