@@ -1,6 +1,11 @@
 package vn.edu.usth.x.Topbar;
 
+import android.content.Context;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,10 +13,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import androidx.fragment.app.FragmentTransaction;
 
+import vn.edu.usth.x.HomeFragment;
 import vn.edu.usth.x.InboxPage.SettingsInboxFragment;
 import vn.edu.usth.x.R;
 
 public class InboxTopBar extends Fragment {
+
+    private DrawerLayout drawerLayout;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof HomeFragment) {
+            drawerLayout = ((HomeFragment) context).getDrawerLayout();
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,6 +45,12 @@ public class InboxTopBar extends Fragment {
                 transaction.replace(R.id.drawer_layout, settings);
                 transaction.addToBackStack(null);
                 transaction.commit();
+            }
+        });
+        ImageView avatar = view.findViewById(R.id.avatar);
+        avatar.setOnClickListener(v -> {
+            if (drawerLayout != null) {
+                drawerLayout.openDrawer(GravityCompat.START);
             }
         });
 

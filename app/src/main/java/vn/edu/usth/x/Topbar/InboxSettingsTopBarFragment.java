@@ -24,6 +24,8 @@ public class InboxSettingsTopBarFragment extends Fragment {
             transaction.commit();
         });
 
+
+
         return view;
     }
 }

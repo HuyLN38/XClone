@@ -9,12 +9,10 @@
             android:title="Quality filter"
             android:summary="Enable or disable activity notifications"
             android:defaultValue="true" />
-
         <SwitchPreference
             android:key="muted_notification"
             android:title="Muted Notification"
             android:defaultValue="false" />
-
         <SwitchPreference
             android:key="muted_word"
             android:title="Muted Word"
