@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="16dp"
+    android:padding="10dp"
     android:background="@color/black">
 
 
@@ -99,9 +99,12 @@
         <!--Icons and statistic-->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
+            android:layout_height="50dp"
+            android:layout_marginTop="-10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
         <!--chat-->
             <ImageView
@@ -117,11 +120,13 @@
                 android:textColor="@color/gray"
                 />
             <!--retweet-->
+            <Space
+                android:layout_width="20dp"
+                android:layout_height="0dp"/>
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/retweet_icon"
-                android:layout_marginLeft="10dp"
                 app:tint="@color/gray"/>
 
             <TextView
@@ -129,28 +134,44 @@
                 android:layout_height="wrap_content"
                 android:text="1,395"
                 android:textColor="@color/gray"/>
+            <Space
+                android:layout_width="20dp"
+                android:layout_height="0dp"/>
             <!--heart-->
-            <ImageView
-                android:id="@+id/like"
+            <FrameLayout
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/heart"
-                android:layout_marginLeft="10dp"
-                app:tint="@color/heart_tint"/>
+                android:gravity="center"
+                android:elevation="10dp"
+                android:clipChildren="false"
+                android:clipToPadding="false">
+
+                <ImageView
+                    android:id="@+id/btn_anim"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="-15dp"
+                    android:layout_marginTop="-15dp"
+                    android:layout_marginRight="-15dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/animation" />
+            </FrameLayout>
             <TextView
                 android:id="@+id/like_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="28.6K"
-                android:layout_marginLeft="3dp"
                 android:textColor="@color/gray"/>
+            <Space
+                android:layout_width="20dp"
+                android:layout_height="0dp"/>
+
             <!--bar-->
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/bar_chart_icon"
-                android:layout_marginLeft="10dp"
                 app:tint="@color/gray"
                 />
             <TextView
@@ -159,18 +180,20 @@
                 android:text="28.6K"
                 android:layout_marginLeft="3dp"
                 android:textColor="@color/gray"/>
+            <Space
+                android:layout_width="20dp"
+                android:layout_height="0dp"/>
             <!--bookmark-->
             <ImageView
-                android:layout_width="25dp"
+                android:id="@+id/bookmark"
+                android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginLeft="10dp"
                 android:src="@drawable/bookmark"
-                app:tint="@color/gray"/>
+                app:tint="@color/bookmark_tint"/>
             <!--share-->
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="20dp"
-                android:layout_marginStart="10dp"
                 android:src="@drawable/share_social_icon"
                 app:tint="@color/gray"/>
 

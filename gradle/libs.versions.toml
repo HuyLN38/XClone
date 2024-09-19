@@ -1,6 +1,7 @@
 [versions]
 agp = "8.6.0"
 circleimageview = "3.1.0"
+easinginterpolator = "v1.3.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
@@ -12,6 +13,7 @@ preference = "1.2.0"
 
 [libraries]
 circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
+easinginterpolator = { module = "com.github.MasayukiSuda:EasingInterpolator", version.ref = "easinginterpolator" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

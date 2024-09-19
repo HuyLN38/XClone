@@ -29,5 +29,10 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="Color1SwitchStyle">
+        <item name="colorControlActivated">@color/light_blue</item>
+    </style>
+
+    
 
 </resources>
