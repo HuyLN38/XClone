@@ -1,5 +1,7 @@
 package vn.edu.usth.x.Tweet;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
@@ -15,6 +17,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import vn.edu.usth.x.R;
+import vn.edu.usth.x.Tweet.comment.CommentFragment;
 
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHolder> {
 
@@ -100,6 +103,34 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
     public TweetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_tweet, parent, false);
+
+        ImageView bookmarkButton = itemView.findViewById(R.id.bookmark);
+
+
+        bookmarkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.setSelected(!v.isSelected());
+                if (v.isSelected()) {
+                    bookmarkButton.setImageResource(R.drawable.bookmark_after);
+                } else {
+                    bookmarkButton.setImageResource(R.drawable.bookmark);
+                }
+            }
+        });
+
+        ImageView commentButton = itemView.findViewById(R.id.comment_button);
+        commentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentActivity activity = (FragmentActivity) v.getContext();
+                FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.replace(R.id.drawer_layout, new CommentFragment()).commit();
+
+            }
+        });
+
         return new TweetViewHolder(itemView);
     }
 

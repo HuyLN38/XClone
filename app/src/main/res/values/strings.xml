@@ -94,6 +94,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="elonmut">"@elonmut"</string>
+    <string name="bccnews">"@bccnews"</string>
     <string name="emi_fukada">"I'm Emi Fukada"</string>
     <string name="you_bonjour_je_m_appelle_datz_j_ai_18_ans_je_taime_3" />
     <string name="you_hello_fukada_wanna_hangout_with_me">You: Hello Fukada. Wanna hangout with me ^^</string>
