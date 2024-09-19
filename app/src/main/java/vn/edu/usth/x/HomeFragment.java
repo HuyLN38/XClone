@@ -40,6 +40,9 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
     private Fragment inboxFragment;
     private Fragment communityFragment;
 
+    private static final String CURRENT_FRAGMENT_TAG = "current_fragment_tag";
+    private String currentFragmentTag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,9 +66,18 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
         inboxFragment = new InboxFragment();
         communityFragment = new CommunityFragment();
 
-        // Set default selected item
-        bottomNavigationView.setSelectedItemId(R.id.home);
-        addFragment(homeFragment, new HomeTopBarFragment());
+        if (savedInstanceState != null) {
+            currentFragmentTag = savedInstanceState.getString(CURRENT_FRAGMENT_TAG);
+            Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(currentFragmentTag);
+            if (currentFragment != null) {
+                showFragment(currentFragment, getTopBarFragment(currentFragmentTag), currentFragmentTag);
+            }
+        } else {
+            // Set default selected item
+            bottomNavigationView.setSelectedItemId(R.id.home);
+            addFragment(homeFragment, new HomeTopBarFragment(), "home");
+            currentFragmentTag = "home";
+        }
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -74,19 +86,19 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
                 bottomNavigationView.setItemIconTintList(null);
 
                 if (id == R.id.home) {
-                    showFragment(homeFragment, new HomeTopBarFragment());
+                    showFragment(homeFragment, new HomeTopBarFragment(), "home");
                     return true;
                 } else if (id == R.id.search) {
-                    showFragment(searchFragment, new SearchTopBarFragment());
+                    showFragment(searchFragment, new SearchTopBarFragment(), "search");
                     return true;
                 } else if (id == R.id.notification) {
-                    showFragment(notificationFragment, new NotificationTopBarFragment());
+                    showFragment(notificationFragment, new NotificationTopBarFragment(), "notification");
                     return true;
                 } else if (id == R.id.mail) {
-                    showFragment(inboxFragment, new InboxTopBar());
+                    showFragment(inboxFragment, new InboxTopBar(), "mail");
                     return true;
                 } else if (id == R.id.community) {
-                    showFragment(communityFragment, new CommunityTopBarFragment());
+                    showFragment(communityFragment, new CommunityTopBarFragment(), "community");
                     return true;
                 }
                 return false;
@@ -95,14 +107,14 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
     }
 
-    private void addFragment(Fragment fragment, Fragment topBarFragment) {
+    private void addFragment(Fragment fragment, Fragment topBarFragment, String tag) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.frameLayout, fragment);
+        transaction.add(R.id.frameLayout, fragment, tag);
         transaction.add(R.id.home_toolbar, topBarFragment);
         transaction.commit();
     }
 
-    private void showFragment(Fragment fragment, Fragment topBarFragment) {
+    private void showFragment(Fragment fragment, Fragment topBarFragment, String tag) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
@@ -117,12 +129,14 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
         if (fragment.isAdded()) {
             transaction.show(fragment);
         } else {
-            transaction.add(R.id.frameLayout, fragment);
+            transaction.add(R.id.frameLayout, fragment, tag);
         }
 
         // Replace the top bar fragment
         transaction.replace(R.id.home_toolbar, topBarFragment);
         transaction.commit();
+
+        currentFragmentTag = tag;
     }
 
     @Override
@@ -146,6 +160,29 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
             } else {
                 drawerLayout.openDrawer(binding.sidebarView);
             }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(CURRENT_FRAGMENT_TAG, currentFragmentTag);
+    }
+
+    private Fragment getTopBarFragment(String tag) {
+        switch (tag) {
+            case "home":
+                return new HomeTopBarFragment();
+            case "search":
+                return new SearchTopBarFragment();
+            case "notification":
+                return new NotificationTopBarFragment();
+            case "mail":
+                return new InboxTopBar();
+            case "community":
+                return new CommunityTopBarFragment();
+            default:
+                return null;
         }
     }
 }
