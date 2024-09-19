@@ -1,14 +1,32 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.X" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/black</item>
         <item name="android:colorPrimaryDark">@color/black</item>
-        <item name="android:colorPrimary">@color/white</item>
+        <item name="android:colorPrimary">@color/black</item>
         <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/black</item>
         <item name="colorSecondary">@color/black</item>
-        <item name="android:windowLightStatusBar">true</item> <!-- Set to false for white text/icons -->
-        <item name="windowActionBar">true</item>
+        <item name="windowActionBar">false</item>
     </style>
 
     <style name="Theme.X" parent="Base.Theme.X" />
+
+    <style name="Theme.X.NoActionBar">
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="CustomPreferenceTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowBackground">@color/black</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">@color/gray</item>
+        <item name="android:colorBackground">@color/black</item>
+        <item name="android:colorForeground">@color/white</item>
+        <item name="android:colorAccent">@color/white</item>
+        <item name="android:colorPrimary">@color/black</item>
+
+    </style>
 </resources>
