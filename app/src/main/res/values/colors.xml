@@ -13,4 +13,5 @@
     <color name="gray_bar">#191919</color>
     <color name="hint_text">#7d8184</color>
     <color name="red">#FF0000</color>
+    <color name="heart">#ff127c</color>
 </resources>

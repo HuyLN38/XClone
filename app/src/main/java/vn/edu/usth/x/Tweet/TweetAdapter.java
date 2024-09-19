@@ -1,5 +1,6 @@
 package vn.edu.usth.x.Tweet;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -61,6 +62,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
                     .into(avatar);
 
             ImageView bookmarkButton = itemView.findViewById(R.id.bookmark);
+            TextView likeCount = itemView.findViewById(R.id.like_count);
 
             // Set up animation
             btnAnim.setImageResource(R.drawable.animation);
@@ -71,11 +73,15 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
                     if (animationDrawable.getCurrent() == animationDrawable.getFrame(lastFrameIndex)) {
                         animationDrawable.selectDrawable(0); // Reset to the first frame
                         animationDrawable.stop();
+                        likeCount.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.gray));
                     }
                 } else {
                     if (animationDrawable.getCurrent() == animationDrawable.getFrame(lastFrameIndex)) {
                         animationDrawable.selectDrawable(0); // Reset to the first frame
                         animationDrawable.stop();
+                        likeCount.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.gray));
+                    } else {
+                        likeCount.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.heart));
                     }
                     animationDrawable.start();
                 }
