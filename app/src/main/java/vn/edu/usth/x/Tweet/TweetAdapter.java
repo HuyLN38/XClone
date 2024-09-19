@@ -57,6 +57,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
                     .load(tweet.getAvatar())
                     .into(avatar);
 
+            ImageView bookmarkButton = itemView.findViewById(R.id.bookmark);
+
             // Set up animation
             btnAnim.setImageResource(R.drawable.animation);
             btnAnim.setOnClickListener(v -> {
@@ -73,6 +75,18 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
                         animationDrawable.stop();
                     }
                     animationDrawable.start();
+                }
+            });
+
+            bookmarkButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    v.setSelected(!v.isSelected());
+                    if (v.isSelected()) {
+                        bookmarkButton.setImageResource(R.drawable.bookmark_after);
+                    } else {
+                        bookmarkButton.setImageResource(R.drawable.bookmark);
+                    }
                 }
             });
         }
