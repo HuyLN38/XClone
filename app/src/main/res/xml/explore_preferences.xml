@@ -4,6 +4,7 @@
     <PreferenceCategory
         android:title="Location">
 
+
         <SwitchPreferenceCompat
             android:key="location_switch"
             android:title="Show content in this location"

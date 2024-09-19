@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
     <!-- Filters section -->
     <Preference
         android:key="filter_settings"
@@ -14,5 +13,4 @@
         android:title="Preferences"
         android:summary="Manage your notification preferences"
         android:fragment="vn.edu.usth.x.NotificationPage.PreferenceSettingsFragment" />
-
 </PreferenceScreen>

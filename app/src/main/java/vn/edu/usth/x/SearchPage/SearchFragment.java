@@ -23,6 +23,7 @@ public class SearchFragment extends Fragment {
     SearchFragmentAdapter searchFragmentAdapter;
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

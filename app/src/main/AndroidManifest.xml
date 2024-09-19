@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.X"
+        android:theme="@style/Base.Theme.X"
         tools:targetApi="31">
         <activity
             android:name=".NotificationPage.NotificationSettings"
@@ -26,7 +26,8 @@
             android:name=".HomeFragment"
             android:exported="false"
             android:label="@string/title_activity_home"
-            android:theme="@style/Theme.X.NoActionBar" />
+            android:theme="@style/Theme.X" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -36,6 +37,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

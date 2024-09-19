@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="purple">#A203FF</color>
+    <color name="transparent">#00000000</color>
+    <color name="gray">#bfbaba</color>
+    <color name="ancient_gray">#2f2f2f</color>
+    <color name="dark_gray">#202020</color>
+    <color name="light_blue">#1591ea</color>
+    <color name="dark_blue">#0f4c75</color>
+    <color name="gray_btn">#424649</color>
+    <color name="gray_bar">#191919</color>
+    <color name="hint_text">#7d8184</color>
+    <color name="red">#FF0000</color>
+</resources>
