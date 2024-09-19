@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Location">
+
+        <SwitchPreferenceCompat
+            android:key="location_switch"
+            android:title="Show content in this location"
+            android:summary="When this is on, you'll see what's happening around you right now."
+            android:defaultValue="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Personalization">
+
+        <SwitchPreferenceCompat
+            android:key="trends_switch"
+            android:title="Trends for you"
+            android:summary="You can personalize the trends for you based on your location and who you follow."
+            android:defaultValue="true" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
