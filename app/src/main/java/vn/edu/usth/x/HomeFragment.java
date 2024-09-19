@@ -92,6 +92,7 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
                 return false;
             }
         });
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
     }
 
     private void addFragment(Fragment fragment, Fragment topBarFragment) {

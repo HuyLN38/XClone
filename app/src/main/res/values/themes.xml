@@ -1,17 +1,14 @@
-    <resources xmlns:tools="http://schemas.android.com/tools">
-        <!-- Base application theme. -->
-        <style name="Base.Theme.X" parent="Theme.Material3.DayNight.NoActionBar">
-            <item name="colorPrimary">@color/black</item>
-            <item name="android:colorPrimaryDark">@color/white</item>
-            <item name="colorPrimaryVariant">@color/black</item>
-            <item name="colorOnPrimary">@color/white</item>
-            <item name="colorSecondary">@color/black</item>
-            <item name="android:windowLightStatusBar">true</item>
-            <item name="android:statusBarColor">@color/black</item>
-            <item name="windowActionBar">true</item>
-        </style>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.X" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:colorPrimaryDark">@color/black</item>
+        <item name="android:colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/black</item>
+        <item name="android:windowLightStatusBar">true</item> <!-- Set to false for white text/icons -->
+        <item name="windowActionBar">true</item>
+    </style>
 
-        <style name="Theme.X" parent="Base.Theme.X" />
-
-
-    </resources>
+    <style name="Theme.X" parent="Base.Theme.X" />
+</resources>
