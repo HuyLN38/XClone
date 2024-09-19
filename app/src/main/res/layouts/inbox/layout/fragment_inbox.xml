@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".InboxPage.InboxFragment"
     android:orientation="vertical"
-    android:background="@color/black"
     android:paddingTop="5dp">
 
     <View
@@ -21,7 +20,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@color/black"
         android:gravity="center"
         android:orientation="horizontal">
         <!--receiver avatar -->
@@ -41,7 +39,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:background="@color/black"
                 android:layout_marginTop="8dp"
                 android:text="@string/eimi_fukada"
                 android:textColor="@color/white"
@@ -63,7 +60,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@color/black"
         android:gravity="center"
         android:orientation="horizontal">
         <!--receiver avatar -->
@@ -83,7 +79,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:background="@color/black"
+                
                 android:layout_marginTop="8dp"
                 android:text="@string/johnny_sins"
                 android:textColor="@color/white"
@@ -105,7 +101,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@color/black"
+        
         android:gravity="center"
         android:orientation="horizontal">
         <!--receiver avatar -->
@@ -125,7 +121,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:background="@color/black"
+                
                 android:layout_marginTop="8dp"
                 android:text="@string/messi_lionel"
                 android:textColor="@color/white"
@@ -147,7 +143,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@color/black"
+        
         android:gravity="center"
         android:orientation="horizontal">
         <!--receiver avatar -->
@@ -167,7 +163,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:background="@color/black"
+                
                 android:layout_marginTop="8dp"
                 android:text="@string/the_boy_who_lived"
                 android:textColor="@color/white"
@@ -189,7 +185,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:background="@color/black"
+        
         android:gravity="center"
         android:orientation="horizontal">
         <!--receiver avatar -->
@@ -209,7 +205,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:background="@color/black"
+                
                 android:layout_marginTop="8dp"
                 android:text="@string/jack_dorsey"
                 android:textColor="@color/white"
