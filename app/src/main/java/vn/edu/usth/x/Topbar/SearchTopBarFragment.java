@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import vn.edu.usth.x.HomeFragment;
 import vn.edu.usth.x.NotificationPage.NotificationSettings;
 import vn.edu.usth.x.R;
+import vn.edu.usth.x.SearchPage.ExploreSettings;
 
 public class SearchTopBarFragment extends Fragment {
 
@@ -43,9 +44,9 @@ public class SearchTopBarFragment extends Fragment {
 
         try {
             @SuppressLint({"MissingInflatedId", "LocalSuppress"})
-            ImageView settingsNotification = view.findViewById(R.id.settings_notification);
+            ImageView settingsNotification = view.findViewById(R.id.settings_search);
             settingsNotification.setOnClickListener(v -> {
-                Intent intent = new Intent(getActivity(), NotificationSettings.class);
+                Intent intent = new Intent(getActivity(), ExploreSettings.class);
                 startActivity(intent);
             });
         } catch (Exception ignored) {
