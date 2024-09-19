@@ -1,0 +1,27 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        app:key="preferences_category"
+        app:title="Preferences">
+        <SwitchPreference
+            app:key="unread"
+            app:title="Unread notification count badge"
+            app:summary="Displays a badge with the number of notifications waiting for you inside the X app. "
+            app:defaultValue="true" />
+
+        <Preference
+            app:key="push_notification"
+            app:title="Push Notification"
+            app:defaultValue="none" />
+
+        <Preference
+            app:key="sms_notification"
+            app:title="SMS notification"
+            app:defaultValue="none" />
+
+        <Preference
+            app:key="email_notification"
+            app:title="Email notification"
+            app:defaultValue="none" />
+    </PreferenceCategory>
+</PreferenceScreen>
