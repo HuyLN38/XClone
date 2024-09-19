@@ -54,12 +54,4 @@ public class SettingsInboxFragment extends Fragment {
             }
         }
     };
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
-        transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right);
-        transaction.commit();
-    }
 }
