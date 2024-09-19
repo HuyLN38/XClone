@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".InboxPage.InboxFragment"
     android:orientation="vertical"
+    android:layout_marginStart="10dp"
     android:paddingTop="5dp">
 
     <View

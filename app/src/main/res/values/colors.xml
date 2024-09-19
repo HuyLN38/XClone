@@ -14,4 +14,5 @@
     <color name="hint_text">#7d8184</color>
     <color name="red">#FF0000</color>
     <color name="heart">#ff127c</color>
+    <color name="search_background">#f0f4f3</color>
 </resources>
