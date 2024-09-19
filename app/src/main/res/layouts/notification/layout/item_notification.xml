@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="16dp"
-    android:background="@color/black">
+   >
 
     <!-- Profile Image -->
     <de.hdodenhof.circleimageview.CircleImageView

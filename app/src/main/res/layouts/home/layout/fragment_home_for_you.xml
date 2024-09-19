@@ -18,7 +18,8 @@
             android:layout_height="wrap_content"
             android:paddingBottom="50dp"
             android:scrollbars="vertical"
-            tools:listitem="@layout/item_tweet" />
+            tools:listitem="@layout/item_tweet"
+            android:background="@null"/>
     </FrameLayout>
 
 
