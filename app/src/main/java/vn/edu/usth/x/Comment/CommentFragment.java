@@ -1,4 +1,4 @@
-package vn.edu.usth.x.Tweet.comment;
+package vn.edu.usth.x.Comment;
 
 import android.os.Bundle;
 
