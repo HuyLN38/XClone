@@ -71,9 +71,7 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
             if (currentFragment != null) {
                 showFragment(currentFragment, getTopBarFragment(currentFragmentTag), currentFragmentTag);
             }
-
         } else {
-            // Set default selected item
             bottomNavigationView.setSelectedItemId(R.id.home);
             addFragment(homeFragment, new HomeTopBarFragment(), "home");
             currentFragmentTag = "home";
@@ -123,21 +121,18 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-        // Hide all fragments
         for (Fragment frag : fragmentManager.getFragments()) {
             if (frag != fragment) {
                 transaction.hide(frag);
             }
         }
 
-        // Show the selected fragment
         if (fragment.isAdded()) {
             transaction.show(fragment);
         } else {
             transaction.add(R.id.frameLayout, fragment, tag);
         }
 
-        // Replace the top bar fragment
         transaction.replace(R.id.home_toolbar, topBarFragment);
         transaction.commit();
 

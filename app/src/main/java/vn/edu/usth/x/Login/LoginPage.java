@@ -1,6 +1,7 @@
 // File: LoginPage.java
 package vn.edu.usth.x.Login;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -30,4 +31,13 @@ public class LoginPage extends AppCompatActivity {
             startActivity(intent);
         });
     }
-}
+
+    @SuppressLint("MissingSuperCall")
+    @Override
+    public void onBackPressed() {
+            int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
+            if (backStackEntryCount > 0) {
+                getSupportFragmentManager().popBackStack();
+            }
+        }
+    }
