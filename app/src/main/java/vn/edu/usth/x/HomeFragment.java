@@ -46,6 +46,7 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
     private static final String CURRENT_FRAGMENT_TAG = "current_fragment_tag";
     private String currentFragmentTag;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

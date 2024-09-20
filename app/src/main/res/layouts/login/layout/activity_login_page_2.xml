@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginPage"
+    tools:context=".Login.LoginPage"
     android:orientation="vertical"
     tools:ignore="HardcodedText">
 
@@ -17,15 +17,82 @@
         app:tint="@color/white"
         android:layout_marginBottom="20dp"
         />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginStart="50dp"
-        android:layout_weight="1"
-        android:text="Create you account"
-        android:textColor="@color/white"
-        android:textSize="30sp"
-        android:textStyle="bold" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginBottom="50dp"
+                android:text="Create you account"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_border_custom"
+                android:backgroundTint="@color/gray"
+                android:hint="Name"
+                android:importantForAutofill="no"
+                android:padding="15dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_border_custom"
+                android:backgroundTint="@color/gray"
+                android:hint="Email"
+                android:importantForAutofill="no"
+                android:inputType="textEmailAddress"
+                android:padding="15dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_border_custom"
+                android:backgroundTint="@color/gray"
+                android:hint="Date of Birth"
+                android:importantForAutofill="no"
+                android:inputType="date"
+                android:padding="15dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+        </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="end|center_vertical"
+        android:paddingEnd="10dp"
+        >
+        <Button
+            android:id="@+id/nextLogin2"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:text="Next"
+            app:backgroundTint="@color/light_blue"/>
+
+    </LinearLayout>
 
 </LinearLayout>
