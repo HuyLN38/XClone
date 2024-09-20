@@ -51,7 +51,17 @@ public class HomeForYou extends Fragment {
                 new Tweet(R.drawable.avatar_bcc, "BCCNEWS", "bccnews",getString(R.string.description_yagiQN), "1h", R.drawable.img_yagiqn),
                 new Tweet(R.drawable.avatar_vtv, "VTV24", "vtv24",getString(R.string.description_flood2), "2h", R.drawable.img_flood2),
                 new Tweet(R.drawable.avatar_bcc, "BCCNEWS", "bccnews",getString(R.string.description_traffic), "3h", R.drawable.img_traffic),
+                new Tweet(R.drawable.avatar_vtv, "VTV24", "vtv24",getString(R.string.description_flood1), "5h", R.drawable.img_flood1),
+                new Tweet(R.drawable.avatar_bcc, "BCCNEWS", "bccnews",getString(R.string.description_yagiQN), "1h", R.drawable.img_yagiqn),
+                new Tweet(R.drawable.avatar_vtv, "VTV24", "vtv24",getString(R.string.description_flood2), "2h", R.drawable.img_flood2),
+                new Tweet(R.drawable.avatar_bcc, "BCCNEWS", "bccnews",getString(R.string.description_traffic), "3h", R.drawable.img_traffic),
+                new Tweet(R.drawable.avatar_vtv, "VTV24", "vtv24",getString(R.string.description_flood1), "5h", R.drawable.img_flood1),
+                new Tweet(R.drawable.avatar_bcc, "BCCNEWS", "bccnews",getString(R.string.description_yagiQN), "1h", R.drawable.img_yagiqn),
+                new Tweet(R.drawable.avatar_vtv, "VTV24", "vtv24",getString(R.string.description_flood2), "2h", R.drawable.img_flood2),
+                new Tweet(R.drawable.avatar_bcc, "BCCNEWS", "bccnews",getString(R.string.description_traffic), "3h", R.drawable.img_traffic),
                 new Tweet(R.drawable.avatar_vtv, "VTV24", "vtv24",getString(R.string.description_flood1), "5h", R.drawable.img_flood1)
+
+
         );
     }
 }

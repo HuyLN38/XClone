@@ -19,7 +19,6 @@ public class CommentFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_comment, container, false);
     }
 
@@ -27,7 +26,6 @@ public class CommentFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize your views and set up event handlers here
         Button cancelButton = view.findViewById(R.id.comment_cancel);
         Button postButton = view.findViewById(R.id.comment_post);
 
