@@ -1,13 +1,10 @@
 package vn.edu.usth.x;
 
 import android.annotation.SuppressLint;
-import android.app.UiModeManager;
-import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -34,7 +31,6 @@ import vn.edu.usth.x.databinding.ActivityHomeBinding;
 public class HomeFragment extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private ActivityHomeBinding binding;
-    private FrameLayout frameLayout;
     private DrawerLayout drawerLayout;
 
     private Fragment homeFragment;
@@ -59,7 +55,6 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        frameLayout = findViewById(R.id.frameLayout);
         NavigationView navigationView = findViewById(R.id.sidebar_view);
         drawerLayout = findViewById(R.id.drawer_layout);
 
@@ -76,6 +71,7 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
             if (currentFragment != null) {
                 showFragment(currentFragment, getTopBarFragment(currentFragmentTag), currentFragmentTag);
             }
+
         } else {
             // Set default selected item
             bottomNavigationView.setSelectedItemId(R.id.home);
@@ -109,7 +105,6 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
             }
         });
         int currentMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-
         if (currentMode == Configuration.UI_MODE_NIGHT_YES) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         } else {

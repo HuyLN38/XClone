@@ -25,8 +25,6 @@ import vn.edu.usth.x.Tweet.TweetAdapter;
 
 public class NotificationVerified extends Fragment {
 
-
-
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
