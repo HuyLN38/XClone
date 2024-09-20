@@ -6,21 +6,20 @@
     android:orientation="vertical"
     tools:context=".NotificationPage.NotificationVerified">
 
-         <TextView
-             android:id="@+id/recent"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:padding="8dp"
-             android:text="RECENT"
-             android:textColor="#FFFFFFFF" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
          <androidx.recyclerview.widget.RecyclerView
-             android:id="@+id/recyclerView"
+             android:id="@+id/recyclerViewNofiVerified"
              android:layout_width="match_parent"
-             android:layout_height="wrap_content"
+             android:layout_height="match_parent"
              android:scrollbars="vertical"
              tools:listitem="@layout/item_notification"
              android:paddingBottom="50dp"/>
 
 
+     </LinearLayout>
 </LinearLayout>
