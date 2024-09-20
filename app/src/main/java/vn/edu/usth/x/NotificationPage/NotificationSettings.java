@@ -14,7 +14,7 @@ public class NotificationSettings extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_activity);
+        setContentView(R.layout.notification_settings);
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()

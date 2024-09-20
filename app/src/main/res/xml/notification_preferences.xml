@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:theme="@style/CustomPreferenceTheme">>
     <!-- Filters section -->
     <Preference
-        android:key="filter_settings"
-        android:title="Filters"
-        android:summary="Manage notification filters"
-        android:fragment="vn.edu.usth.x.NotificationPage.FilterSettingsFragment" />
+        app:key="filter_settings"
+        app:title="Filters"
+        app:summary="Manage notification filters"
+        app:icon="@drawable/icon_filter_24"
+        app:fragment="vn.edu.usth.x.NotificationPage.FilterSettingsFragment" />
 
     <!-- Preferences section -->
     <Preference
-        android:key="preferences_settings"
-        android:title="Preferences"
-        android:summary="Manage your notification preferences"
-        android:fragment="vn.edu.usth.x.NotificationPage.PreferenceSettingsFragment" />
+        app:key="preferences_settings"
+        app:title="Preferences"
+        app:summary="Manage your notification preferences"
+        app:icon="@drawable/icon_preferences_30"
+        app:fragment="vn.edu.usth.x.NotificationPage.PreferenceSettingsFragment" />
 </PreferenceScreen>

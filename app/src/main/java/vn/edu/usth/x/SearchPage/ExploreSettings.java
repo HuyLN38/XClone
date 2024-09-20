@@ -14,7 +14,7 @@ public class ExploreSettings extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_activity);
+        setContentView(R.layout.search_explore_settings);
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()

@@ -3,21 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".NotificationPage.NotificationMentions">
-
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewNofiMention"
+        <TextView
+            android:id="@+id/recent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            tools:listitem="@layout/item_notification"
-            android:paddingBottom="50dp"/>
-
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="RECENT"
+            android:textColor="#FFFFFFFF" />
     </LinearLayout>
+
 </LinearLayout>

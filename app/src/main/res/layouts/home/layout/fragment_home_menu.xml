@@ -41,16 +41,16 @@
             android:layout_weight="1" />
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/homeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="60dp"
-        android:background="@drawable/round_button"
-        android:src="@drawable/plus_icon"
-        app:tint="@color/white"
-        app:backgroundTint="@null" />
+<!--    <ImageButton-->
+<!--        android:id="@+id/homeButton"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="bottom|end"-->
+<!--        android:layout_marginEnd="15dp"-->
+<!--        android:layout_marginBottom="60dp"-->
+<!--        android:background="@drawable/round_button"-->
+<!--        android:src="@drawable/plus_icon"-->
+<!--        app:tint="@color/white"-->
+<!--        app:backgroundTint="@null" />-->
 
 </FrameLayout>

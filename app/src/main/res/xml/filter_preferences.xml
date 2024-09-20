@@ -1,5 +1,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@style/CustomPreferenceTheme">>
     <PreferenceCategory app:title="Filters"
         app:key="filter_category"
         app:summary="Choose the notifications you'd like to see --- and those you don't">
