@@ -1,4 +1,4 @@
-package vn.edu.usth.x.data;
+package vn.edu.usth.x.Login.data;
 
 /**
  * A generic class that holds a result success w/ data or an error exception.

@@ -45,7 +45,7 @@ android {
                             'src\\main\\res\\layouts\\topbar',
                             'src\\main\\res\\layouts\\sidebar',
                             'src\\main\\res\\layouts\\components',
-                            'src\\main\\res\\layouts\\settings', 'src\\main\\res\\animated', 'src\\main\\res\\animated\\heartlogo',
+                            'src\\main\\res\\layouts\\settings', 'src\\main\\res\\animated', 'src\\main\\res\\animated\\heartlogo', 'src\\main\\res\\layouts\\login',
                     ]
         }
     }
@@ -58,6 +58,9 @@ dependencies {
     implementation libs.activity
     implementation libs.constraintlayout
     implementation libs.preference
+    implementation libs.annotation
+    implementation libs.lifecycle.livedata.ktx
+    implementation libs.lifecycle.viewmodel.ktx
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core

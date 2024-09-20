@@ -152,6 +152,15 @@
     <string name="inbox_setting_9">Send read receipts</string>
     <string name="inbox_setting_10">Let people you\'re messaging with know when you\'ve seen their messages. Read receipts are not shown on message requests.</string>
     <string name="inbox_setting_11">Manage encrypted devices</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
 
 
 </resources>

@@ -1,4 +1,4 @@
-package vn.edu.usth.x.data.model;
+package vn.edu.usth.x.Login.data.model;
 
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository

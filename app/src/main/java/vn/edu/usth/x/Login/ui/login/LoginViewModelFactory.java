@@ -1,11 +1,11 @@
-package vn.edu.usth.x.ui.login;
+package vn.edu.usth.x.Login.ui.login;
 
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.annotation.NonNull;
 
-import vn.edu.usth.x.data.LoginDataSource;
-import vn.edu.usth.x.data.LoginRepository;
+import vn.edu.usth.x.Login.data.LoginDataSource;
+import vn.edu.usth.x.Login.data.LoginRepository;
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

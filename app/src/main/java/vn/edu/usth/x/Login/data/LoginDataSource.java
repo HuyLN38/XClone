@@ -1,6 +1,6 @@
-package vn.edu.usth.x.data;
+package vn.edu.usth.x.Login.data;
 
-import vn.edu.usth.x.data.model.LoggedInUser;
+import vn.edu.usth.x.Login.data.model.LoggedInUser;
 
 import java.io.IOException;
 

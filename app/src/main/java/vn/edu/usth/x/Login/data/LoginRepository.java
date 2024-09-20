@@ -1,6 +1,6 @@
-package vn.edu.usth.x.data;
+package vn.edu.usth.x.Login.data;
 
-import vn.edu.usth.x.data.model.LoggedInUser;
+import vn.edu.usth.x.Login.data.model.LoggedInUser;
 
 /**
  * Class that requests authentication and user information from the remote data source and

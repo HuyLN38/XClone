@@ -1,4 +1,4 @@
-package vn.edu.usth.x.ui.login;
+package vn.edu.usth.x.Login.ui.login;
 
 import android.app.Activity;
 
@@ -23,8 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import vn.edu.usth.x.R;
-import vn.edu.usth.x.ui.login.LoginViewModel;
-import vn.edu.usth.x.ui.login.LoginViewModelFactory;
 import vn.edu.usth.x.databinding.ActivityLoginBinding;
 
 public class LoginActivity extends AppCompatActivity {
