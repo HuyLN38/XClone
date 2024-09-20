@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import vn.edu.usth.x.CommunityPage.CommunityTweet;
 import vn.edu.usth.x.R;
 
 public class NotificationRecycleAdapter extends RecyclerView.Adapter<NotificationRecycleAdapter.MyNotificationHolder> {

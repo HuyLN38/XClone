@@ -17,7 +17,6 @@ public class HomeAdapter extends FragmentStateAdapter {
         switch (position){
             case 0: return new HomeForYou();
             case 1: return new HomeFollowing();
-
             default: return new HomeForYou();
         }
     }
