@@ -10,13 +10,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <TextView
-            android:id="@+id/recent"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewNofiMention"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="RECENT"
-            android:textColor="#FFFFFFFF" />
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            tools:listitem="@layout/item_notification"
+            android:paddingBottom="50dp"/>
     </LinearLayout>
 
 </LinearLayout>
