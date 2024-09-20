@@ -12,9 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import vn.edu.usth.x.NotificationPage.NotificationRecycle.NotificationModel;
+import vn.edu.usth.x.NotificationPage.NotificationRecycle.NotificationRecycleAdapter;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Tweet.Tweet;
 import vn.edu.usth.x.Tweet.TweetAdapter;
@@ -35,25 +38,30 @@ public class NotificationVerified extends Fragment {
         View view = inflater.inflate(R.layout.fragment_notification_verified, container, false);
 
         // Initialize RecyclerView
-        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView = view.findViewById(R.id.recyclerViewNofiVerified);
 
         // Use a linear layout manager
         layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
         // Specify an adapter (you need to implement your own adapter)
-        adapter = new TweetAdapter(getTweetData());
+        adapter = new NotificationRecycleAdapter(getTweetData());
         recyclerView.setAdapter(adapter);
 
         return view;
     }
 
     // Example method to get data for the adapter
-    private List<Tweet> getTweetData() {
+    private ArrayList<NotificationModel> getTweetData() {
         // Return a list of tweets
-        return Arrays.asList(
-                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", NULL),
-                new Tweet(R.drawable.johnnysins, "Johnny Sins", "johnnysins", "I'm a plumber", "3h", NULL)
+        return new ArrayList<>(
+                Arrays.asList(
+                        new NotificationModel(R.drawable.avatar_bcc, "BBC NEWS",  getString(R.string.description_yagiQN)),
+                        new NotificationModel(R.drawable.avatar_vtv, "VTV24",  getString(R.string.description_flood2)),
+                        new NotificationModel(R.drawable.avatar3, "Naruto",  getString(R.string.description_traffic)),
+                        new NotificationModel(R.drawable.avatar_2, "Johnny Smith",  getString(R.string.description_flood1)),
+                        new NotificationModel(R.drawable.johnnysins, "Johnny Sins",  "I'm a plumber")
+                )
         );
     }
 }
