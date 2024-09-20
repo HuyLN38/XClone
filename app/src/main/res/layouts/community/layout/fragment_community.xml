@@ -21,7 +21,6 @@
         android:layout_width="match_parent"
         app:tabIndicatorFullWidth="true"
         android:layout_height="wrap_content"
-        android:background="@color/black"
         app:layout_constraintTop_toTopOf="@+id/first_gray_bar"
         app:tabGravity="fill"
         app:tabIndicatorColor="#2BA2EA"

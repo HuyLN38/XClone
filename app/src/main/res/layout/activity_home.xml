@@ -4,7 +4,6 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
     android:theme="@style/Base.Theme.X"
     tools:context=".HomeFragment"
     tools:showIn="@layout/activity_home">
@@ -35,6 +34,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
+            app:backgroundTint="@color/black"
             app:itemActiveIndicatorStyle="@android:color/transparent"
             app:itemTextAppearanceActive="@style/BottomNavigationViewTextStyle"
             app:itemTextAppearanceInactive="@style/BottomNavigationViewTextStyle"

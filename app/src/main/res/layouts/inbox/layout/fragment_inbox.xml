@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     tools:context=".InboxPage.InboxFragment"
     android:orientation="vertical"
-    android:layout_marginStart="10dp"
-    android:paddingTop="5dp">
+    android:paddingTop="5dp"
+>
 
     <View
         android:layout_width="match_parent"
@@ -31,8 +31,9 @@
             android:src="@drawable/fukada" />
         <!--chat box-->
         <LinearLayout
-            android:layout_width="340dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical"
             android:layout_marginStart="10dp"
             >
@@ -71,8 +72,9 @@
             android:src="@drawable/johnnysins" />
         <!--chat box-->
         <LinearLayout
-            android:layout_width="340dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical"
             android:layout_marginStart="10dp"
             >
@@ -113,8 +115,9 @@
             android:src="@drawable/messi" />
         <!--chat box-->
         <LinearLayout
-            android:layout_width="340dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical"
             android:layout_marginStart="10dp"
             >
@@ -155,8 +158,9 @@
             android:src="@drawable/potter" />
         <!--chat box-->
         <LinearLayout
-            android:layout_width="340dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical"
             android:layout_marginStart="10dp"
             >
@@ -197,8 +201,9 @@
             android:src="@drawable/jackdorsey" />
         <!--chat box-->
         <LinearLayout
-            android:layout_width="340dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical"
             android:layout_marginStart="10dp"
             >

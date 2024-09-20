@@ -23,8 +23,6 @@
         android:layout_weight="6"
         android:text="See what's \nhappening in the \nworld right now."
         android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:textColor="@color/white"
         android:layout_marginTop="200dp"
         android:layout_marginStart="50dp"
