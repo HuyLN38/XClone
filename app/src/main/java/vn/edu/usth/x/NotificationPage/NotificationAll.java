@@ -58,6 +58,11 @@ public class NotificationAll extends Fragment {
                         new NotificationModel(R.drawable.avatar_vtv, "VTV24",  getString(R.string.description_flood2)),
                         new NotificationModel(R.drawable.avatar3, "Naruto",  getString(R.string.description_traffic)),
                         new NotificationModel(R.drawable.avatar_2, "Johnny Smith",  getString(R.string.description_flood1)),
+                        new NotificationModel(R.drawable.johnnysins, "Johnny Sins",  getString(R.string.description_flood2)),
+                        new NotificationModel(R.drawable.avatar_bcc, "BBC NEWS",  getString(R.string.description_yagiQN)),
+                        new NotificationModel(R.drawable.avatar_vtv, "VTV24",  getString(R.string.description_flood2)),
+                        new NotificationModel(R.drawable.avatar3, "Naruto",  getString(R.string.description_traffic)),
+                        new NotificationModel(R.drawable.avatar_2, "Johnny Smith",  getString(R.string.description_flood1)),
                         new NotificationModel(R.drawable.johnnysins, "Johnny Sins",  getString(R.string.description_flood2))
                 )
         );
