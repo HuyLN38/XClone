@@ -13,6 +13,9 @@
         android:theme="@style/Base.Theme.X"
         tools:targetApi="31">
         <activity
+            android:name=".Login.LoginPage0"
+            android:exported="false" />
+        <activity
             android:name=".Login.ui.login.LoginActivity"
             android:exported="false"
             android:label="@string/title_activity_login" />
@@ -20,14 +23,12 @@
             android:name=".Login.LoginPage"
             android:exported="false"
             android:label="LoginPage"
-            android:theme="@style/Theme.X"
-            />
+            android:theme="@style/Theme.X" />
         <activity
             android:name=".Login.LoginPage1Activity"
             android:exported="false"
             android:label="LoginPage"
-            android:theme="@style/Theme.X"
-            />
+            android:theme="@style/Theme.X" />
         <activity
             android:name=".NotificationPage.NotificationSettings"
             android:exported="false"
