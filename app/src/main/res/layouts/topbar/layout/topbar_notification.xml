@@ -23,8 +23,7 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/avatar"
                 android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:src="@drawable/avatar" />
+                android:layout_height="25dp" />
 
             <Space
                 android:layout_width="25dp"

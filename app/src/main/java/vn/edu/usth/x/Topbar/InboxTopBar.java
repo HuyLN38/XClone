@@ -1,12 +1,15 @@
 package vn.edu.usth.x.Topbar;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 import vn.edu.usth.x.HomeFragment;
 import vn.edu.usth.x.InboxPage.SettingsInboxFragment;
 import vn.edu.usth.x.R;
+import vn.edu.usth.x.Utils.UserAvatar;
 
 public class InboxTopBar extends Fragment {
 
@@ -47,7 +51,25 @@ public class InboxTopBar extends Fragment {
                 transaction.commit();
             }
         });
+
+
         ImageView avatar = view.findViewById(R.id.avatar);
+
+        Context context = getContext();
+        if (context != null) {
+            UserAvatar.getAvatar(context, new UserAvatar.AvatarCallback() {
+                @Override
+                public void onSuccess(Bitmap avatarBitmap) {
+                    avatar.setImageBitmap(avatarBitmap);
+                }
+
+                @Override
+                public void onFailure(String errorMessage) {
+                    // Handle the error, e.g., show a default avatar or log the error
+                    Log.e("CommunityTopBarFragment", errorMessage);
+                }
+            });
+        }
         avatar.setOnClickListener(v -> {
             if (drawerLayout != null) {
                 drawerLayout.openDrawer(GravityCompat.START);

@@ -1,20 +1,26 @@
 package vn.edu.usth.x.Login;
 
-
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,10 +28,13 @@ import vn.edu.usth.x.HomeFragment;
 import vn.edu.usth.x.Login.Data.User;
 import vn.edu.usth.x.Login.Data.UserManager;
 import vn.edu.usth.x.R;
+import vn.edu.usth.x.Utils.UserAvatar;
 
 public class RegisterPage4 extends AppCompatActivity {
 
     private EditText usernameEditText;
+    private static final String PREFS_NAME = "UserPrefs";
+    private static final String USER_ID_KEY = "userId";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +44,6 @@ public class RegisterPage4 extends AppCompatActivity {
         usernameEditText = findViewById(R.id.usernameEditText);
         Button nextButton = findViewById(R.id.nextButton);
         nextButton.setOnClickListener(v -> registerUser());
-
     }
 
     private void registerUser() {
@@ -71,7 +79,7 @@ public class RegisterPage4 extends AppCompatActivity {
         }
     }
 
-    private static class RegisterUserTask extends AsyncTask<String, Void, Boolean> {
+    private class RegisterUserTask extends AsyncTask<String, Void, Boolean> {
 
         private static final int MAX_SIZE_MB = 15;
         private static final int MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
@@ -95,8 +103,39 @@ public class RegisterPage4 extends AppCompatActivity {
 
                 int responseCode = conn.getResponseCode();
                 Log.d("RegisterUserTask", "Response code: " + responseCode);
-                Log.d("RegisterUserTask", "Response message: " + conn.getResponseMessage());
-                return responseCode == HttpURLConnection.HTTP_CREATED;
+                if (responseCode == HttpURLConnection.HTTP_CREATED) {
+                    InputStream is = conn.getInputStream();
+                    String responseJson = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))
+                            .lines().collect(Collectors.joining("\n"));
+                    Log.d("RegisterUserTask", "Response JSON: " + responseJson);
+                    // Parse the response JSON and extract the id
+                    JSONObject jsonResponse = new JSONObject(responseJson);
+                    String id = jsonResponse.getString("id");
+                    Log.d("RegisterUserTask", "User ID: " + id);
+
+                    // Save the user ID in SharedPreferences
+                    SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(USER_ID_KEY, id);
+                    editor.apply();
+
+                    UserAvatar.onUuidChanged(RegisterPage4.this, id, new UserAvatar.AvatarCallback() {
+                        @Override
+                        public void onSuccess(Bitmap avatar) {
+                            Log.d("RegisterUserTask", "Successfully saved user ID and avatar");
+                        }
+
+                        @Override
+                        public void onFailure(String errorMessage) {
+                            Log.e("RegisterUserTask", errorMessage);
+                        }
+                    });
+
+                    return true;
+                } else {
+                    Log.d("RegisterUserTask", "Response message: " + conn.getResponseMessage());
+                    return false;
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();

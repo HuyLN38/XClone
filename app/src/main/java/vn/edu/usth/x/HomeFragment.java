@@ -1,10 +1,14 @@
 package vn.edu.usth.x;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -26,6 +30,7 @@ import vn.edu.usth.x.Topbar.HomeTopBarFragment;
 import vn.edu.usth.x.Topbar.InboxTopBar;
 import vn.edu.usth.x.Topbar.NotificationTopBarFragment;
 import vn.edu.usth.x.Topbar.SearchTopBarFragment;
+import vn.edu.usth.x.Utils.UserAvatar;
 import vn.edu.usth.x.databinding.ActivityHomeBinding;
 
 public class HomeFragment extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,7 +47,6 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
     private static final String CURRENT_FRAGMENT_TAG = "current_fragment_tag";
     private String currentFragmentTag;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +60,24 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         NavigationView navigationView = findViewById(R.id.sidebar_view);
+        View headerView = navigationView.getHeaderView(0);
+        ImageView avatar = headerView.findViewById(R.id.avatar);
+
+        Context context = this.getApplicationContext();
+        if (context != null) {
+            UserAvatar.getAvatar(context, new UserAvatar.AvatarCallback() {
+                @Override
+                public void onSuccess(Bitmap avatarBitmap) {
+                    avatar.setImageBitmap(avatarBitmap);
+                }
+
+                @Override
+                public void onFailure(String errorMessage) {
+                    // Handle the error, e.g., show a default avatar or log the error
+                    Log.e("CommunityTopBarFragment", errorMessage);
+                }
+            });
+        }
         drawerLayout = findViewById(R.id.drawer_layout);
 
         // Initialize fragments

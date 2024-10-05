@@ -3,7 +3,9 @@ package vn.edu.usth.x.Topbar;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import vn.edu.usth.x.HomeFragment;
 import vn.edu.usth.x.NotificationPage.NotificationSettings;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.SearchPage.ExploreSettings;
+import vn.edu.usth.x.Utils.UserAvatar;
 
 public class SearchTopBarFragment extends Fragment {
 
@@ -41,6 +44,22 @@ public class SearchTopBarFragment extends Fragment {
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
+
+        Context context = getContext();
+        if (context != null) {
+            UserAvatar.getAvatar(context, new UserAvatar.AvatarCallback() {
+                @Override
+                public void onSuccess(Bitmap avatarBitmap) {
+                    avatar.setImageBitmap(avatarBitmap);
+                }
+
+                @Override
+                public void onFailure(String errorMessage) {
+                    // Handle the error, e.g., show a default avatar or log the error
+                    Log.e("CommunityTopBarFragment", errorMessage);
+                }
+            });
+        }
 
         try {
             @SuppressLint({"MissingInflatedId", "LocalSuppress"})
