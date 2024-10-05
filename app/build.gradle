@@ -61,16 +61,24 @@ dependencies {
     implementation libs.annotation
     implementation libs.lifecycle.livedata.ktx
     implementation libs.lifecycle.viewmodel.ktx
+    implementation libs.navigation.fragment
+    implementation libs.navigation.ui
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
     implementation libs.circleimageview
     implementation libs.glide
     annotationProcessor libs.compiler
+    //noinspection UseTomlInstead,GradleDependency
     implementation 'androidx.fragment:fragment:1.8.3'
+    //noinspection UseTomlInstead,GradleDependency
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    //noinspection UseTomlInstead,GradleDependency
     implementation 'com.google.android.material:material:1.9.0'
+    //noinspection UseTomlInstead,GradleDependency
     implementation("androidx.preference:preference-ktx:1.2.0")
+    //noinspection UseTomlInstead,GradleDependency
+    implementation("at.favre.lib:bcrypt:0.10.2")
 
 
 

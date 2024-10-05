@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import vn.edu.usth.x.HomeFragment;
 import vn.edu.usth.x.R;
 
 public class LoginPage extends AppCompatActivity {
@@ -21,7 +20,7 @@ public class LoginPage extends AppCompatActivity {
 
         Button nextButton = findViewById(R.id.create_account);
         nextButton.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginPage.this, LoginPage1Activity.class);
+            Intent intent = new Intent(LoginPage.this, RegisterPage1.class);
             startActivity(intent);
         });
 
