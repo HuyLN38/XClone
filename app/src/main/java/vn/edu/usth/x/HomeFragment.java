@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -30,8 +31,9 @@ import vn.edu.usth.x.Topbar.HomeTopBarFragment;
 import vn.edu.usth.x.Topbar.InboxTopBar;
 import vn.edu.usth.x.Topbar.NotificationTopBarFragment;
 import vn.edu.usth.x.Topbar.SearchTopBarFragment;
-import vn.edu.usth.x.Utils.UserAvatar;
+import vn.edu.usth.x.Utils.UserFunction;
 import vn.edu.usth.x.databinding.ActivityHomeBinding;
+import java.util.concurrent.CountDownLatch;
 
 public class HomeFragment extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -65,19 +67,21 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
 
         Context context = this.getApplicationContext();
         if (context != null) {
-            UserAvatar.getAvatar(context, new UserAvatar.AvatarCallback() {
+            UserFunction.getAvatar(context, new UserFunction.AvatarCallback() {
                 @Override
                 public void onSuccess(Bitmap avatarBitmap) {
-                    avatar.setImageBitmap(avatarBitmap);
+                    Glide.with(context)
+                            .load(avatarBitmap)
+                            .into(avatar);
                 }
 
                 @Override
                 public void onFailure(String errorMessage) {
-                    // Handle the error, e.g., show a default avatar or log the error
-                    Log.e("CommunityTopBarFragment", errorMessage);
+                    Log.e("SearchTopBarFragment", errorMessage);
                 }
             });
         }
+
         drawerLayout = findViewById(R.id.drawer_layout);
 
         // Initialize fragments
@@ -124,6 +128,7 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
                 return false;
             }
         });
+
         int currentMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         if (currentMode == Configuration.UI_MODE_NIGHT_YES) {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);

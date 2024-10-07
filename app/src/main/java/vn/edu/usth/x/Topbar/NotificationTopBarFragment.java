@@ -16,10 +16,12 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+
 import vn.edu.usth.x.HomeFragment;
 import vn.edu.usth.x.NotificationPage.NotificationSettings;
 import vn.edu.usth.x.R;
-import vn.edu.usth.x.Utils.UserAvatar;
+import vn.edu.usth.x.Utils.UserFunction;
 
 public class NotificationTopBarFragment extends Fragment {
     private DrawerLayout drawerLayout;
@@ -45,16 +47,17 @@ public class NotificationTopBarFragment extends Fragment {
 
         Context context = getContext();
         if (context != null) {
-            UserAvatar.getAvatar(context, new UserAvatar.AvatarCallback() {
+            UserFunction.getAvatar(context, new UserFunction.AvatarCallback() {
                 @Override
                 public void onSuccess(Bitmap avatarBitmap) {
-                    avatar.setImageBitmap(avatarBitmap);
+                    Glide.with(context)
+                            .load(avatarBitmap)
+                            .into(avatar);
                 }
 
                 @Override
                 public void onFailure(String errorMessage) {
-                    // Handle the error, e.g., show a default avatar or log the error
-                    Log.e("CommunityTopBarFragment", errorMessage);
+                    Log.e("SearchTopBarFragment", errorMessage);
                 }
             });
         }

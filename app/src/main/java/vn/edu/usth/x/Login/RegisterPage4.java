@@ -28,13 +28,12 @@ import vn.edu.usth.x.HomeFragment;
 import vn.edu.usth.x.Login.Data.User;
 import vn.edu.usth.x.Login.Data.UserManager;
 import vn.edu.usth.x.R;
-import vn.edu.usth.x.Utils.UserAvatar;
+import vn.edu.usth.x.Utils.UserFunction;
 
 public class RegisterPage4 extends AppCompatActivity {
 
     private EditText usernameEditText;
-    private static final String PREFS_NAME = "UserPrefs";
-    private static final String USER_ID_KEY = "userId";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +70,6 @@ public class RegisterPage4 extends AppCompatActivity {
 
             new RegisterUserTask().execute(jsonBody.toString());
 
-            Intent intent = new Intent(RegisterPage4.this, HomeFragment.class);
-            startActivity(intent);
-            finish();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -97,7 +93,7 @@ public class RegisterPage4 extends AppCompatActivity {
                 conn.setDoOutput(true);
 
                 try (OutputStream os = conn.getOutputStream()) {
-                    byte[] input = jsonBody.getBytes("utf-8");
+                    byte[] input = jsonBody.getBytes(StandardCharsets.UTF_8);
                     os.write(input, 0, input.length);
                 }
 
@@ -113,16 +109,11 @@ public class RegisterPage4 extends AppCompatActivity {
                     String id = jsonResponse.getString("id");
                     Log.d("RegisterUserTask", "User ID: " + id);
 
-                    // Save the user ID in SharedPreferences
-                    SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(USER_ID_KEY, id);
-                    editor.apply();
-
-                    UserAvatar.onUuidChanged(RegisterPage4.this, id, new UserAvatar.AvatarCallback() {
+                    // Remake the avatar
+                    UserFunction.onUuidChanged(getApplicationContext(), id, new UserFunction.AvatarCallback() {
                         @Override
-                        public void onSuccess(Bitmap avatar) {
-                            Log.d("RegisterUserTask", "Successfully saved user ID and avatar");
+                        public void onSuccess(Bitmap avatarBitmap) {
+                            Log.d("RegisterUserTask", "Avatar remadeeeeeeeeeeeeeeeeeeeeeeeeee");
                         }
 
                         @Override
@@ -130,6 +121,10 @@ public class RegisterPage4 extends AppCompatActivity {
                             Log.e("RegisterUserTask", errorMessage);
                         }
                     });
+
+                    Intent intent = new Intent(RegisterPage4.this, HomeFragment.class);
+                    startActivity(intent);
+                    finish();
 
                     return true;
                 } else {

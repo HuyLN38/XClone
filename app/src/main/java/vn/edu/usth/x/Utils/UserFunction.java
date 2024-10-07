@@ -22,7 +22,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.stream.Collectors;
 
-public class UserAvatar {
+public class UserFunction {
     private static final String PREFS_NAME = "UserPrefs";
     private static final String USER_ID_KEY = "userId";
     private static final String AVATAR_FILE_NAME = "user_avatar.png";
@@ -42,18 +42,38 @@ public class UserAvatar {
             Bitmap avatarBitmap = BitmapFactory.decodeFile(avatarFile.getAbsolutePath());
             callback.onSuccess(avatarBitmap);
         } else {
-            new FetchAvatarTask(context, callback).execute("https://huyln.info/xclone/api/users/" + userId);
+            fetchAndSaveAvatar(context, userId, callback);
         }
+
+
+
     }
 
     public static void onUuidChanged(Context context, String newUuid, AvatarCallback callback) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(USER_ID_KEY, newUuid);
-        editor.apply();
+        String oldUuid = sharedPreferences.getString(USER_ID_KEY, null);
 
-        // Fetch the new avatar
-        getAvatar(context, callback);
+        if (!newUuid.equals(oldUuid)) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(USER_ID_KEY, newUuid);
+            editor.apply();
+
+            // Delete the old avatar file
+            File oldAvatarFile = new File(context.getFilesDir(), AVATAR_FILE_NAME);
+            if (oldAvatarFile.exists()) {
+                oldAvatarFile.delete();
+            }
+
+            // Fetch and save the new avatar
+            fetchAndSaveAvatar(context, newUuid, callback);
+        } else {
+            // UUID hasn't changed, just load the existing avatar
+            getAvatar(context, callback);
+        }
+    }
+
+    private static void fetchAndSaveAvatar(Context context, String userId, AvatarCallback callback) {
+        new FetchAvatarTask(context, callback).execute("https://huyln.info/xclone/api/users/" + userId);
     }
 
     private static class FetchAvatarTask extends AsyncTask<String, Void, Bitmap> {
