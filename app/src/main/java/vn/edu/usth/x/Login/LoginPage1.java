@@ -1,12 +1,17 @@
 package vn.edu.usth.x.Login;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,68 +25,49 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import vn.edu.usth.x.HomeFragment;
-import vn.edu.usth.x.Login.Data.User;
-import vn.edu.usth.x.Login.Data.UserManager;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Utils.UserFunction;
 
-public class RegisterPage4 extends AppCompatActivity {
 
-    private EditText usernameEditText;
+public class LoginPage1 extends AppCompatActivity {
+
+    private EditText indentify;
+    private EditText passwordEditText;
+    private Button loginButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_username);
+        setContentView(R.layout.activity_login_page1);
 
-        usernameEditText = findViewById(R.id.usernameEditText);
-        Button nextButton = findViewById(R.id.nextButton);
-        nextButton.setOnClickListener(v -> registerUser());
+        indentify = findViewById(R.id.name);
+        passwordEditText = findViewById(R.id.password);
+        loginButton = findViewById(R.id.Login);
+
+        loginButton.setOnClickListener(v -> {
+            try {
+                JSONObject jsonBody = new JSONObject();
+                jsonBody.put("identifier", indentify.getText().toString());
+                jsonBody.put("password", passwordEditText.getText().toString());
+
+                new LoginTask().execute(jsonBody.toString());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
     }
-
-    private void registerUser() {
-        User user = UserManager.getUser();
-        String username = usernameEditText.getText().toString();
-
-        if (username.isEmpty()) {
-            usernameEditText.setError("Username cannot be empty");
-            return;
-        }
-
-        if (user.getEmail() == null || user.getDob() == null || user.getPasswordHash() == null || user.getName() == null) {
-            Log.e("RegisterPage4", "User information is incomplete");
-            return;
-        }
-
-        try {
-            JSONObject jsonBody = new JSONObject();
-            jsonBody.put("username", username);
-            jsonBody.put("email", user.getEmail());
-            jsonBody.put("birth_date", user.getDob());
-            jsonBody.put("password_hash", user.getPasswordHash());
-            jsonBody.put("avatar_url", user.getProfileImageBase64());
-            jsonBody.put("display_name", user.getName());
-
-            new RegisterUserTask().execute(jsonBody.toString());
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private class RegisterUserTask extends AsyncTask<String, Void, Boolean> {
-
+    @SuppressLint("StaticFieldLeak")
+    private class LoginTask extends AsyncTask<String, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(String... params) {
             String jsonBody = params[0];
             Log.d("RegisterUserTask", "Received JSON: " + jsonBody); // Log the received JSON
             try {
-                URL url = new URL("https://huyln.info/xclone/api/users/");
+                URL url = new URL("https://huyln.info/xclone/api/login/");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json");
@@ -94,16 +80,15 @@ public class RegisterPage4 extends AppCompatActivity {
                 }
 
                 int responseCode = conn.getResponseCode();
-                Log.d("RegisterUserTask", "Response code: " + responseCode);
-                if (responseCode == HttpURLConnection.HTTP_CREATED) {
+                Log.d("LoginTask", "Response code: " + responseCode);
+                if (responseCode == HttpURLConnection.HTTP_OK) {
                     InputStream is = conn.getInputStream();
                     String responseJson = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))
                             .lines().collect(Collectors.joining("\n"));
-                    Log.d("RegisterUserTask", "Response JSON: " + responseJson);
                     // Parse the response JSON and extract the id
                     JSONObject jsonResponse = new JSONObject(responseJson);
                     String id = jsonResponse.getString("id");
-                    Log.d("RegisterUserTask", "User ID: " + id);
+                    Log.d("LoginTask", "User ID: " + id);
 
                     // Remake the avatar
                     UserFunction.onUuidChanged(getApplicationContext(), id, new UserFunction.AvatarCallback() {
@@ -111,20 +96,19 @@ public class RegisterPage4 extends AppCompatActivity {
                         public void onSuccess(Bitmap avatarBitmap) {
 
                         }
-
                         @Override
                         public void onFailure(String errorMessage) {
                             Log.e("RegisterUserTask", errorMessage);
                         }
                     });
 
-                    Intent intent = new Intent(RegisterPage4.this, HomeFragment.class);
+                    Intent intent = new Intent(LoginPage1.this, HomeFragment.class);
                     startActivity(intent);
                     finish();
 
                     return true;
                 } else {
-                    Log.d("RegisterUserTask", "Response message: " + conn.getResponseMessage());
+                    Log.d("LoginTask", "Response message: " + conn.getResponseMessage());
                     return false;
                 }
 

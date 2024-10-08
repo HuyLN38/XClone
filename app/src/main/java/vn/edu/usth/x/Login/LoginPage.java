@@ -26,7 +26,7 @@ public class LoginPage extends AppCompatActivity {
 
         TextView login = findViewById(R.id.login);
         login.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginPage.this, LoginPage0.class);
+            Intent intent = new Intent(LoginPage.this, LoginPage1.class);
             startActivity(intent);
         });
     }

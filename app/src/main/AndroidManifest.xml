@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -14,11 +14,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Base.Theme.X"
-        tools:targetApi="31" >
+        android:theme="@style/Theme.X"
+         >
         <activity
-            android:name=".Login.LoginPage0"
-            android:exported="false" />
+            android:name=".Login.LoginPage1"
+            android:exported="false"
+            android:label="LoginPage"
+            android:theme="@style/Theme.X" />
         <activity
             android:name=".Login.LoginPage"
             android:exported="false"
@@ -58,7 +60,7 @@
             android:name=".HomeFragment"
             android:exported="false"
             android:label="@string/title_activity_home"
-            android:theme="@style/Theme.X" />
+            android:theme="@style/Base.Theme.X" />
         <activity
             android:name=".MainActivity"
             android:exported="true" >

@@ -33,7 +33,6 @@ import vn.edu.usth.x.Topbar.NotificationTopBarFragment;
 import vn.edu.usth.x.Topbar.SearchTopBarFragment;
 import vn.edu.usth.x.Utils.UserFunction;
 import vn.edu.usth.x.databinding.ActivityHomeBinding;
-import java.util.concurrent.CountDownLatch;
 
 public class HomeFragment extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
