@@ -1,4 +1,4 @@
-package vn.edu.usth.x.Comment;
+package vn.edu.usth.x.Blog;
 
 import android.os.Bundle;
 

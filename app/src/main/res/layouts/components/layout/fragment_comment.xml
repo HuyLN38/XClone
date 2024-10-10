@@ -6,7 +6,7 @@
     android:id="@+id/comment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Comment.CommentFragment"
+    tools:context=".Blog.CommentFragment"
     >
     <LinearLayout
         android:layout_width="match_parent"
@@ -194,7 +194,7 @@
                     android:textColorHint="@color/gray"
                     android:textSize="16sp"
                     android:backgroundTint="@android:color/transparent"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
                     tools:ignore="TouchTargetSizeCheck,VisualLintTextFieldSize" />
             </LinearLayout>
         </LinearLayout>

@@ -20,8 +20,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Blog.CommentFragment;
 
-public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHolder> {
-
+public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline.TweetViewHolder> {
     private static AnimationDrawable animationDrawable;
     private int flag = 0;
     private List<Tweet> tweetList;
@@ -54,11 +53,11 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
 
             // Load images using Glide
             Glide.with(itemView.getContext())
-                    .load(tweet.getImage())
+                    .load(tweet.getImageBit())
                     .into(image);
 
             Glide.with(itemView.getContext())
-                    .load(tweet.getAvatar())
+                    .load(tweet.getAvatar_bit())
                     .into(avatar);
 
             ImageView bookmarkButton = itemView.findViewById(R.id.bookmark);
@@ -101,13 +100,13 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
         }
     }
 
-    public TweetAdapter(List<Tweet> tweetList) {
+    public TweetAdapterOnline(List<Tweet> tweetList) {
         this.tweetList = tweetList;
     }
 
     @NonNull
     @Override
-    public TweetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TweetAdapterOnline.TweetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_tweet, parent, false);
 
@@ -120,11 +119,11 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
             fragmentTransaction.replace(R.id.drawer_layout, new CommentFragment()).commit();
         });
 
-        return new TweetViewHolder(itemView);
+        return new TweetAdapterOnline.TweetViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(TweetViewHolder holder, int position) {
+    public void onBindViewHolder(TweetAdapterOnline.TweetViewHolder holder, int position) {
         Tweet tweet = tweetList.get(position);
         holder.bind(tweet);
     }
@@ -133,4 +132,5 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
     public int getItemCount() {
         return tweetList.size();
     }
+
 }

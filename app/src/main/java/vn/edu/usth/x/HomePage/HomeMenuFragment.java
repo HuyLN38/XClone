@@ -5,17 +5,25 @@ import static java.util.Arrays.*;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Objects;
 
+import vn.edu.usth.x.Blog.CommentFragment;
+import vn.edu.usth.x.Blog.PostNewsFeed;
 import vn.edu.usth.x.R;
+import vn.edu.usth.x.Tweet.TweetAdapter;
 
 
 // HomeMenuFragment.java
@@ -60,5 +68,22 @@ public class HomeMenuFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Now set up the button listener
+        ImageButton createNewsfeed = view.findViewById(R.id.create_newsfeed);
+
+        createNewsfeed.setOnClickListener(v -> {
+            // Navigate to PostNewsFeed
+            FragmentActivity activity = (FragmentActivity) v.getContext();
+            FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.replace(R.id.drawer_layout, new PostNewsFeed()).commit();
+        });
     }
 }
