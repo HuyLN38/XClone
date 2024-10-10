@@ -112,6 +112,7 @@ public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline
 
                 //save through bundle to CommentFragment
                 Bundle bundle = new Bundle();
+                bundle.putString("id", tweet.getTweet_id());
                 bundle.putString("username", tweet.getUsername());
                 bundle.putString("tweetLink", tweet.getTweetlink());
                 bundle.putString("tweetText", tweet.getTweetText());
