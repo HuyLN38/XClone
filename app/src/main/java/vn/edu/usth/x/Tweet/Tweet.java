@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 
 // Tweet.java
 public class Tweet {
+
+    private String tweet_id;
     private int avatar;
 
     private Bitmap avatar_bit;
@@ -17,7 +19,8 @@ public class Tweet {
     private int image;
 
     //Constructor online mode
-    public Tweet(Bitmap avatar_bit, String username, String tweetlink, String tweetText, String time, Bitmap image_bit) {
+    public Tweet(String tweet_id,Bitmap avatar_bit, String username, String tweetlink, String tweetText, String time, Bitmap image_bit) {
+        this.tweet_id = tweet_id;
         this.avatar_bit = avatar_bit;
         this.username = username;
         this.tweetlink = "@"+ tweetlink;
@@ -84,11 +87,11 @@ public class Tweet {
         this.image = image;
     }
 
-    public Bitmap getImageBit() {
+    public Bitmap getImage_bit() {
         return image_bit;
     }
 
-    public void setImageBit(Bitmap image_bit) {
+    public void setImage_bit(Bitmap image_bit) {
         this.image_bit = image_bit;
     }
 
@@ -99,4 +102,13 @@ public class Tweet {
     public void setAvatar_bit(Bitmap avatar_bit) {
         this.avatar_bit = avatar_bit;
     }
+
+    public String getTweet_id() {
+        return tweet_id;
+    }
+
+    public void setTweet_id(String tweet_id) {
+        this.tweet_id = tweet_id;
+    }
+
 }

@@ -107,6 +107,7 @@ public class HomeForYou extends Fragment {
                         String timeAgo = formatTimeAgo(tweetJson.getString("created_at"));
 
                         Tweet tweet = new Tweet(
+                                tweetJson.getString("id"),
                                 avatarBitmap,
                                 tweetJson.getString("display_name"),
                                 tweetJson.getString("username"),
