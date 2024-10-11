@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 
 import vn.edu.usth.x.HomeFragment;
+import vn.edu.usth.x.Profile.Profile; // Thêm Profile vào import
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.NotificationPage.NotificationSettings;
 import vn.edu.usth.x.Utils.UserFunction;
@@ -41,6 +42,7 @@ public class HomeTopBarFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.topbar_home, container, false);
 
+        // Nút Avatar mở Drawer
         ImageView avatar = view.findViewById(R.id.avatar);
         avatar.setOnClickListener(v -> {
             if (drawerLayout != null) {
@@ -48,6 +50,7 @@ public class HomeTopBarFragment extends Fragment {
             }
         });
 
+        // Lấy avatar từ UserFunction
         Context context = getContext();
         if (context != null) {
             UserFunction.getAvatar(context, new UserFunction.AvatarCallback() {
@@ -65,6 +68,7 @@ public class HomeTopBarFragment extends Fragment {
             });
         }
 
+        // Nút Notification Settings
         try {
             @SuppressLint({"MissingInflatedId", "LocalSuppress"})
             ImageView settingsNotification = view.findViewById(R.id.settings_notification);
@@ -73,8 +77,8 @@ public class HomeTopBarFragment extends Fragment {
                 startActivity(intent);
             });
         } catch (Exception ignored) {
-
         }
+
 
 
         return view;
