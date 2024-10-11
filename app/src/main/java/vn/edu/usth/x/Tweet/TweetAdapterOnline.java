@@ -7,21 +7,23 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Blog.CommentFragment;
 
-public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHolder> {
-
+public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline.TweetViewHolder> {
     private static AnimationDrawable animationDrawable;
     private int flag = 0;
     private List<Tweet> tweetList;
@@ -54,11 +56,11 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
 
             // Load images using Glide
             Glide.with(itemView.getContext())
-                    .load(tweet.getImage())
+                    .load(tweet.getImage_bit())
                     .into(image);
 
             Glide.with(itemView.getContext())
-                    .load(tweet.getAvatar())
+                    .load(tweet.getAvatar_bit())
                     .into(avatar);
 
             ImageView bookmarkButton = itemView.findViewById(R.id.bookmark);
@@ -98,33 +100,63 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
                     }
                 }
             });
+
+            //comment button
+
+            ImageView commentButton = itemView.findViewById(R.id.comment_button);
+            commentButton.setOnClickListener(v -> {
+                FragmentActivity activity = (FragmentActivity) v.getContext();
+                FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down);
+                fragmentTransaction.addToBackStack(null);
+
+                //save through bundle to CommentFragment
+                Bundle bundle = new Bundle();
+                bundle.putString("id", tweet.getTweet_id());
+                bundle.putString("username", tweet.getUsername());
+                bundle.putString("tweetLink", tweet.getTweetlink());
+                bundle.putString("tweetText", tweet.getTweetText());
+                bundle.putString("time", tweet.getTime());
+
+                // avatar_bit
+                if (tweet.getAvatar_bit() != null) {
+                    ByteArrayOutputStream avatarStream = new ByteArrayOutputStream();
+                    tweet.getAvatar_bit().compress(Bitmap.CompressFormat.PNG, 100, avatarStream);
+                    byte[] avatarByteArray = avatarStream.toByteArray();
+                    bundle.putByteArray("avatar", avatarByteArray);
+                }
+
+                //image_bit
+                if (tweet.getImage_bit() != null) {
+                    ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
+                    tweet.getImage_bit().compress(Bitmap.CompressFormat.PNG, 100, imageStream);
+                    byte[] imageByteArray = imageStream.toByteArray();
+                    bundle.putByteArray("tweetImage", imageByteArray);
+                }
+
+                // Tạo CommentFragment mới và đặt arguments
+                CommentFragment commentFragment = new CommentFragment();
+                commentFragment.setArguments(bundle);
+
+                fragmentTransaction.replace(R.id.drawer_layout, commentFragment).commit();
+            });
         }
     }
 
-    public TweetAdapter(List<Tweet> tweetList) {
+    public TweetAdapterOnline(List<Tweet> tweetList) {
         this.tweetList = tweetList;
     }
 
     @NonNull
     @Override
-    public TweetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TweetAdapterOnline.TweetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_tweet, parent, false);
-
-        ImageView commentButton = itemView.findViewById(R.id.comment_button);
-        commentButton.setOnClickListener(v -> {
-            FragmentActivity activity = (FragmentActivity) v.getContext();
-            FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.replace(R.id.drawer_layout, new CommentFragment()).commit();
-        });
-
-        return new TweetViewHolder(itemView);
+        return new TweetAdapterOnline.TweetViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(TweetViewHolder holder, int position) {
+    public void onBindViewHolder(TweetAdapterOnline.TweetViewHolder holder, int position) {
         Tweet tweet = tweetList.get(position);
         holder.bind(tweet);
     }
@@ -133,4 +165,5 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
     public int getItemCount() {
         return tweetList.size();
     }
+
 }

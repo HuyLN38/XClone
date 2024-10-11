@@ -6,7 +6,7 @@
     android:id="@+id/comment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Comment.CommentFragment"
+    tools:context=".Blog.CommentFragment"
     >
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,6 +60,9 @@
     </FrameLayout>
 
     <!-- Main Content -->
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <LinearLayout
         app:layout_constraintTop_toBottomOf="@+id/comment_toolbar"
         android:layout_width="match_parent"
@@ -95,7 +98,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tweet_username"
+                        android:id="@+id/tweet_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="BCCNEWS"
@@ -103,7 +106,7 @@
                         android:textColor="@color/white" />
 
                     <TextView
-                        android:id="@+id/tweet_link"
+                        android:id="@+id/tweet_username"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/bccnews"
@@ -127,6 +130,17 @@
                     android:textColor="@color/white"
                     android:text="@string/description_yagiQN"
                     tools:ignore="HardcodedText" />
+
+                <!--Image user post-->
+                <ImageView
+                    android:id="@+id/tweet_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/border_image"
+                    android:clipToOutline="true"
+                    android:src="@drawable/avatar"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -138,14 +152,13 @@
             android:layout_marginTop="12dp">
 
             <TextView
-                android:id="@+id/response_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Replying to"
                 android:textColor="@color/gray"/>
 
             <TextView
-                android:id="@+id/response_link"
+                android:id="@+id/response_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/bccnews"
@@ -165,7 +178,7 @@
 
             <!-- Response Profile Image -->
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/response_avatar"
+                android:id="@+id/user_avatar"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginEnd="8dp"
@@ -194,30 +207,12 @@
                     android:textColorHint="@color/gray"
                     android:textSize="16sp"
                     android:backgroundTint="@android:color/transparent"
-                    android:inputType="text"
+                    android:inputType="textMultiLine"
                     tools:ignore="TouchTargetSizeCheck,VisualLintTextFieldSize" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+</ScrollView>
 </LinearLayout >
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/tweet_avatar"
-        app:layout_constraintBottom_toTopOf="@+id/response_avatar"
-        android:layout_marginStart="35dp"
-        android:layout_marginTop="130dp">
-
-        <ImageView
-            android:layout_width="2dp"
-            android:layout_height="80dp"
-            android:src="@drawable/vertical_line"
-            android:background="@color/gray_btn"
-            />
-
-    </FrameLayout>
-
-
 </FrameLayout>
 
