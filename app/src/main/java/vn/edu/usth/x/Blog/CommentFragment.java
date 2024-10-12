@@ -195,6 +195,7 @@ public class CommentFragment extends Fragment {
         }
     }
 
+    //encode image
     private String bitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
@@ -252,6 +253,7 @@ public class CommentFragment extends Fragment {
 
                 if (!base64Image.isEmpty()) {
                     jsonBody.put("image_url", base64Image);
+
                 }
                 String jsonString = jsonBody.toString();
                 Log.d(TAG, "Request JSON body: " + jsonString);
