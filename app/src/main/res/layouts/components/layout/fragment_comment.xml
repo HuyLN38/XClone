@@ -229,6 +229,8 @@
             <!--Mic Button -->
             <ImageView
                 android:id="@+id/mic_button"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:padding="10dp"
@@ -241,6 +243,8 @@
             <!--Sound Button -->
             <ImageView
                 android:id="@+id/sound_button"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:padding="10dp"
@@ -265,6 +269,8 @@
             <!-- Gif Button -->
             <ImageView
                 android:id="@+id/gif_button"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:padding="10dp"
@@ -277,6 +283,8 @@
             <!-- Selection Button -->
             <ImageView
                 android:id="@+id/selection_button"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:padding="10dp"
@@ -289,6 +297,8 @@
             <!-- Position Button -->
             <ImageView
                 android:id="@+id/position_button"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:padding="10dp"
@@ -302,6 +312,8 @@
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_weight="1"
                 android:background="@color/gray_bar"
                 android:layout_gravity="bottom"/>
@@ -309,6 +321,8 @@
             <!-- Circle Button -->
             <ImageView
                 android:id="@+id/circle_button"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:padding="10dp"
@@ -320,6 +334,8 @@
 
             <View
                 android:layout_width="1dp"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_height="match_parent"
                 android:background="@color/gray_bar"
                 android:layout_gravity="bottom"/>
@@ -328,6 +344,8 @@
             <!-- Add Button -->
             <ImageView
                 android:id="@+id/add_button"
+                android:clickable="true"
+                android:focusable="true"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:padding="10dp"
