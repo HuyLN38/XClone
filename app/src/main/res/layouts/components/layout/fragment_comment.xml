@@ -1,218 +1,341 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/comment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Blog.CommentFragment"
-    >
+    tools:context=".Blog.CommentFragment">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black"
         android:orientation="vertical">
 
-    <!-- Toolbar Section -->
-    <FrameLayout
-        android:id="@+id/comment_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center|start"
-            android:gravity="center_vertical">
-
-            <Button
-                android:id="@+id/comment_cancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Cancel"
-                android:textSize="16sp"
-                android:backgroundTint="@color/black"
-                android:textColor="@color/white" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|end"
-            android:orientation="horizontal"
-            android:layout_margin="5dp">
-
-            <Button
-                android:id="@+id/comment_post"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/oval_button"
-                android:text="Post"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                app:backgroundTint="@null"
-                tools:ignore="TouchTargetSizeCheck" />
-        </LinearLayout>
-
-    </FrameLayout>
-
-    <!-- Main Content -->
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
-        app:layout_constraintTop_toBottomOf="@+id/comment_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <!-- Tweet Section -->
-        <LinearLayout
+        <!-- Toolbar Section -->
+        <FrameLayout
+            android:id="@+id/comment_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp">
+            android:layout_height="?android:attr/actionBarSize">
 
-            <!-- Profile Image -->
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/tweet_avatar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/avatar_bcc" />
-
-            <!-- Tweet Content -->
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:layout_gravity="center|start"
+                android:gravity="center_vertical">
 
-                <!-- Username and Info -->
+                <Button
+                    android:id="@+id/comment_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cancel"
+                    android:textSize="16sp"
+                    android:backgroundTint="@color/black"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|end"
+                android:orientation="horizontal"
+                android:layout_margin="5dp">
+
+                <Button
+                    android:id="@+id/comment_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/oval_button"
+                    android:text="Post"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    app:backgroundTint="@null"
+                    tools:ignore="TouchTargetSizeCheck" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Main Content -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="8dp">
+
+                <!-- Tweet Section -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <!-- Profile Image -->
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/tweet_avatar"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/avatar_bcc" />
+
+                    <!-- Tweet Content -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <!-- Username and Info -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tweet_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="BCCNEWS"
+                                android:textStyle="bold"
+                                android:textColor="@color/white" />
+
+                            <TextView
+                                android:id="@+id/tweet_username"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/bccnews"
+                                android:textColor="@color/gray"
+                                android:layout_marginStart="8dp" />
+
+                            <TextView
+                                android:id="@+id/tweet_time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="• 2h"
+                                android:textColor="@color/gray"
+                                android:layout_marginStart="8dp" />
+                        </LinearLayout>
+
+                        <!-- Tweet Text -->
+                        <TextView
+                            android:id="@+id/tweet_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:text="@string/description_yagiQN"
+                            tools:ignore="HardcodedText" />
+
+                        <!-- Image user post -->
+                        <ImageView
+                            android:id="@+id/tweet_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:adjustViewBounds="true"
+                            android:background="@drawable/border_image"
+                            android:clipToOutline="true"
+                            android:src="@drawable/avatar" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginStart="65dp"
+                    android:layout_marginTop="12dp">
 
                     <TextView
-                        android:id="@+id/tweet_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="BCCNEWS"
-                        android:textStyle="bold"
-                        android:textColor="@color/white" />
+                        android:text="Replying to"
+                        android:textColor="@color/gray" />
 
                     <TextView
-                        android:id="@+id/tweet_username"
+                        android:id="@+id/response_username"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/bccnews"
-                        android:textColor="@color/gray"
-                        android:layout_marginStart="8dp" />
-
-                    <TextView
-                        android:id="@+id/tweet_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="• 2h"
-                        android:textColor="@color/gray"
-                        android:layout_marginStart="8dp" />
+                        android:textColor="@color/light_blue"
+                        android:layout_marginStart="4dp" />
                 </LinearLayout>
 
-                <!-- Tweet Text -->
-                <TextView
-                    android:id="@+id/tweet_text"
+                <!-- Response Section -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:text="@string/description_yagiQN"
-                    tools:ignore="HardcodedText" />
+                    android:orientation="horizontal"
+                    android:padding="16dp">
 
-                <!--Image user post-->
-                <ImageView
-                    android:id="@+id/tweet_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:adjustViewBounds="true"
-                    android:background="@drawable/border_image"
-                    android:clipToOutline="true"
-                    android:src="@drawable/avatar"/>
+                    <!-- Response Profile Image -->
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/user_avatar"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="8dp"
+                        android:src="@drawable/avatar" />
+
+                    <!-- Response Content -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <!-- Response Text -->
+                        <EditText
+                            android:id="@+id/edit_text_comment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Type your comment here..."
+                            android:padding="10dp"
+                            android:textColor="@color/white"
+                            android:textColorHint="@color/gray"
+                            android:textSize="16sp"
+                            android:backgroundTint="@android:color/transparent"
+                            android:inputType="textMultiLine"
+                            tools:ignore="TouchTargetSizeCheck,VisualLintTextFieldSize" />
+
+                        <!-- Selected Image Preview -->
+                        <ImageView
+                            android:id="@+id/selected_image_view_comment"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:layout_marginTop="8dp"
+                            android:scaleType="centerCrop"
+                            android:adjustViewBounds="true"
+                            android:background="@drawable/border_image"
+                            android:clipToOutline="true"
+                            android:visibility="gone"
+                            android:contentDescription="Selected image preview" />
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+        </ScrollView>
 
+        <!-- Footer Buttons -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginStart="65dp"
-            android:layout_marginTop="12dp">
+            android:paddingBottom="16dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Replying to"
-                android:textColor="@color/gray"/>
-
-            <TextView
-                android:id="@+id/response_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/bccnews"
-                android:textColor="@color/light_blue"
-                android:layout_marginStart="4dp" />
-
-        </LinearLayout>
-
-
-
-        <!-- Response Section -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp">
-
-            <!-- Response Profile Image -->
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/user_avatar"
+            <!-- Buttons and their Layouts -->
+            <!--Mic Button -->
+            <ImageView
+                android:id="@+id/mic_button"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/avatar" />
+                android:padding="10dp"
+                android:src="@drawable/mic"
+                app:tint="@color/light_blue"
+                app:backgroundTint="@null"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp" />
 
-            <!-- Response Content -->
-            <LinearLayout
+            <!--Sound Button -->
+            <ImageView
+                android:id="@+id/sound_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="10dp"
+                android:src="@drawable/sound"
+                app:tint="@color/light_blue"
+                app:backgroundTint="@null"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp" />
+
+            <!-- Add Picture Button -->
+            <ImageView
+                android:id="@+id/add_picture_button_comment"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="10dp"
+                android:src="@drawable/image"
+                app:tint="@color/light_blue"
+                app:backgroundTint="@null"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp" />
+
+            <!-- Gif Button -->
+            <ImageView
+                android:id="@+id/gif_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="10dp"
+                android:src="@drawable/gif"
+                app:tint="@color/light_blue"
+                app:backgroundTint="@null"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp" />
+
+            <!-- Selection Button -->
+            <ImageView
+                android:id="@+id/selection_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="10dp"
+                android:src="@drawable/selection"
+                app:tint="@color/light_blue"
+                app:backgroundTint="@null"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp" />
+
+            <!-- Position Button -->
+            <ImageView
+                android:id="@+id/position_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="10dp"
+                android:src="@drawable/position"
+                app:tint="@color/light_blue"
+                app:backgroundTint="@null"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp" />
+
+            <!--Spacer-->
+            <View
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:background="@color/gray_bar"
+                android:layout_gravity="bottom"/>
 
-                <!-- Username and Info -->
+            <!-- Circle Button -->
+            <ImageView
+                android:id="@+id/circle_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="10dp"
+                android:src="@drawable/circle_thin_line"
+                app:tint="@color/gray_bar"
+                app:backgroundTint="@null"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@color/gray_bar"
+                android:layout_gravity="bottom"/>
 
 
-                <!-- Response Text -->
-
-                <EditText
-                    android:id="@+id/edit_text_comment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autofillHints=""
-                    android:hint="Type your comment here..."
-                    android:padding="10dp"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/gray"
-                    android:textSize="16sp"
-                    android:backgroundTint="@android:color/transparent"
-                    android:inputType="textMultiLine"
-                    tools:ignore="TouchTargetSizeCheck,VisualLintTextFieldSize" />
-            </LinearLayout>
+            <!-- Add Button -->
+            <ImageView
+                android:id="@+id/add_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="10dp"
+                android:src="@drawable/add"
+                app:tint="@color/light_blue"
+                app:backgroundTint="@null"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp" />
         </LinearLayout>
     </LinearLayout>
-</ScrollView>
-</LinearLayout >
 </FrameLayout>
-
