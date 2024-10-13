@@ -1,11 +1,15 @@
 package vn.edu.usth.x.Blog;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +30,8 @@ import com.bumptech.glide.Glide;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -39,6 +45,8 @@ import vn.edu.usth.x.Utils.UserFunction;
 
 public class CommentFragment extends Fragment {
     private static final String TAG = "Comment_Tweet";
+    private static final int PICK_IMAGE_REQUEST = 1;
+
     private static final String API_URL = "https://huyln.info/xclone/api/comments";
     private EditText commentEditText;
     private String tweet_id;
@@ -56,6 +64,10 @@ public class CommentFragment extends Fragment {
 
     private TextView timeTextView;
     private ImageView tweetImageView;
+
+    private ImageView selectedImageView;
+
+    private String base64Image = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,7 +88,9 @@ public class CommentFragment extends Fragment {
         timeTextView = view.findViewById(R.id.tweet_time);
         tweetImageView = view.findViewById(R.id.tweet_image);
         commentEditText = view.findViewById(R.id.edit_text_comment);
+        selectedImageView = view.findViewById(R.id.selected_image_view_comment);
 
+        ImageView addPictureButton = view.findViewById(R.id.add_picture_button_comment);
         Button cancelButton = view.findViewById(R.id.comment_cancel);
         postButton = view.findViewById(R.id.comment_post);
 
@@ -97,6 +111,8 @@ public class CommentFragment extends Fragment {
             //transmit comment to postTweet
             postTweet(content);
         });
+
+        addPictureButton.setOnClickListener(v -> openGallery());
 
         //set avatar of current user
         ImageView avatar = view.findViewById(R.id.user_avatar);
@@ -149,6 +165,43 @@ public class CommentFragment extends Fragment {
             }
         }
     }
+
+    private void openGallery() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == requireActivity().RESULT_OK
+                && data != null && data.getData() != null) {
+            Uri imageUri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(
+                        requireActivity().getContentResolver(),
+                        imageUri
+                );
+                selectedImageView.setImageBitmap(bitmap);
+                selectedImageView.setVisibility(View.VISIBLE);
+                base64Image = bitmapToBase64(bitmap);
+            } catch (IOException e) {
+                Log.e("PostNewsFeed", "Error processing image: " + e.getMessage());
+                Toast.makeText(getContext(), "Error processing image", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    //encode image
+    private String bitmapToBase64(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
     //Handle Post Comment through API
     private void postTweet(String content) {
         // Disable post button to prevent double posting
@@ -198,9 +251,10 @@ public class CommentFragment extends Fragment {
                 jsonBody.put("user_id", userId);
                 jsonBody.put("tweet_id", tweetId);
 
-//                if (!base64Image.isEmpty()) {
-//                    jsonBody.put("media_url", base64Image);
-//                }
+                if (!base64Image.isEmpty()) {
+                    jsonBody.put("image_url", base64Image);
+
+                }
                 String jsonString = jsonBody.toString();
                 Log.d(TAG, "Request JSON body: " + jsonString);
 

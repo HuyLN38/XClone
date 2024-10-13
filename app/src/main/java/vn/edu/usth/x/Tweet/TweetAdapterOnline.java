@@ -2,6 +2,7 @@ package vn.edu.usth.x.Tweet;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,12 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import vn.edu.usth.x.Blog.ResponseTweet;
+import vn.edu.usth.x.HomeFragment;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Blog.CommentFragment;
 
@@ -102,7 +106,6 @@ public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline
             });
 
             //comment button
-
             ImageView commentButton = itemView.findViewById(R.id.comment_button);
             commentButton.setOnClickListener(v -> {
                 FragmentActivity activity = (FragmentActivity) v.getContext();
@@ -110,36 +113,64 @@ public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline
                 fragmentTransaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down);
                 fragmentTransaction.addToBackStack(null);
 
-                //save through bundle to CommentFragment
-                Bundle bundle = new Bundle();
-                bundle.putString("id", tweet.getTweet_id());
-                bundle.putString("username", tweet.getUsername());
-                bundle.putString("tweetLink", tweet.getTweetlink());
-                bundle.putString("tweetText", tweet.getTweetText());
-                bundle.putString("time", tweet.getTime());
+                Bundle bundle = transmitionIn4(tweet);
 
-                // avatar_bit
-                if (tweet.getAvatar_bit() != null) {
-                    ByteArrayOutputStream avatarStream = new ByteArrayOutputStream();
-                    tweet.getAvatar_bit().compress(Bitmap.CompressFormat.PNG, 100, avatarStream);
-                    byte[] avatarByteArray = avatarStream.toByteArray();
-                    bundle.putByteArray("avatar", avatarByteArray);
-                }
-
-                //image_bit
-                if (tweet.getImage_bit() != null) {
-                    ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
-                    tweet.getImage_bit().compress(Bitmap.CompressFormat.PNG, 100, imageStream);
-                    byte[] imageByteArray = imageStream.toByteArray();
-                    bundle.putByteArray("tweetImage", imageByteArray);
-                }
-
-                // Tạo CommentFragment mới và đặt arguments
+                //Create a new CommentFragment and set the arguments
                 CommentFragment commentFragment = new CommentFragment();
                 commentFragment.setArguments(bundle);
-
                 fragmentTransaction.replace(R.id.drawer_layout, commentFragment).commit();
             });
+
+            //tweet change to reponse fragment
+            LinearLayout tweetContent = itemView.findViewById(R.id.tweet_content);
+            tweetContent.setOnClickListener(v -> {
+                FragmentActivity activity = (FragmentActivity) v.getContext();
+                FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
+                fragmentTransaction.addToBackStack(null);
+
+                Bundle bundle = transmitionIn4(tweet);
+
+
+                // Create a new ResponseTweet instance using the newInstance method
+                ResponseTweet responseTweet = ResponseTweet.newInstance(bundle);
+
+                // If you still need to pass other information, you can do so like this:
+                Bundle additionalInfo = transmitionIn4(tweet);
+                responseTweet.getArguments().putAll(additionalInfo);
+
+                fragmentTransaction.replace(R.id.drawer_layout, responseTweet).commit();
+            });
+
+
+
+
+        }
+        public Bundle transmitionIn4(Tweet tweet){
+            //save through bundle to CommentFragment
+            Bundle bundle = new Bundle();
+            bundle.putString("id", tweet.getTweet_id());
+            bundle.putString("username", tweet.getUsername());
+            bundle.putString("tweetLink", tweet.getTweetlink());
+            bundle.putString("tweetText", tweet.getTweetText());
+            bundle.putString("time", tweet.getTime());
+
+            // avatar_bit
+            if (tweet.getAvatar_bit() != null) {
+                ByteArrayOutputStream avatarStream = new ByteArrayOutputStream();
+                tweet.getAvatar_bit().compress(Bitmap.CompressFormat.PNG, 100, avatarStream);
+                byte[] avatarByteArray = avatarStream.toByteArray();
+                bundle.putByteArray("avatar", avatarByteArray);
+            }
+
+            //image_bit
+            if (tweet.getImage_bit() != null) {
+                ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
+                tweet.getImage_bit().compress(Bitmap.CompressFormat.PNG, 100, imageStream);
+                byte[] imageByteArray = imageStream.toByteArray();
+                bundle.putByteArray("tweetImage", imageByteArray);
+            }
+            return bundle;
         }
     }
 
