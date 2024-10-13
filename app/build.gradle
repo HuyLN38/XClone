@@ -80,6 +80,7 @@ dependencies {
     implementation("androidx.preference:preference-ktx:1.2.0")
     //noinspection UseTomlInstead,GradleDependency
     implementation("at.favre.lib:bcrypt:0.10.2")
+    implementation 'com.android.volley:volley:1.2.1'
 
 
 

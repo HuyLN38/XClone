@@ -17,223 +17,231 @@
         android:layout_width="match_parent"
         android:layout_height="10dp"/>
 
-    <!--INBOX-->
-    <LinearLayout
+<!--    &lt;!&ndash;INBOX&ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="80dp"-->
+<!--        android:gravity="center"-->
+<!--        android:orientation="horizontal">-->
+<!--        &lt;!&ndash;receiver avatar &ndash;&gt;-->
+<!--        <de.hdodenhof.circleimageview.CircleImageView-->
+<!--            android:layout_width="60dp"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:src="@drawable/fukada" />-->
+<!--        &lt;!&ndash;chat box&ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:orientation="vertical"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            >-->
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:text="@string/eimi_fukada"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="15sp"-->
+<!--                android:textStyle="bold" />-->
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="@string/you_hello_fukada_wanna_hangout_with_me"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textAlignment="viewStart"-->
+<!--                android:textStyle="normal"-->
+<!--                android:textSize="12sp"/>-->
+<!--        </LinearLayout>-->
+<!--    </LinearLayout>-->
+
+<!--    &lt;!&ndash;INBOX&ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="80dp"-->
+<!--        android:gravity="center"-->
+<!--        android:orientation="horizontal">-->
+<!--        &lt;!&ndash;receiver avatar &ndash;&gt;-->
+<!--        <de.hdodenhof.circleimageview.CircleImageView-->
+<!--            android:layout_width="60dp"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:src="@drawable/johnnysins" />-->
+<!--        &lt;!&ndash;chat box&ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:orientation="vertical"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            >-->
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="30dp"-->
+<!--                -->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:text="@string/johnny_sins"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="15sp"-->
+<!--                android:textStyle="bold" />-->
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="You: Just want to tell you that ilysm"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textAlignment="viewStart"-->
+<!--                android:textStyle="normal"-->
+<!--                android:textSize="12sp"/>-->
+<!--        </LinearLayout>-->
+<!--    </LinearLayout>-->
+
+<!--    &lt;!&ndash;INBOX&ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="80dp"-->
+<!--        -->
+<!--        android:gravity="center"-->
+<!--        android:orientation="horizontal">-->
+<!--        &lt;!&ndash;receiver avatar &ndash;&gt;-->
+<!--        <de.hdodenhof.circleimageview.CircleImageView-->
+<!--            android:layout_width="60dp"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:src="@drawable/messi" />-->
+<!--        &lt;!&ndash;chat box&ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:orientation="vertical"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            >-->
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="30dp"-->
+<!--                -->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:text="@string/messi_lionel"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="15sp"-->
+<!--                android:textStyle="bold" />-->
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="Messi: Mes que un club "-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textAlignment="viewStart"-->
+<!--                android:textStyle="normal"-->
+<!--                android:textSize="12sp"/>-->
+<!--        </LinearLayout>-->
+<!--    </LinearLayout>-->
+
+<!--    &lt;!&ndash;INBOX&ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="80dp"-->
+<!--        -->
+<!--        android:gravity="center"-->
+<!--        android:orientation="horizontal">-->
+<!--        &lt;!&ndash;receiver avatar &ndash;&gt;-->
+<!--        <de.hdodenhof.circleimageview.CircleImageView-->
+<!--            android:layout_width="60dp"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:src="@drawable/potter" />-->
+<!--        &lt;!&ndash;chat box&ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:orientation="vertical"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            >-->
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="30dp"-->
+<!--                -->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:text="@string/the_boy_who_lived"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="15sp"-->
+<!--                android:textStyle="bold" />-->
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="@string/the_experliamus"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textAlignment="viewStart"-->
+<!--                android:textStyle="normal"-->
+<!--                android:textSize="12sp"/>-->
+<!--        </LinearLayout>-->
+<!--    </LinearLayout>-->
+
+<!--    &lt;!&ndash;INBOX&ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="80dp"-->
+<!--        -->
+<!--        android:gravity="center"-->
+<!--        android:orientation="horizontal">-->
+<!--        &lt;!&ndash;receiver avatar &ndash;&gt;-->
+<!--        <de.hdodenhof.circleimageview.CircleImageView-->
+<!--            android:layout_width="60dp"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:src="@drawable/jackdorsey" />-->
+<!--        &lt;!&ndash;chat box&ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:orientation="vertical"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            >-->
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="30dp"-->
+<!--                -->
+<!--                android:layout_marginTop="8dp"-->
+<!--                android:text="@string/jack_dorsey"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="15sp"-->
+<!--                android:textStyle="bold" />-->
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="@string/you_i_m_gonna_block_your_account_for_no_reason"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textAlignment="viewStart"-->
+<!--                android:textStyle="normal"-->
+<!--                android:textSize="12sp"/>-->
+<!--        </LinearLayout>-->
+<!--    </LinearLayout>-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chatRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-        <!--receiver avatar -->
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/fukada" />
-        <!--chat box-->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="10dp"
-            >
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/eimi_fukada"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="@string/you_hello_fukada_wanna_hangout_with_me"
-                android:textColor="@color/white"
-                android:textAlignment="viewStart"
-                android:textStyle="normal"
-                android:textSize="12sp"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <!--INBOX-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-        <!--receiver avatar -->
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/johnnysins" />
-        <!--chat box-->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="10dp"
-            >
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                
-                android:layout_marginTop="8dp"
-                android:text="@string/johnny_sins"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="You: Just want to tell you that ilysm"
-                android:textColor="@color/white"
-                android:textAlignment="viewStart"
-                android:textStyle="normal"
-                android:textSize="12sp"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <!--INBOX-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        
-        android:gravity="center"
-        android:orientation="horizontal">
-        <!--receiver avatar -->
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/messi" />
-        <!--chat box-->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="10dp"
-            >
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                
-                android:layout_marginTop="8dp"
-                android:text="@string/messi_lionel"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="Messi: Mes que un club "
-                android:textColor="@color/white"
-                android:textAlignment="viewStart"
-                android:textStyle="normal"
-                android:textSize="12sp"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <!--INBOX-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        
-        android:gravity="center"
-        android:orientation="horizontal">
-        <!--receiver avatar -->
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/potter" />
-        <!--chat box-->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="10dp"
-            >
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                
-                android:layout_marginTop="8dp"
-                android:text="@string/the_boy_who_lived"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="@string/the_experliamus"
-                android:textColor="@color/white"
-                android:textAlignment="viewStart"
-                android:textStyle="normal"
-                android:textSize="12sp"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <!--INBOX-->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        
-        android:gravity="center"
-        android:orientation="horizontal">
-        <!--receiver avatar -->
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/jackdorsey" />
-        <!--chat box-->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginStart="10dp"
-            >
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                
-                android:layout_marginTop="8dp"
-                android:text="@string/jack_dorsey"
-                android:textColor="@color/white"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="@string/you_i_m_gonna_block_your_account_for_no_reason"
-                android:textColor="@color/white"
-                android:textAlignment="viewStart"
-                android:textStyle="normal"
-                android:textSize="12sp"/>
-        </LinearLayout>
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        tools:listitem="@layout/item_chat_box" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:backgroundTint="@color/black">
         <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/add_msg_button"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_alignParentBottom="true"
