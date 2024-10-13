@@ -16,10 +16,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
 
     private List<Chat> chatList;
     private Context context;
+    private OnChatClickListener chatClickListener;
 
-    public ChatAdapter(List<Chat> chatList, Context context) {
+    public ChatAdapter(List<Chat> chatList, Context context, OnChatClickListener chatClickListener) {
         this.chatList = chatList;
         this.context = context;
+        this.chatClickListener = chatClickListener;
     }
 
     @NonNull
@@ -42,6 +44,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             // Set a default avatar if none exists
             holder.avatarImageView.setImageResource(R.drawable.potter);
         }
+
+        holder.itemView.setOnClickListener(v -> chatClickListener.onChatClick(chat));
     }
 
     @Override
@@ -59,5 +63,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             displayName = itemView.findViewById(R.id.chatDisplayName);
             messagePreview = itemView.findViewById(R.id.chatMessagePreview);
         }
+    }
+
+    public interface OnChatClickListener {
+        void onChatClick(Chat chat);
     }
 }

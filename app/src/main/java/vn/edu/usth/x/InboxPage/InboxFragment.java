@@ -20,7 +20,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import vn.edu.usth.x.R;
 
-public class InboxFragment extends Fragment {
+public class InboxFragment extends Fragment implements ChatAdapter.OnChatClickListener{
 
     private static final int ADD_MESSAGE_REQUEST_CODE = 1;  // Request code for starting add_message_activity
     private CircleImageView addMessageButton;
@@ -39,14 +39,14 @@ public class InboxFragment extends Fragment {
 
         // Initialize the chat list
         chatList = new ArrayList<>();
-        chatList.add(new Chat("Eimi Fukada", "You: Wanna hangout with me?"));
-        chatList.add(new Chat("Johnny Sins", "You: Just want to tell you that ilysm"));
-        chatList.add(new Chat("Lionel Messi", "Messi: Mes que un club"));
-        chatList.add(new Chat("The Boy Who Lived", "The Experliamus"));
-        chatList.add(new Chat("Jack Dorsey", "You: I'm gonna block your account"));
+//        chatList.add(new Chat("Eimi Fukada", "You: Wanna hangout with me?"));
+//        chatList.add(new Chat("Johnny Sins", "You: Just want to tell you that ilysm"));
+//        chatList.add(new Chat("Lionel Messi", "Messi: Mes que un club"));
+//        chatList.add(new Chat("The Boy Who Lived", "The Experliamus"));
+//        chatList.add(new Chat("Jack Dorsey", "You: I'm gonna block your account"));
 
         // Set up the adapter
-        chatAdapter = new ChatAdapter(chatList, getContext());
+        chatAdapter = new ChatAdapter(chatList, getContext(),this);
         chatRecyclerView.setAdapter(chatAdapter);
 
         // Initialize and set OnClickListener for addMessageButton
@@ -62,6 +62,14 @@ public class InboxFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onChatClick(Chat chat) {
+        Intent intent = new Intent(getActivity(), MessageActivity.class);
+        intent.putExtra("USER_NAME", chat.getDisplayName());
+        intent.putExtra("RECIPIENT_ID", chat.getRecipientId());// Pass the avatar if needed
+        startActivity(intent);
+    }
+
     // Handle result from add_message_activity
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -72,6 +80,7 @@ public class InboxFragment extends Fragment {
             String userName = data.getStringExtra("USER_NAME");
             String message = data.getStringExtra("MESSAGE");
             String avatarFilePath = data.getStringExtra("AVATAR_FILE_PATH");
+            String recipientId = data.getStringExtra("RECIPIENT_ID");
 
             // Decode the image file into a Bitmap
             Bitmap avatarBitmap = null;
@@ -83,13 +92,13 @@ public class InboxFragment extends Fragment {
             }
 
             // Add new chat to the list and notify the adapter
-            addNewChat(userName, message, avatarBitmap);
+            addNewChat(userName, message, avatarBitmap, recipientId);
         }
     }
 
     // Method to dynamically add a new chat
-    private void addNewChat(String displayName, String message, Bitmap avatarBitmap) {
-        Chat newChat = new Chat(displayName, message);
+    private void addNewChat(String displayName, String message, Bitmap avatarBitmap, String recipientId) {
+        Chat newChat = new Chat(displayName, message, recipientId);
         newChat.setAvatarBitmap(avatarBitmap);  // Assuming your Chat model has this method
         chatList.add(newChat);
         chatAdapter.notifyItemInserted(chatList.size() - 1);  // Notify adapter to update the RecyclerView

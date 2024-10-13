@@ -33,6 +33,7 @@ public class add_message_activity extends AppCompatActivity {
     private Button buttonAddMessage;
     private User selectedUser;
     private String avatarFilePath;
+    private String recipientId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +63,10 @@ public class add_message_activity extends AppCompatActivity {
 
         // Add message button listener
         buttonAddMessage.setOnClickListener(v -> {
-            if (selectedUser != null) {
+            if (selectedUser != null && recipientId != null) {
                 Intent intent = new Intent(add_message_activity.this, MessageActivity.class);
                 intent.putExtra("USER_NAME", selectedUser.getDisplayName());
+                intent.putExtra("RECIPIENT_ID", recipientId);
                 intent.putExtra("AVATAR_FILE_PATH", avatarFilePath); // Pass the file path, not the image
                 startActivity(intent);
                 setResult(RESULT_OK, intent);
@@ -89,7 +91,7 @@ public class add_message_activity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             // Parse the response
-                            String id = response.getString("id");
+                            recipientId  = response.getString("id");
                             String username = response.getString("username");
                             String displayName = response.getString("display_name");
                             String avatarBase64 = response.getString("avatar_url");
