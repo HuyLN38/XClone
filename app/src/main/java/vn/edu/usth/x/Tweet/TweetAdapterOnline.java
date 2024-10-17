@@ -40,6 +40,8 @@ public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline
         public TextView time;
         public ImageView image;
         public ImageView btnAnim;
+        public TextView likeCountView;
+        public int likeCount;
 
         public TweetViewHolder(View itemView) {
             super(itemView);
@@ -50,6 +52,7 @@ public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline
             time = itemView.findViewById(R.id.time);
             image = itemView.findViewById(R.id.image);
             btnAnim = itemView.findViewById(R.id.btn_anim);
+            likeCountView = itemView.findViewById(R.id.like_count);
         }
 
         public void bind(Tweet tweet) {
@@ -57,6 +60,8 @@ public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline
             tweetText.setText(tweet.getTweetText());
             tweetlink.setText(tweet.getTweetlink());
             time.setText(tweet.getTime());
+            likeCountView.setText(String.valueOf(tweet.getLikeCount()));
+            likeCount =(int) tweet.getLikeCount();
 
             // Load images using Glide
             Glide.with(itemView.getContext())
@@ -68,7 +73,7 @@ public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline
                     .into(avatar);
 
             ImageView bookmarkButton = itemView.findViewById(R.id.bookmark);
-            TextView likeCount = itemView.findViewById(R.id.like_count);
+
 
             // Set up animation
             btnAnim.setImageResource(R.drawable.animation);
@@ -79,18 +84,21 @@ public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline
                     if (animationDrawable.getCurrent() == animationDrawable.getFrame(lastFrameIndex)) {
                         animationDrawable.selectDrawable(0); // Reset to the first frame
                         animationDrawable.stop();
-                        likeCount.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.gray));
+                        likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.gray));
+                        likeCount--;
                     }
                 } else {
                     if (animationDrawable.getCurrent() == animationDrawable.getFrame(lastFrameIndex)) {
                         animationDrawable.selectDrawable(0); // Reset to the first frame
                         animationDrawable.stop();
-                        likeCount.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.gray));
+                        likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.gray));
                     } else {
-                        likeCount.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.heart));
+                        likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.heart));
+                        likeCount++;
                     }
                     animationDrawable.start();
                 }
+                likeCountView.setText(Integer.toString(likeCount));
             });
 
             bookmarkButton.setOnClickListener(new View.OnClickListener() {
@@ -131,7 +139,6 @@ public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline
 
                 Bundle bundle = transmitionIn4(tweet);
 
-
                 // Create a new ResponseTweet instance using the newInstance method
                 ResponseTweet responseTweet = ResponseTweet.newInstance(bundle);
 
@@ -141,10 +148,6 @@ public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline
 
                 fragmentTransaction.replace(R.id.drawer_layout, responseTweet).commit();
             });
-
-
-
-
         }
         public Bundle transmitionIn4(Tweet tweet){
             //save through bundle to CommentFragment

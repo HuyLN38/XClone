@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -35,6 +36,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import vn.edu.usth.x.HomePage.HomeForYou;
 import vn.edu.usth.x.R;
@@ -44,16 +47,14 @@ import vn.edu.usth.x.Tweet.TweetAdapterOnline;
 public class ResponseTweet extends Fragment {
     private static final String TAG = "Reponse_Tweet";
     private static final int PICK_IMAGE_REQUEST = 1;
-    private  String tweet_id;
+    private String tweet_id;
 
     private List<Tweet> tweetList;
     private TweetAdapterOnline adapter;
     private RecyclerView recyclerView;
 
-
-
-
     private String API_URL;
+    private String API_Like_URL = "https://huyln.info/xclone/api/like/";
     private EditText commentEditText;
 
     private Button postButton;
@@ -74,7 +75,11 @@ public class ResponseTweet extends Fragment {
 
     private String base64Image = "";
 
+    private Button followButton;
+
     private static final String ARG_TWEET_ID = "tweet_id";
+
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     public static ResponseTweet newInstance(Bundle bundle) {
         ResponseTweet fragment = new ResponseTweet();
@@ -102,6 +107,20 @@ public class ResponseTweet extends Fragment {
         tweetList = new ArrayList<>();
         adapter = new TweetAdapterOnline(tweetList);
         recyclerView.setAdapter(adapter);
+        followButton = view.findViewById(R.id.follow_button);
+
+        followButton.setOnClickListener(v -> {
+            // Logic for following/unfollowing
+            boolean isFollowing = followButton.getText().toString().equals("Following");
+
+            if (isFollowing) {
+                unfollowUser(); // Call the method to unfollow
+                followButton.setText("Follow");
+            } else {
+                followUser(); // Call the method to follow
+                followButton.setText("Following");
+            }
+        });
 
 //        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
 
@@ -119,7 +138,6 @@ public class ResponseTweet extends Fragment {
 //                swipeRefreshLayout.setRefreshing(false);
 //            }
 //        });
-
         return view;
     }
 
@@ -188,36 +206,27 @@ public class ResponseTweet extends Fragment {
                 URL url = new URL(API_URL);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
-
                 int responseCode = conn.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                     StringBuilder response = new StringBuilder();
                     String line;
-
                     while ((line = reader.readLine()) != null) {
                         response.append(line);
                     }
-
                     JSONArray jsonArray = new JSONArray(response.toString());
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject tweetJson = jsonArray.getJSONObject(i);
-
-
                         // Fetch and decode avatar
                         Bitmap avatarBitmap = fetchBitmapFromBase64(tweetJson.getString("avatar_url"));
-//                        Log.d(TAG, "Base64 String: " + avatarBitmap);
-
-
                         // Fetch and decode media
                         Bitmap imageBitmap = fetchBitmapFromBase64(tweetJson.optString("image_url", null));
-
-
                         // Format the created_at timestamp
                         String timeAgo = formatTimeAgo(tweetJson.getString("created_at"));
-
+                        String tweetId = tweetJson.getString("id");
+                        int likeCount = fetchLikeCount(tweetId);
                         Tweet tweet = new Tweet(
-                                tweetJson.getString("id"),
+                                tweetId,
                                 avatarBitmap,
                                 tweetJson.getString("display_name"),
                                 tweetJson.getString("username"),
@@ -225,20 +234,51 @@ public class ResponseTweet extends Fragment {
                                 timeAgo,
                                 imageBitmap
                         );
-                        Log.d(TAG, "tweet: " + tweet);
-
-
+                        tweet.setLikeCount(likeCount);
+                        Log.d("Tweet", "Tweet: " + tweet);
                         fetchedTweets.add(tweet);
                     }
                 }
                 conn.disconnect();
-
             } catch (Exception e) {
                 Log.e("FetchTweetsTask", "Error fetching tweets: " + e.getMessage());
             }
             return fetchedTweets;
         }
-        private Bitmap  fetchBitmapFromBase64(String base64String) {
+
+        private int fetchLikeCount(String tweetId) {
+            int likeCount = 0;
+            try {
+                // Fetch likes
+                URL likeUrl = new URL(API_Like_URL + tweetId);
+                HttpURLConnection likeConn = (HttpURLConnection) likeUrl.openConnection();
+                likeConn.setRequestMethod("GET");
+                int likeResponseCode = likeConn.getResponseCode();
+                if (likeResponseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(likeConn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                    JSONArray likeArray = new JSONArray(response.toString());
+                    Log.d("FetchLikesTask", "Likes Array Length: " + likeArray.length());
+                    for (int i = 0; i < likeArray.length(); i++) {
+                        JSONObject likeJson = likeArray.getJSONObject(i);
+                        if (likeJson.getString("tweet_id").equals(tweetId)) {
+                            likeCount++;
+                        }
+                    }
+                }
+                likeConn.disconnect();
+            } catch (Exception e) {
+                Log.e("FetchLikesTask", "Error fetching likes: " + e.getMessage());
+            }
+            return likeCount;
+        }
+
+
+        private Bitmap fetchBitmapFromBase64(String base64String) {
             if (base64String != null && !base64String.isEmpty()) {
                 byte[] decodedString = Base64.decode(base64String, Base64.DEFAULT);
                 return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
@@ -279,5 +319,39 @@ public class ResponseTweet extends Fragment {
                 return "";
             }
         }
+    }
+
+    private void followUser() {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL("https://huyln.info/xclone/api/follow/" + tweet_id);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.getResponseCode(); // Send request
+                    conn.disconnect();
+                } catch (Exception e) {
+                    Log.e(TAG, "Error following user: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    private void unfollowUser() {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL("https://huyln.info/xclone/api/unfollow/" + tweet_id);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.getResponseCode(); // Send request
+                    conn.disconnect();
+                } catch (Exception e) {
+                    Log.e(TAG, "Error unfollowing user: " + e.getMessage());
+                }
+            }
+        });
     }
 }

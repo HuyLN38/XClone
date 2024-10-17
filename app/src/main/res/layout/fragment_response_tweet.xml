@@ -125,17 +125,17 @@ tools:context=".Blog.ResponseTweet">
                             android:layout_height="0dp"
                             android:layout_weight="1" />
 
-                        <!--                        <Button-->
-                        <!--                            android:id="@+id/comment_post"-->
-                        <!--                            android:layout_width="100dp"-->
-                        <!--                            android:layout_height="35dp"-->
-                        <!--                            android:background="@drawable/oval_button"-->
-                        <!--                            android:text="Follow"-->
-                        <!--                            android:textColor="@color/white"-->
-                        <!--                            android:textSize="15sp"-->
-                        <!--                            android:paddingBottom="5dp"-->
-                        <!--                            app:backgroundTint="@null"-->
-                        <!--                            tools:ignore="TouchTargetSizeCheck" />-->
+                        <Button
+                            android:id="@+id/follow_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:padding="0dp"
+                            android:background="@drawable/oval_button"
+                            android:text="subscribe"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            app:backgroundTint="@null"
+                            tools:ignore="TouchTargetSizeCheck" />
 
                         <!--3dot-->
                         <ImageView
