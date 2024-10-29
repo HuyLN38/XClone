@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,13 +76,30 @@ public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline
             ImageView bookmarkButton = itemView.findViewById(R.id.bookmark);
 
 
-            // Set up animation
+            Log.d("TweetAdapter", "Tweet isLiked: " + tweet.isLiked());
+                    // Assuming `adapter` is your RecyclerView adapter instance
+            if (tweet.isLiked()) {
+                // Safeguard against NullPointerException
+                if (animationDrawable != null) {
+                    animationDrawable.selectDrawable(0);
+                    Log.d("TweetAdapter", "Tweet isLiked: animation start");
+                    animationDrawable.start();
+                }
+                likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.heart));
+                btnAnim.setImageResource(R.drawable.animation);
+            } else {
+                likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.gray));
+
+            }
+
+// Set up animation
             btnAnim.setImageResource(R.drawable.animation);
             btnAnim.setOnClickListener(v -> {
                 AnimationDrawable animationDrawable = (AnimationDrawable) btnAnim.getDrawable();
                 int lastFrameIndex = animationDrawable.getNumberOfFrames() - 1;
-                if (animationDrawable.isRunning()) {
-                    if (animationDrawable.getCurrent() == animationDrawable.getFrame(lastFrameIndex)) {
+
+                if (animationDrawable.isRunning() && tweet.isLiked()) {
+                    if (animationDrawable.getCurrent() == animationDrawable.getFrame(lastFrameIndex) ) {
                         animationDrawable.selectDrawable(0); // Reset to the first frame
                         animationDrawable.stop();
                         likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.gray));
@@ -100,6 +118,7 @@ public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline
                 }
                 likeCountView.setText(Integer.toString(likeCount));
             });
+
 
             bookmarkButton.setOnClickListener(new View.OnClickListener() {
                 @Override
