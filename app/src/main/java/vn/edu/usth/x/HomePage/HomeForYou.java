@@ -1,5 +1,6 @@
 package vn.edu.usth.x.HomePage;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,6 +8,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,6 +45,11 @@ public class HomeForYou extends Fragment {
     private List<Tweet> tweetList;
     private static final String API_Tweet_URL = "https://huyln.info/xclone/api/tweets/";
     private static final String API_Like_URL = "https://huyln.info/xclone/api/like/";
+    private static final int PAGE_SIZE = 5;
+    private int currentPage = 1;
+    private int firstPage = 1;
+
+    private boolean isLoading = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,29 +67,84 @@ public class HomeForYou extends Fragment {
         SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
 
         // Fetch tweets
-        new FetchTweetsTask().execute();
+        new FetchTweetsTask(firstPage).execute();
 
         //Refresh
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @SuppressLint("StaticFieldLeak")
             @Override
             public void onRefresh() {
-                // call FetchTweetsTask
-                new FetchTweetsTask().execute();
+                // Clear the existing tweet list
+                tweetList.clear();
+                currentPage = 1; // Reset to the first page
 
-                // stop circle loading
-                swipeRefreshLayout.setRefreshing(false);
+                // Fetch new tweets
+                new FetchTweetsTask(currentPage) {
+                    @Override
+                    protected void onPostExecute(List<Tweet> fetchedTweets) {
+                        super.onPostExecute(fetchedTweets);
+
+                        if (fetchedTweets != null && !fetchedTweets.isEmpty()) {
+                            tweetList.addAll(fetchedTweets); // Add the fetched tweets to the list
+                            adapter.notifyDataSetChanged(); // Notify the adapter of data changes
+                        } else {
+                            Log.d("Refresh", "No new tweets found.");
+                        }
+
+                        // Stop the refresh animation
+                        swipeRefreshLayout.setRefreshing(false);
+                        isLoading = false; // Reset loading state
+                    }
+                }.execute(); // Execute the AsyncTask
             }
         });
+
+        //scroll down to update new post
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext()) {
+            @Override
+            public boolean canScrollVertically() { // Allow vertical scrolling
+                return true;
+            }
+        };
+        // Apply the layout manager to the RecyclerView
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setNestedScrollingEnabled(true);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (!isLoading) {
+                    int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+                    if (lastVisibleItemPosition >= tweetList.size() - 2) {
+                        isLoading = true;
+                        fetchTweets(++currentPage);
+                    }
+                }
+            }
+        });
+
 
         return view;
     }
 
+    //call FetchTweetsTask
+    public void fetchTweets( int page) {
+        new FetchTweetsTask(page).execute();
+    }
+
     private class FetchTweetsTask extends AsyncTask<Void, Void, List<Tweet>> {
+        private int page;
+
+        public FetchTweetsTask(int page) {
+            this.page = page;
+        }
         @Override
         protected List<Tweet> doInBackground(Void... voids) {
             List<Tweet> fetchedTweets = new ArrayList<>();
             try {
-                URL url = new URL(API_Tweet_URL);
+                String urlString = API_Tweet_URL + "?page=" + page + "&size=" + PAGE_SIZE + "&sort=created_at&order=desc";
+                URL url = new URL(urlString);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
 
@@ -95,9 +158,10 @@ public class HomeForYou extends Fragment {
                         response.append(line);
                     }
 
-                    JSONArray jsonArray = new JSONArray(response.toString());
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject tweetJson = jsonArray.getJSONObject(i);
+                    JSONObject  jsonArray = new JSONObject(response.toString());
+                    JSONArray itemsArray = jsonArray.getJSONArray("items");
+                    for (int i = 0; i < itemsArray.length(); i++) {
+                        JSONObject tweetJson = itemsArray.getJSONObject(i);
 
                         // Fetch and decode avatar
                         Bitmap avatarBitmap = fetchBitmapFromBase64(tweetJson.getString("avatar_url"));
@@ -212,12 +276,14 @@ public class HomeForYou extends Fragment {
 
 
         @Override
-        protected void onPostExecute(List<Tweet> tweets) {
-            if (tweets != null && !tweets.isEmpty()) {
-                tweetList.clear();
-                tweetList.addAll(tweets);
-                adapter.notifyDataSetChanged();
+        protected void onPostExecute(List<Tweet> fetchedTweets) {
+            super.onPostExecute(fetchedTweets);
+            if (fetchedTweets != null && !fetchedTweets.isEmpty()) {
+                // Add the fetched tweets to the existing list
+                tweetList.addAll(fetchedTweets);
+                adapter.notifyDataSetChanged(); // Notify the adapter of data changes
             }
+            isLoading = false; // Reset loading state
         }
     }
 

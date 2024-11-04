@@ -10,6 +10,7 @@ import android.view.View;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import vn.edu.usth.x.HomePage.HomeForYou;
 import vn.edu.usth.x.Login.LoginPage;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,5 +45,9 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         }, 1000);
+
+        //call NewsTweet
+        HomeForYou homeForYou = new HomeForYou();
+        homeForYou.fetchTweets(1);
     }
 }
