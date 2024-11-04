@@ -17,6 +17,8 @@ public class Tweet {
     private Bitmap image_bit;
 
     private int image;
+    private int likeCount;
+    private boolean isLike = false;
 
     //Constructor online mode
     public Tweet(String tweet_id,Bitmap avatar_bit, String username, String tweetlink, String tweetText, String time, Bitmap image_bit) {
@@ -37,6 +39,14 @@ public class Tweet {
         this.tweetText = tweetText;
         this.time = time;
         this.image  = image;
+    }
+
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
     }
 
     public int getAvatar() {
@@ -111,4 +121,11 @@ public class Tweet {
         this.tweet_id = tweet_id;
     }
 
+    public void setLiked(boolean isLike){
+        this.isLike = isLike;
+    }
+
+    public boolean isLiked(){
+        return this.isLike;
+    }
 }

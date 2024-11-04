@@ -64,6 +64,11 @@ tools:context=".Blog.ResponseTweet">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp"
             android:paddingBottom="8dp">
@@ -120,17 +125,17 @@ tools:context=".Blog.ResponseTweet">
                             android:layout_height="0dp"
                             android:layout_weight="1" />
 
-                        <!--                        <Button-->
-                        <!--                            android:id="@+id/comment_post"-->
-                        <!--                            android:layout_width="100dp"-->
-                        <!--                            android:layout_height="35dp"-->
-                        <!--                            android:background="@drawable/oval_button"-->
-                        <!--                            android:text="Follow"-->
-                        <!--                            android:textColor="@color/white"-->
-                        <!--                            android:textSize="15sp"-->
-                        <!--                            android:paddingBottom="5dp"-->
-                        <!--                            app:backgroundTint="@null"-->
-                        <!--                            tools:ignore="TouchTargetSizeCheck" />-->
+                        <Button
+                            android:id="@+id/follow_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:padding="0dp"
+                            android:background="@drawable/oval_button"
+                            android:text="subscribe"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            app:backgroundTint="@null"
+                            tools:ignore="TouchTargetSizeCheck" />
 
                         <!--3dot-->
                         <ImageView
@@ -288,19 +293,13 @@ tools:context=".Blog.ResponseTweet">
                 android:textColor="@color/gray_btn"
                 android:textStyle="bold"
                 />
-
+            </LinearLayout>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:paddingStart="0dp"
                 android:background="@color/gray_bar"
                 android:layout_gravity="bottom"/>
-
-<!--            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->
-<!--                android:id="@+id/swipeRefreshLayout"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                tools:ignore="MissingClass">-->
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/response_tweet_recycle"
@@ -453,6 +452,15 @@ tools:context=".Blog.ResponseTweet">
             android:textSize="16sp"
             android:layout_marginTop="10dp" />
     </LinearLayout>
+
+    <!--    Horizontal line-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:paddingStart="0dp"
+        android:background="@color/gray_bar"
+        android:layout_gravity="bottom"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -1,5 +1,6 @@
 package vn.edu.usth.x.HomePage;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -39,7 +40,8 @@ public class HomeForYou extends Fragment {
     private RecyclerView recyclerView;
     private TweetAdapterOnline adapter;
     private List<Tweet> tweetList;
-    private static final String API_URL = "https://huyln.info/xclone/api/tweets/";
+    private static final String API_Tweet_URL = "https://huyln.info/xclone/api/tweets/";
+    private static final String API_Like_URL = "https://huyln.info/xclone/api/like/";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -79,7 +81,7 @@ public class HomeForYou extends Fragment {
         protected List<Tweet> doInBackground(Void... voids) {
             List<Tweet> fetchedTweets = new ArrayList<>();
             try {
-                URL url = new URL(API_URL);
+                URL url = new URL(API_Tweet_URL);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
 
@@ -106,8 +108,20 @@ public class HomeForYou extends Fragment {
                         // Format the created_at timestamp
                         String timeAgo = formatTimeAgo(tweetJson.getString("created_at"));
 
+                        String tweetId = tweetJson.getString("id");
+
+                        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("UserPrefs", requireContext().MODE_PRIVATE);
+                        String userId = sharedPreferences.getString("userId", null);
+                        if (userId != null) {
+                            Log.d("UserId", "Retrieved User ID: " + userId);
+                        } else {
+                            Log.e("UserId", "User ID not found in SharedPreferences");
+                        }
+
+                        int likeCount = fetchLikeCount(tweetId);
+
                         Tweet tweet = new Tweet(
-                                tweetJson.getString("id"),
+                                tweetId,
                                 avatarBitmap,
                                 tweetJson.getString("display_name"),
                                 tweetJson.getString("username"),
@@ -115,7 +129,8 @@ public class HomeForYou extends Fragment {
                                 timeAgo,
                                 mediaBitmap
                         );
-
+                        tweet.setLikeCount(likeCount);
+                        tweet.setLiked(isTweetLikedByUser(tweetId, userId));
                         fetchedTweets.add(tweet);
                     }
                 }
@@ -134,6 +149,67 @@ public class HomeForYou extends Fragment {
             }
             return null;
         }
+
+        private int fetchLikeCount(String tweetId) {
+            int likeCount = 0;
+            try {
+                // Fetch likes
+                URL likeUrl = new URL(API_Like_URL + tweetId);
+                HttpURLConnection likeConn = (HttpURLConnection) likeUrl.openConnection();
+                likeConn.setRequestMethod("GET");
+                int likeResponseCode = likeConn.getResponseCode();
+                if (likeResponseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(likeConn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                    JSONArray likeArray = new JSONArray(response.toString());
+                    for (int i = 0; i < likeArray.length(); i++) {
+                        JSONObject likeJson = likeArray.getJSONObject(i);
+                        if (likeJson.getString("tweet_id").equals(tweetId)) {
+                            likeCount++;
+                        }
+                    }
+                }
+                likeConn.disconnect();
+            } catch (Exception e) {
+                Log.e("FetchLikesTask", "Error fetching likes: " + e.getMessage());
+            }
+            return likeCount;
+        }
+
+        private boolean isTweetLikedByUser(String tweetId, String userId) {
+            try {
+                Log.d("FetchLikesTask", "Checking if tweet is liked by user: " + userId);
+                URL likeUrl = new URL("https://huyln.info/xclone/api/like/" + tweetId);
+                HttpURLConnection likeConn = (HttpURLConnection) likeUrl.openConnection();
+                likeConn.setRequestMethod("GET");
+                int likeResponseCode = likeConn.getResponseCode();
+                if (likeResponseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(likeConn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                    JSONArray likeArray = new JSONArray(response.toString());
+                    for (int i = 0; i < likeArray.length(); i++) {
+                        JSONObject likeJson = likeArray.getJSONObject(i);
+                        if (likeJson.getString("user_id").equals(userId)) {
+                            return true; // The tweet is liked by the current user
+                        }
+                    }
+                }
+                likeConn.disconnect();
+            } catch (Exception e) {
+                Log.e("FetchLikesTask", "Error checking if tweet is liked by user: " + e.getMessage());
+            }
+            Log.d("FetchLikesTask", "Tweet liked by userId: " + userId);
+            return false; // The tweet is not liked by the user
+        }
+
 
         @Override
         protected void onPostExecute(List<Tweet> tweets) {

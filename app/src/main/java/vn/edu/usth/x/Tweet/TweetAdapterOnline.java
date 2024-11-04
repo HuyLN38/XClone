@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,8 @@ public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline
         public TextView time;
         public ImageView image;
         public ImageView btnAnim;
+        public TextView likeCountView;
+        public int likeCount;
 
         public TweetViewHolder(View itemView) {
             super(itemView);
@@ -50,6 +53,7 @@ public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline
             time = itemView.findViewById(R.id.time);
             image = itemView.findViewById(R.id.image);
             btnAnim = itemView.findViewById(R.id.btn_anim);
+            likeCountView = itemView.findViewById(R.id.like_count);
         }
 
         public void bind(Tweet tweet) {
@@ -57,6 +61,8 @@ public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline
             tweetText.setText(tweet.getTweetText());
             tweetlink.setText(tweet.getTweetlink());
             time.setText(tweet.getTime());
+            likeCountView.setText(String.valueOf(tweet.getLikeCount()));
+            likeCount =(int) tweet.getLikeCount();
 
             // Load images using Glide
             Glide.with(itemView.getContext())
@@ -68,30 +74,51 @@ public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline
                     .into(avatar);
 
             ImageView bookmarkButton = itemView.findViewById(R.id.bookmark);
-            TextView likeCount = itemView.findViewById(R.id.like_count);
 
-            // Set up animation
+
+            Log.d("TweetAdapter", "Tweet isLiked: " + tweet.isLiked());
+                    // Assuming `adapter` is your RecyclerView adapter instance
+            if (tweet.isLiked()) {
+                // Safeguard against NullPointerException
+                if (animationDrawable != null) {
+                    animationDrawable.selectDrawable(0);
+                    Log.d("TweetAdapter", "Tweet isLiked: animation start");
+                    animationDrawable.start();
+                }
+                likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.heart));
+                btnAnim.setImageResource(R.drawable.animation);
+            } else {
+                likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.gray));
+
+            }
+
+// Set up animation
             btnAnim.setImageResource(R.drawable.animation);
             btnAnim.setOnClickListener(v -> {
                 AnimationDrawable animationDrawable = (AnimationDrawable) btnAnim.getDrawable();
                 int lastFrameIndex = animationDrawable.getNumberOfFrames() - 1;
-                if (animationDrawable.isRunning()) {
-                    if (animationDrawable.getCurrent() == animationDrawable.getFrame(lastFrameIndex)) {
+
+                if (animationDrawable.isRunning() && tweet.isLiked()) {
+                    if (animationDrawable.getCurrent() == animationDrawable.getFrame(lastFrameIndex) ) {
                         animationDrawable.selectDrawable(0); // Reset to the first frame
                         animationDrawable.stop();
-                        likeCount.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.gray));
+                        likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.gray));
+                        likeCount--;
                     }
                 } else {
                     if (animationDrawable.getCurrent() == animationDrawable.getFrame(lastFrameIndex)) {
                         animationDrawable.selectDrawable(0); // Reset to the first frame
                         animationDrawable.stop();
-                        likeCount.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.gray));
+                        likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.gray));
                     } else {
-                        likeCount.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.heart));
+                        likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.heart));
+                        likeCount++;
                     }
                     animationDrawable.start();
                 }
+                likeCountView.setText(Integer.toString(likeCount));
             });
+
 
             bookmarkButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -131,7 +158,6 @@ public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline
 
                 Bundle bundle = transmitionIn4(tweet);
 
-
                 // Create a new ResponseTweet instance using the newInstance method
                 ResponseTweet responseTweet = ResponseTweet.newInstance(bundle);
 
@@ -141,10 +167,6 @@ public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline
 
                 fragmentTransaction.replace(R.id.drawer_layout, responseTweet).commit();
             });
-
-
-
-
         }
         public Bundle transmitionIn4(Tweet tweet){
             //save through bundle to CommentFragment
