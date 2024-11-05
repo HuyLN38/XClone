@@ -33,4 +33,5 @@ public class Chat {
     public String getRecipientId() {
         return recipientId;
     }
+
 }

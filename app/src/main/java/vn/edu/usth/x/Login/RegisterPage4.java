@@ -106,17 +106,7 @@ public class RegisterPage4 extends AppCompatActivity {
                     Log.d("RegisterUserTask", "User ID: " + id);
 
                     // Remake the avatar
-                    UserFunction.onUuidChanged(getApplicationContext(), id, new UserFunction.AvatarCallback() {
-                        @Override
-                        public void onSuccess(Bitmap avatarBitmap) {
-
-                        }
-
-                        @Override
-                        public void onFailure(String errorMessage) {
-                            Log.e("RegisterUserTask", errorMessage);
-                        }
-                    });
+                    UserFunction.onUuidChanged(getApplicationContext(), id);
 
                     Intent intent = new Intent(RegisterPage4.this, HomeFragment.class);
                     startActivity(intent);

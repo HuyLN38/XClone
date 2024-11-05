@@ -14,10 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.X">
         <activity
-            android:name=".InboxPage.MessageActivity"
-            android:exported="false" />
-        <activity
-            android:name=".InboxPage.add_message_activity"
+            android:name=".InboxPage.ChatActivity"
             android:exported="false" />
         <activity
             android:name=".Login.LoginPage1"
@@ -31,6 +28,11 @@
             android:theme="@style/Theme.X" />
         <activity
             android:name=".Login.RegisterPage1"
+            android:exported="false"
+            android:label="LoginPage"
+            android:theme="@style/Theme.X" />
+        <activity
+            android:name=".InboxPage.AddChatActivity.AddChatActivity"
             android:exported="false"
             android:label="LoginPage"
             android:theme="@style/Theme.X" />

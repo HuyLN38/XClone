@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import vn.edu.usth.x.R;
+import vn.edu.usth.x.Topbar.InboxSettingsTopBarFragment;
 
 public class SettingsInboxFragment extends Fragment {
     private CheckBox checkBox1, checkBox2, checkBox3;

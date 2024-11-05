@@ -8,26 +8,26 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
+import vn.edu.usth.x.Login.Data.AvatarManager;
 import vn.edu.usth.x.R;
 
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder> {
-
     private List<Chat> chatList;
-    private Context context;
     private OnChatClickListener chatClickListener;
+    private Context context;
 
-    public ChatAdapter(List<Chat> chatList, Context context, OnChatClickListener chatClickListener) {
+    public ChatAdapter(List<Chat> chatList, OnChatClickListener chatClickListener) {
         this.chatList = chatList;
-        this.context = context;
         this.chatClickListener = chatClickListener;
     }
 
     @NonNull
     @Override
     public ChatViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_chat_box, parent, false);
+        context = parent.getContext();
+        View view = LayoutInflater.from(context).inflate(R.layout.item_chat_box, parent, false);
         return new ChatViewHolder(view);
     }
 
@@ -36,17 +36,25 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         Chat chat = chatList.get(position);
         holder.displayName.setText(chat.getDisplayName());
         holder.messagePreview.setText(chat.getLastMessage());
-        // Load avatar image if available
-        // Set the avatar
-        if (chat.getAvatarBitmap() != null) {
-            holder.avatarImageView.setImageBitmap(chat.getAvatarBitmap());
-        } else {
-            // Set a default avatar if none exists
-            holder.avatarImageView.setImageResource(R.drawable.potter);
-        }
 
-        holder.itemView.setOnClickListener(v -> chatClickListener.onChatClick(chat));
+        // Try to load avatar from local storage first
+        AvatarManager.getInstance(context)
+                .getAvatar(chat.getRecipientId())
+                .thenAccept(bitmap -> {
+                    if (bitmap != null) {
+                        holder.avatarImageView.setImageBitmap(bitmap);
+                    } else {
+                        // Handle the case when avatar couldn't be loaded
+                        holder.avatarImageView.setImageResource(R.drawable.potter);
+                    }
+                });
+        holder.itemView.setOnClickListener(v -> {
+            if (chatClickListener != null) {
+                chatClickListener.onChatClick(chat);
+            }
+        });
     }
+
 
     @Override
     public int getItemCount() {

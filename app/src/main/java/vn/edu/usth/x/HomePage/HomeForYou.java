@@ -28,15 +28,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicReference;
 
+import vn.edu.usth.x.Login.Data.AvatarManager;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Tweet.Tweet;
-import vn.edu.usth.x.Tweet.TweetAdapter;
 import vn.edu.usth.x.Tweet.TweetAdapterOnline;
 
 public class HomeForYou extends Fragment {
@@ -47,7 +47,6 @@ public class HomeForYou extends Fragment {
     private static final String API_Like_URL = "https://huyln.info/xclone/api/like/";
     private static final int PAGE_SIZE = 5;
     private int currentPage = 1;
-    private int firstPage = 1;
 
     private boolean isLoading = false;
 
@@ -67,9 +66,9 @@ public class HomeForYou extends Fragment {
         SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
 
         // Fetch tweets
-        new FetchTweetsTask(firstPage).execute();
+        fetchTweets(currentPage);
 
-        //Refresh
+        // Refresh
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @SuppressLint("StaticFieldLeak")
             @Override
@@ -79,27 +78,14 @@ public class HomeForYou extends Fragment {
                 currentPage = 1; // Reset to the first page
 
                 // Fetch new tweets
-                new FetchTweetsTask(currentPage) {
-                    @Override
-                    protected void onPostExecute(List<Tweet> fetchedTweets) {
-                        super.onPostExecute(fetchedTweets);
+                fetchTweets(currentPage);
 
-                        if (fetchedTweets != null && !fetchedTweets.isEmpty()) {
-                            tweetList.addAll(fetchedTweets); // Add the fetched tweets to the list
-                            adapter.notifyDataSetChanged(); // Notify the adapter of data changes
-                        } else {
-                            Log.d("Refresh", "No new tweets found.");
-                        }
-
-                        // Stop the refresh animation
-                        swipeRefreshLayout.setRefreshing(false);
-                        isLoading = false; // Reset loading state
-                    }
-                }.execute(); // Execute the AsyncTask
+                // Stop the refresh animation
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
 
-        //scroll down to update new post
+        // Scroll down to update new post
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext()) {
             @Override
             public boolean canScrollVertically() { // Allow vertical scrolling
@@ -124,12 +110,11 @@ public class HomeForYou extends Fragment {
             }
         });
 
-
         return view;
     }
 
-    //call FetchTweetsTask
-    public void fetchTweets( int page) {
+    // Call FetchTweetsTask
+    public void fetchTweets(int page) {
         new FetchTweetsTask(page).execute();
     }
 
@@ -139,6 +124,7 @@ public class HomeForYou extends Fragment {
         public FetchTweetsTask(int page) {
             this.page = page;
         }
+
         @Override
         protected List<Tweet> doInBackground(Void... voids) {
             List<Tweet> fetchedTweets = new ArrayList<>();
@@ -158,13 +144,23 @@ public class HomeForYou extends Fragment {
                         response.append(line);
                     }
 
-                    JSONObject  jsonArray = new JSONObject(response.toString());
+                    JSONObject jsonArray = new JSONObject(response.toString());
                     JSONArray itemsArray = jsonArray.getJSONArray("items");
                     for (int i = 0; i < itemsArray.length(); i++) {
                         JSONObject tweetJson = itemsArray.getJSONObject(i);
 
+                        AtomicReference<Bitmap> avatarBitmap = new AtomicReference<>();
+
                         // Fetch and decode avatar
-                        Bitmap avatarBitmap = fetchBitmapFromBase64(tweetJson.getString("avatar_url"));
+                        AvatarManager.getInstance(getContext())
+                                .getAvatar(tweetJson.getString("user_id"))
+                                .thenAccept(bitmap -> {
+                                    if (bitmap != null) {
+                                        // Use the bitmap (e.g., set it to an ImageView)
+                                        avatarBitmap.set(bitmap);
+                                    } else
+                                        avatarBitmap.set(BitmapFactory.decodeResource(getResources(), R.drawable.avatar));
+                                });
 
                         // Fetch and decode media
                         Bitmap mediaBitmap = fetchBitmapFromBase64(tweetJson.optString("media_url", null));
@@ -186,7 +182,7 @@ public class HomeForYou extends Fragment {
 
                         Tweet tweet = new Tweet(
                                 tweetId,
-                                avatarBitmap,
+                                avatarBitmap.get(),
                                 tweetJson.getString("display_name"),
                                 tweetJson.getString("username"),
                                 tweetJson.getString("content"),
@@ -273,7 +269,6 @@ public class HomeForYou extends Fragment {
             Log.d("FetchLikesTask", "Tweet liked by userId: " + userId);
             return false; // The tweet is not liked by the user
         }
-
 
         @Override
         protected void onPostExecute(List<Tweet> fetchedTweets) {

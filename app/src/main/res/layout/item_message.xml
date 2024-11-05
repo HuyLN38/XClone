@@ -1,30 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="8dp">
 
-    <!-- Received Message -->
     <TextView
-        android:id="@+id/textMessageReceived"
+        android:id="@+id/messageTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/received_message_bg"
-        android:textColor="@android:color/white"
-        android:padding="10dp"
-        android:layout_gravity="start"
-        android:visibility="gone"/>
+        android:text="Message content" />
 
-    <!-- Sent Message -->
     <TextView
-        android:id="@+id/textMessageSent"
+        android:id="@+id/statusTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/sent_message_bg"
-        android:textColor="@android:color/white"
-        android:padding="10dp"
-        android:layout_gravity="end"
-        android:visibility="gone"/>
-
+        android:text="Status" />
 </LinearLayout>
