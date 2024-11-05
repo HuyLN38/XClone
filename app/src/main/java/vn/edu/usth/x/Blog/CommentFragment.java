@@ -202,6 +202,7 @@ public class CommentFragment extends Fragment {
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
+
     //Handle Post Comment through API
     private void postTweet(String content) {
         // Disable post button to prevent double posting
@@ -218,12 +219,44 @@ public class CommentFragment extends Fragment {
 
             // Send content and userId to API
             new PostTweetTask().execute(content, userId, tweet_id);
+
+            //send Noti API for post's owner
+            sendNotification("comment", userId, tweet_id);
         } else {
             // If userId is null, log an error or show a toast message
             Log.e("PostTweet", "User ID not found in SharedPreferences");
             Toast.makeText(getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
             postButton.setEnabled(true);
         }
+    }
+
+    public void sendNotification(String type, String actionUserId, String tweetId) {
+        AsyncTask.execute(() -> {
+            try {
+                URL url = new URL("https://huyln.info/xclone/api/notifications");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("POST");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setDoOutput(true);
+
+                JSONObject jsonBody = new JSONObject();
+                jsonBody.put("user_id", "ownerUserId");
+                jsonBody.put("actionUserId", actionUserId);
+                jsonBody.put("tweet_id", tweetId);
+                jsonBody.put("type", type);
+
+                String jsonString = jsonBody.toString();
+                try (OutputStream os = connection.getOutputStream()) {
+                    os.write(jsonString.getBytes(StandardCharsets.UTF_8));
+                }
+                int responseCode = connection.getResponseCode();
+                Log.d(TAG, "Notification response code: " + responseCode);
+
+                connection.disconnect();
+            } catch (Exception e) {
+                Log.e(TAG, "Exception while sending notification", e);
+            }
+        });
     }
 
     private class PostTweetTask extends AsyncTask<String, Void, Boolean> {
@@ -309,5 +342,4 @@ public class CommentFragment extends Fragment {
             }
         }
     }
-
 }
