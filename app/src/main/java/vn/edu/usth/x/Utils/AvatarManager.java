@@ -1,4 +1,4 @@
-package vn.edu.usth.x.Login.Data;
+package vn.edu.usth.x.Utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -67,7 +67,6 @@ public class AvatarManager {
             }
         }
 
-        // If not in cache, fetch from API
         String url = BASE_URL + "/users/" + uuid + "/avatar";
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {

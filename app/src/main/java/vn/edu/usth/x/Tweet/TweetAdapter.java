@@ -105,6 +105,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
         this.tweetList = tweetList;
     }
 
+
+
     @NonNull
     @Override
     public TweetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

@@ -38,7 +38,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
-import vn.edu.usth.x.Login.Data.AvatarManager;
+import vn.edu.usth.x.Utils.AvatarManager;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Utils.UserFunction;
 

@@ -9,7 +9,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import vn.edu.usth.x.Login.Data.User;
-import vn.edu.usth.x.Login.Data.UserManager;
+import vn.edu.usth.x.Utils.UserManager;
 import vn.edu.usth.x.R;
 
 public class RegisterPage1 extends AppCompatActivity {

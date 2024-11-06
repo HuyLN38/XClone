@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import vn.edu.usth.x.Login.Data.AvatarManager;
+import vn.edu.usth.x.Utils.AvatarManager;
 import vn.edu.usth.x.R;
 
 public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserViewHolder> {

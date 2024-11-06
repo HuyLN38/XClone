@@ -18,7 +18,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import vn.edu.usth.x.Login.Data.User;
-import vn.edu.usth.x.Login.Data.UserManager;
+import vn.edu.usth.x.Utils.UserManager;
 import vn.edu.usth.x.R;
 
 public class RegisterPage3 extends AppCompatActivity {

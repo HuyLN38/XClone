@@ -8,14 +8,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
-import vn.edu.usth.x.Login.Data.AvatarManager;
+import vn.edu.usth.x.Utils.AvatarManager;
 import vn.edu.usth.x.R;
 
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder> {
-    private List<Chat> chatList;
-    private OnChatClickListener chatClickListener;
+    private final List<Chat> chatList;
+    private final OnChatClickListener chatClickListener;
     private Context context;
 
     public ChatAdapter(List<Chat> chatList, OnChatClickListener chatClickListener) {
@@ -43,9 +43,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
                 .thenAccept(bitmap -> {
                     if (bitmap != null) {
                         holder.avatarImageView.setImageBitmap(bitmap);
-                    } else {
-                        // Handle the case when avatar couldn't be loaded
-                        holder.avatarImageView.setImageResource(R.drawable.potter);
                     }
                 });
         holder.itemView.setOnClickListener(v -> {

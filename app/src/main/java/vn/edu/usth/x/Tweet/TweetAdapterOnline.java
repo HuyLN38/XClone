@@ -2,12 +2,17 @@ package vn.edu.usth.x.Tweet;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
@@ -19,30 +24,67 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import vn.edu.usth.x.Blog.ResponseTweet;
-import vn.edu.usth.x.HomeFragment;
-import vn.edu.usth.x.R;
 import vn.edu.usth.x.Blog.CommentFragment;
+import vn.edu.usth.x.R;
+import vn.edu.usth.x.Utils.UserFunction;
 
-public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline.TweetViewHolder> {
-    private static AnimationDrawable animationDrawable;
-    private int flag = 0;
-    private List<Tweet> tweetList;
+public class TweetAdapterOnline extends RecyclerView.Adapter<TweetAdapterOnline.TweetViewHolder> {
+    private static final String TAG = "TweetAdapterOnline";
+    private final List<Tweet> tweetList;
+    private final Object lock = new Object(); // For thread safety
+
+    public TweetAdapterOnline(List<Tweet> tweetList) {
+        this.tweetList = tweetList;
+    }
+
+
+    @NonNull
+    @Override
+    public TweetViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_tweet, parent, false);
+        return new TweetViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull TweetViewHolder holder, int position) {
+        synchronized (lock) {
+            if (position < 0 || position >= tweetList.size()) {
+                Log.e(TAG, "Invalid position: " + position);
+                return;
+            }
+            Tweet tweet = tweetList.get(position);
+            holder.bind(tweet);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        synchronized (lock) {
+            return tweetList.size();
+        }
+    }
 
     public static class TweetViewHolder extends RecyclerView.ViewHolder {
-        public CircleImageView avatar;
-        public TextView username;
-        public TextView tweetText;
-        public TextView tweetlink;
-        public TextView time;
-        public ImageView image;
-        public ImageView btnAnim;
-        public TextView likeCountView;
-        public int likeCount;
+        private final CircleImageView avatar;
+        private final TextView username;
+        private final TextView tweetText;
+        private final TextView tweetlink;
+        private final TextView time;
+        private final ImageView image;
+        private final ImageView btnAnim;
+        private final TextView likeCountView;
+        private final ImageView bookmarkButton;
+        private final ImageView commentButton;
+        private final LinearLayout tweetContent;
 
         public TweetViewHolder(View itemView) {
             super(itemView);
@@ -54,169 +96,227 @@ public class TweetAdapterOnline  extends RecyclerView.Adapter<TweetAdapterOnline
             image = itemView.findViewById(R.id.image);
             btnAnim = itemView.findViewById(R.id.btn_anim);
             likeCountView = itemView.findViewById(R.id.like_count);
+            bookmarkButton = itemView.findViewById(R.id.bookmark);
+            commentButton = itemView.findViewById(R.id.comment_button);
+            tweetContent = itemView.findViewById(R.id.tweet_content);
         }
 
         public void bind(Tweet tweet) {
+            bindBasicInfo(tweet);
+            bindImages(tweet);
+            initializeLikeButton(tweet);
+            initializeBookmarkButton();
+            initializeCommentButton(tweet);
+            initializeTweetContent(tweet);
+        }
+
+        private void bindBasicInfo(Tweet tweet) {
             username.setText(tweet.getUsername());
             tweetText.setText(tweet.getTweetText());
             tweetlink.setText(tweet.getTweetlink());
             time.setText(tweet.getTime());
             likeCountView.setText(String.valueOf(tweet.getLikeCount()));
-            likeCount =(int) tweet.getLikeCount();
+        }
 
-            // Load images using Glide
-            Glide.with(itemView.getContext())
-                    .load(tweet.getImage_bit())
-                    .into(image);
-
-            Glide.with(itemView.getContext())
-                    .load(tweet.getAvatar_bit())
-                    .into(avatar);
-
-            ImageView bookmarkButton = itemView.findViewById(R.id.bookmark);
-
-
-            Log.d("TweetAdapter", "Tweet isLiked: " + tweet.isLiked());
-                    // Assuming `adapter` is your RecyclerView adapter instance
-            if (tweet.isLiked()) {
-                // Safeguard against NullPointerException
-                if (animationDrawable != null) {
-                    animationDrawable.selectDrawable(0);
-                    Log.d("TweetAdapter", "Tweet isLiked: animation start");
-                    animationDrawable.start();
-                }
-                likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.heart));
-                btnAnim.setImageResource(R.drawable.animation);
+        private void bindImages(Tweet tweet) {
+            // Load tweet image
+            if (tweet.getImage_bit() != null) {
+                Glide.with(itemView.getContext())
+                        .load(tweet.getImage_bit())
+                        .into(image);
+                image.setVisibility(View.VISIBLE);
             } else {
-                likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.gray));
-
+                image.setVisibility(View.GONE);
             }
 
-// Set up animation
+            // Load avatar
+            Glide.with(itemView.getContext())
+                    .load(tweet.getAvatar_bit())
+                    .placeholder(R.drawable.avatar)
+                    .error(R.drawable.avatar)
+                    .into(avatar);
+        }
+
+        private void initializeLikeButton(Tweet tweet) {
+            Context context = itemView.getContext();
             btnAnim.setImageResource(R.drawable.animation);
-            btnAnim.setOnClickListener(v -> {
-                AnimationDrawable animationDrawable = (AnimationDrawable) btnAnim.getDrawable();
-                int lastFrameIndex = animationDrawable.getNumberOfFrames() - 1;
+            updateLikeState(tweet, context);
 
-                if (animationDrawable.isRunning() && tweet.isLiked()) {
-                    if (animationDrawable.getCurrent() == animationDrawable.getFrame(lastFrameIndex) ) {
-                        animationDrawable.selectDrawable(0); // Reset to the first frame
-                        animationDrawable.stop();
-                        likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.gray));
-                        likeCount--;
-                    }
+            btnAnim.setOnClickListener(v -> handleLikeButtonClick(tweet));
+        }
+
+        private void updateLikeState(Tweet tweet, Context context) {
+            int textColor = tweet.isLiked() ?
+                    ContextCompat.getColor(context, R.color.heart) :
+                    ContextCompat.getColor(context, R.color.gray);
+            likeCountView.setTextColor(textColor);
+
+            if (tweet.isLiked()) {
+                btnAnim.setImageResource(R.drawable.liked);
+                Log.d(TAG, "Animation started for liked tweet");
+            }
+        }
+
+        private void handleLikeButtonClick(Tweet tweet) {
+            btnAnim.setImageResource(R.drawable.animation);
+
+            AnimationDrawable anim = (AnimationDrawable) btnAnim.getDrawable();
+            anim.selectDrawable(0);
+            anim.start();
+
+            int lastFrameIndex = anim.getNumberOfFrames() - 1;
+
+            boolean isCurrentlyLiked = tweet.isLiked();
+
+            if (isCurrentlyLiked) {
+                    handleUnlike(tweet, anim);
+            } else {
+                if ((btnAnim.getDrawable() == ContextCompat.getDrawable(itemView.getContext(), R.drawable.liked))) {
+                    handleUnlike(tweet, anim);
                 } else {
-                    if (animationDrawable.getCurrent() == animationDrawable.getFrame(lastFrameIndex)) {
-                        animationDrawable.selectDrawable(0); // Reset to the first frame
-                        animationDrawable.stop();
-                        likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.gray));
-                    } else {
-                        likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.heart));
-                        likeCount++;
-                    }
-                    animationDrawable.start();
+                    handleLike(tweet, anim);
                 }
-                likeCountView.setText(Integer.toString(likeCount));
-            });
+            }
+        }
 
+        private void handleUnlike(Tweet tweet, AnimationDrawable anim) {
+            tweet.setLiked(false);
+            btnAnim.setImageResource(R.drawable.animation);
+            anim.selectDrawable(0);
+            anim.stop();
+            likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.gray));
+            updateLikeCount(tweet);
+        }
 
-            bookmarkButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    v.setSelected(!v.isSelected());
-                    if (v.isSelected()) {
-                        bookmarkButton.setImageResource(R.drawable.bookmark_after);
-                    } else {
-                        bookmarkButton.setImageResource(R.drawable.bookmark);
-                    }
-                }
-            });
+        private void handleLike(Tweet tweet, AnimationDrawable anim) {
+            tweet.setLiked(true);
+            likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.heart));
+            anim.start();
+            updateLikeCount(tweet);
+        }
 
-            //comment button
-            ImageView commentButton = itemView.findViewById(R.id.comment_button);
-            commentButton.setOnClickListener(v -> {
-                FragmentActivity activity = (FragmentActivity) v.getContext();
-                FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down);
-                fragmentTransaction.addToBackStack(null);
+        private void updateLikeCount(Tweet tweet) {
+            try {
+                int newCount = tweet.getLikeCount() + (tweet.isLiked() ? 1 : -1);
+                tweet.setLikeCount(newCount);
+                likeCountView.setText(String.valueOf(newCount));
 
-                Bundle bundle = transmitionIn4(tweet);
+                // Post like update to server
+                toggleLikeOnServer(UserFunction.getUserId(itemView.getContext()), tweet.getTweet_id());
 
-                //Create a new CommentFragment and set the arguments
-                CommentFragment commentFragment = new CommentFragment();
-                commentFragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.drawer_layout, commentFragment).commit();
-            });
+            } catch (Exception e) {
+                Log.e(TAG, "Error updating like count", e);
+            }
+        }
 
-            //tweet change to reponse fragment
-            LinearLayout tweetContent = itemView.findViewById(R.id.tweet_content);
-            tweetContent.setOnClickListener(v -> {
-                FragmentActivity activity = (FragmentActivity) v.getContext();
-                FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
-                fragmentTransaction.addToBackStack(null);
+        private void toggleLikeOnServer(String userId, String tweetId) {
+            if (userId == null || tweetId == null) {
+                Log.e(TAG, "Invalid user ID or tweet ID");
+                return;
+            }
 
-                Bundle bundle = transmitionIn4(tweet);
+            String url = "https://huyln.info/xclone/api/like";
+            JSONObject jsonBody = new JSONObject();
+            try {
+                jsonBody.put("user_id", userId);
+                jsonBody.put("tweet_id", tweetId);
 
-                // Create a new ResponseTweet instance using the newInstance method
-                ResponseTweet responseTweet = ResponseTweet.newInstance(bundle);
+                RequestQueue requestQueue = Volley.newRequestQueue(itemView.getContext());
+                JsonObjectRequest request = new JsonObjectRequest(
+                        Request.Method.POST, url, jsonBody,
+                        response -> {
+                            try {
+                                boolean liked = response.getBoolean("liked");
+                                Log.d(TAG, "Like status updated: " + liked);
+                            } catch (JSONException e) {
+                                Log.e(TAG, "Error parsing like response", e);
+                            }
+                        },
+                        error -> Log.e(TAG, "Error toggling like: " + error.getMessage())
+                );
 
-                // If you still need to pass other information, you can do so like this:
-                Bundle additionalInfo = transmitionIn4(tweet);
-                responseTweet.getArguments().putAll(additionalInfo);
+                requestQueue.add(request);
+            } catch (JSONException e) {
+                Log.e(TAG, "Error creating like request", e);
+            }
+        }
 
-                fragmentTransaction.replace(R.id.drawer_layout, responseTweet).commit();
+        private void initializeBookmarkButton() {
+            bookmarkButton.setOnClickListener(v -> {
+                v.setSelected(!v.isSelected());
+                bookmarkButton.setImageResource(v.isSelected() ?
+                        R.drawable.bookmark_after : R.drawable.bookmark);
             });
         }
-        public Bundle transmitionIn4(Tweet tweet){
-            //save through bundle to CommentFragment
+
+        private void initializeCommentButton(Tweet tweet) {
+            commentButton.setOnClickListener(v -> {
+                FragmentActivity activity = (FragmentActivity) v.getContext();
+                if (activity != null) {
+                    showCommentFragment(activity, tweet);
+                }
+            });
+        }
+
+        private void initializeTweetContent(Tweet tweet) {
+            tweetContent.setOnClickListener(v -> {
+                FragmentActivity activity = (FragmentActivity) v.getContext();
+                if (activity != null) {
+                    showResponseTweet(activity, tweet);
+                }
+            });
+        }
+
+        private void showCommentFragment(FragmentActivity activity, Tweet tweet) {
+            FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down);
+
+            CommentFragment commentFragment = new CommentFragment();
+            commentFragment.setArguments(createTweetBundle(tweet));
+
+            transaction.replace(R.id.drawer_layout, commentFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
+
+        private void showResponseTweet(FragmentActivity activity, Tweet tweet) {
+            FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
+            ResponseTweet responseTweet = ResponseTweet.newInstance(createTweetBundle(tweet));
+            transaction.replace(R.id.drawer_layout, responseTweet)
+                    .addToBackStack(null)
+                    .commit();
+        }
+
+        private Bundle createTweetBundle(Tweet tweet) {
             Bundle bundle = new Bundle();
             bundle.putString("id", tweet.getTweet_id());
             bundle.putString("username", tweet.getUsername());
             bundle.putString("tweetLink", tweet.getTweetlink());
             bundle.putString("tweetText", tweet.getTweetText());
             bundle.putString("time", tweet.getTime());
+            bundle.putInt("likeCount", tweet.getLikeCount());
+            bundle.putBoolean("isLiked", tweet.isLiked());
+            bundle.putParcelable("avatarBitmap", tweet.getAvatar_bit());
+            bundle.putParcelable("imageBitmap", tweet.getImage_bit());
 
-            // avatar_bit
+            // Add avatar bitmap if available
             if (tweet.getAvatar_bit() != null) {
-                ByteArrayOutputStream avatarStream = new ByteArrayOutputStream();
-                tweet.getAvatar_bit().compress(Bitmap.CompressFormat.PNG, 100, avatarStream);
-                byte[] avatarByteArray = avatarStream.toByteArray();
-                bundle.putByteArray("avatar", avatarByteArray);
+                bundle.putByteArray("avatar", bitmapToByteArray(tweet.getAvatar_bit()));
             }
 
-            //image_bit
+            // Add tweet image if available
             if (tweet.getImage_bit() != null) {
-                ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
-                tweet.getImage_bit().compress(Bitmap.CompressFormat.PNG, 100, imageStream);
-                byte[] imageByteArray = imageStream.toByteArray();
-                bundle.putByteArray("tweetImage", imageByteArray);
+                bundle.putByteArray("tweetImage", bitmapToByteArray(tweet.getImage_bit()));
             }
+
             return bundle;
         }
-    }
 
-    public TweetAdapterOnline(List<Tweet> tweetList) {
-        this.tweetList = tweetList;
+        private byte[] bitmapToByteArray(Bitmap bitmap) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+            return stream.toByteArray();
+        }
     }
-
-    @NonNull
-    @Override
-    public TweetAdapterOnline.TweetViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_tweet, parent, false);
-        return new TweetAdapterOnline.TweetViewHolder(itemView);
-    }
-
-    @Override
-    public void onBindViewHolder(TweetAdapterOnline.TweetViewHolder holder, int position) {
-        Tweet tweet = tweetList.get(position);
-        holder.bind(tweet);
-    }
-
-    @Override
-    public int getItemCount() {
-        return tweetList.size();
-    }
-
 }

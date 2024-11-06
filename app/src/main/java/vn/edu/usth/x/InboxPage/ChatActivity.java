@@ -1,7 +1,6 @@
 package vn.edu.usth.x.InboxPage;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,10 +28,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
-import vn.edu.usth.x.Login.Data.AvatarManager;
+import vn.edu.usth.x.Utils.AvatarManager;
 import vn.edu.usth.x.R;
+import vn.edu.usth.x.Utils.GlobalWebSocketManager;
 
-public class ChatActivity extends AppCompatActivity implements WebSocketManager.ChatCallback {
+public class ChatActivity extends AppCompatActivity {
     private static final String BASE_URL = "https://huyln.info/xclone/api";
     private RecyclerView recyclerView;
     private EditText messageInput;
@@ -40,7 +41,6 @@ public class ChatActivity extends AppCompatActivity implements WebSocketManager.
     private SwipeRefreshLayout swipeRefreshLayout;
     private MessageAdapter messageAdapter;
     private List<Message> messageList;
-    private WebSocketManager webSocketManager;
     private RequestQueue requestQueue;
     private String currentUserId;
     private String otherUserId;
@@ -55,12 +55,33 @@ public class ChatActivity extends AppCompatActivity implements WebSocketManager.
         setContentView(R.layout.activity_message);
 
         initializeViews();
-        setupWebSocket();
         setupRecyclerView();
         loadInitialMessages();
+
+        // Observe new messages
+        GlobalWebSocketManager.getInstance().getNewMessageLiveData().observe(this, message -> {
+            if (message.getSenderId().equals(otherUserId) ||
+                    message.getRecipientId().equals(otherUserId)) {
+                messageList.add(0, message);
+                messageAdapter.notifyItemInserted(0);
+                recyclerView.scrollToPosition(0);
+                updateEmptyState();
+            }
+        });
+
+        // Observe message status updates
+        GlobalWebSocketManager.getInstance().getMessageStatusLiveData().observe(this, status -> {
+            for (int i = 0; i < messageList.size(); i++) {
+                Message message = messageList.get(i);
+                if (message.getId().equals(status.messageId)) {
+                    messageAdapter.notifyItemChanged(i);
+                    break;
+                }
+            }
+        });
     }
 
-    private void initializeViews() {
+        private void initializeViews() {
         TextView name = findViewById(R.id.userName);
         recyclerView = findViewById(R.id.recyclerView);
         messageInput = findViewById(R.id.messageInput);
@@ -102,10 +123,6 @@ public class ChatActivity extends AppCompatActivity implements WebSocketManager.
         swipeRefreshLayout.setColorSchemeResources(R.color.light_blue);
     }
 
-    private void setupWebSocket() {
-        webSocketManager = new WebSocketManager(this);
-        webSocketManager.connect(this);
-    }
 
     private void setupRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -115,10 +132,10 @@ public class ChatActivity extends AppCompatActivity implements WebSocketManager.
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                int totalItemCount = layoutManager.getItemCount();
-                int lastVisible = layoutManager.findLastVisibleItemPosition();
+                int totalItemCount = layoutManager != null ? layoutManager.getItemCount() : 0;
+                int lastVisible = layoutManager != null ? layoutManager.findLastVisibleItemPosition() : 0;
 
                 if (hasMoreMessages && !isLoading && lastVisible >= totalItemCount - 5) {
                     loadMoreMessages();
@@ -147,10 +164,10 @@ public class ChatActivity extends AppCompatActivity implements WebSocketManager.
             loadingIndicator.setVisibility(View.VISIBLE);
         }
 
-        String url = String.format("%s/messages/conversation?user1_id=%s&user2_id=%s&page=%d&size=%d",
+        @SuppressLint("DefaultLocale") String url = String.format("%s/messages/conversation?user1_id=%s&user2_id=%s&page=%d&size=%d",
                 BASE_URL, currentUserId, otherUserId, currentPage, PAGE_SIZE);
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+        @SuppressLint("NotifyDataSetChanged") JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
                         JSONArray items = response.getJSONArray("items");
@@ -165,7 +182,6 @@ public class ChatActivity extends AppCompatActivity implements WebSocketManager.
                                     item.getString("recipient_id"),
                                     item.getString("content")
                             );
-                            message.setStatus(item.optString("status", "sent"));
                             newMessages.add(message);
                         }
 
@@ -216,48 +232,8 @@ public class ChatActivity extends AppCompatActivity implements WebSocketManager.
             messageAdapter.notifyItemInserted(0);
             recyclerView.scrollToPosition(0);
             messageInput.setText("");
-            webSocketManager.sendMessage(message, this);
+            GlobalWebSocketManager.getInstance().sendMessage(message);
             updateEmptyState();
-        }
-    }
-
-    @Override
-    public void onMessageReceived(Message message) {
-        runOnUiThread(() -> {
-            messageList.add(0, message);
-            messageAdapter.notifyItemInserted(0);
-            recyclerView.scrollToPosition(0);
-            updateEmptyState();
-        });
-    }
-
-    @Override
-    public void onStatusUpdate(String messageId, String status) {
-        runOnUiThread(() -> {
-            for (int i = 0; i < messageList.size(); i++) {
-                Message message = messageList.get(i);
-                if (message.getId().equals(messageId)) {
-                        message.setStatus(status);
-                    messageAdapter.notifyItemChanged(i);
-                    break;
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onConnectionStateChange(boolean connected) {
-        runOnUiThread(() -> {
-
-        });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        webSocketManager.disconnect();
-        if (requestQueue != null) {
-            requestQueue.cancelAll(this);
         }
     }
 }

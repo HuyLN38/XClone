@@ -84,8 +84,8 @@ tools:context=".Blog.ResponseTweet">
                 <!-- Profile Image -->
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/tweet_avatar"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_marginEnd="8dp"
                     android:src="@drawable/avatar_bcc" />
 
@@ -108,6 +108,7 @@ tools:context=".Blog.ResponseTweet">
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="BCCNEWS"
+                            android:textSize="16sp"
                             android:textColor="@color/white"
                             android:textStyle="bold" />
 
@@ -118,6 +119,7 @@ tools:context=".Blog.ResponseTweet">
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:text="• 2h"
+                            android:textSize="16sp"
                             android:textColor="@color/gray" />
                         <!--Spacer-->
                         <View
@@ -131,8 +133,8 @@ tools:context=".Blog.ResponseTweet">
                             android:layout_height="30dp"
                             android:padding="0dp"
                             android:background="@drawable/oval_button"
-                            android:text="subscribe"
-                            android:textColor="@color/white"
+                            android:text="Subscribe"
+                            android:textColor="@color/black"
                             android:textSize="12sp"
                             app:backgroundTint="@null"
                             tools:ignore="TouchTargetSizeCheck" />
@@ -170,6 +172,7 @@ tools:context=".Blog.ResponseTweet">
                 android:layout_height="wrap_content"
                 android:text="@string/description_traffic"
                 android:textColor="@color/white"
+                android:paddingVertical="5dp"
                 android:textSize="16dp"
                 tools:ignore="HardcodedText" />
 

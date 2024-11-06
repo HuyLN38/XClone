@@ -87,14 +87,9 @@ public class HomeFollowing extends Fragment {
                     JSONArray jsonArray = new JSONArray(response.toString());
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject tweetJson = jsonArray.getJSONObject(i);
-                        // Fetch and decode avatar
                         Bitmap avatarBitmap = fetchBitmapFromBase64(tweetJson.getString("avatar_url"));
-                        // Fetch and decode media
                         Bitmap mediaBitmap = fetchBitmapFromBase64(tweetJson.optString("media_url", null));
-                        // Format the created_at timestamp
                         String timeAgo = formatTimeAgo(tweetJson.getString("created_at"));
-
-                        // Extract userId from SharedPreferences
                         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("UserPrefs", requireContext().MODE_PRIVATE);
                         String userId = sharedPreferences.getString("userId", null);
                         if (userId != null) {
@@ -112,7 +107,8 @@ public class HomeFollowing extends Fragment {
                                 tweetJson.getString("username"),
                                 tweetJson.getString("content"),
                                 timeAgo,
-                                mediaBitmap
+                                mediaBitmap,
+                                0,true
                         );
                         tweet.setLikeCount(likeCount);
                         tweet.setLiked(isTweetLikedByUser(tweetId, userId));

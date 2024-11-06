@@ -41,30 +41,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
         Message message = messages.get(position);
         holder.messageText.setText(message.getContent());
-
-        // Only show status for sent messages
-        if (getItemViewType(position) == VIEW_TYPE_SENT && holder.messageStatus != null) {
-            String status = message.getStatus();
-            if (status != null) {
-                switch (status) {
-                    case "sent":
-                        holder.messageStatus.setText("✓");
-                        break;
-                    case "delivered":
-                        holder.messageStatus.setText("✓✓");
-                        break;
-                    case "seen":
-                        holder.messageStatus.setText("✓✓");
-                        holder.messageStatus.setTextColor(context.getResources().getColor(R.color.light_blue));
-                        break;
-                }
-            }
-        }
-
-        // Set timestamp
-        if (holder.timestamp != null && message.getTimestamp() != null) {
-            holder.timestamp.setText(formatTimestamp(message.getTimestamp()));
-        }
     }
 
     @Override
@@ -84,8 +60,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     public static class MessageViewHolder extends RecyclerView.ViewHolder {
         TextView messageText;
-        TextView messageStatus;
-        TextView timestamp;
 
         public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -93,16 +67,4 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         }
     }
 
-    private String formatTimestamp(String timestamp) {
-        try {
-            long timeInMillis = Long.parseLong(timestamp);
-            return android.text.format.DateUtils.getRelativeTimeSpanString(
-                    timeInMillis,
-                    System.currentTimeMillis(),
-                    android.text.format.DateUtils.MINUTE_IN_MILLIS
-            ).toString();
-        } catch (NumberFormatException e) {
-            return "";
-        }
-    }
 }

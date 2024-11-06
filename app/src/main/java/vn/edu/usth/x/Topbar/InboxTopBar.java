@@ -1,7 +1,6 @@
 package vn.edu.usth.x.Topbar;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,7 +8,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +18,7 @@ import com.bumptech.glide.Glide;
 
 import vn.edu.usth.x.HomeFragment;
 import vn.edu.usth.x.InboxPage.SettingsInboxFragment;
-import vn.edu.usth.x.Login.Data.AvatarManager;
+import vn.edu.usth.x.Utils.AvatarManager;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Utils.UserFunction;
 

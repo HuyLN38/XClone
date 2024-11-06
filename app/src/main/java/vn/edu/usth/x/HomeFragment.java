@@ -1,11 +1,8 @@
 package vn.edu.usth.x;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,7 +21,7 @@ import androidx.fragment.app.FragmentTransaction;
 import vn.edu.usth.x.CommunityPage.CommunityFragment;
 import vn.edu.usth.x.HomePage.HomeMenuFragment;
 import vn.edu.usth.x.InboxPage.InboxFragment;
-import vn.edu.usth.x.Login.Data.AvatarManager;
+import vn.edu.usth.x.Utils.AvatarManager;
 import vn.edu.usth.x.NotificationPage.NotificationFragment;
 import vn.edu.usth.x.SearchPage.SearchFragment;
 import vn.edu.usth.x.Topbar.CommunityTopBarFragment;

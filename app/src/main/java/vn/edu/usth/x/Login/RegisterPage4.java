@@ -1,7 +1,6 @@
 package vn.edu.usth.x.Login;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,7 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import vn.edu.usth.x.HomeFragment;
 import vn.edu.usth.x.Login.Data.User;
-import vn.edu.usth.x.Login.Data.UserManager;
+import vn.edu.usth.x.Utils.UserManager;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Utils.UserFunction;
 

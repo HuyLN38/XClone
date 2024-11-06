@@ -2,10 +2,6 @@ package vn.edu.usth.x.Utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-
-
-import vn.edu.usth.x.Login.Data.AvatarManager;
 
 
 public class UserFunction {
@@ -34,10 +30,5 @@ public class UserFunction {
                     });
 
         }
-    }
-
-    public interface AvatarCallback {
-        void onSuccess(Bitmap avatar);
-        void onFailure(String errorMessage);
     }
 }
