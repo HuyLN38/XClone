@@ -11,7 +11,7 @@
         android:id="@+id/avatarImageView"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/potter" />
+        android:src="@drawable/avatar" />
 
     <!-- Chat Box -->
     <LinearLayout

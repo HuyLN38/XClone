@@ -344,12 +344,13 @@ public class TweetAdapterOnline extends RecyclerView.Adapter<TweetAdapterOnline.
             bundle.putString("tweetText", tweet.getTweetText());
             bundle.putString("time", tweet.getTime());
             bundle.putInt("likeCount", tweet.getLikeCount());
+            bundle.putInt("reTweetCount", tweet.getReTweetCount());
+            bundle.putInt("CommentCount", tweet.getCommentCount());
+            bundle.putInt("ViewCount", tweet.getSeenCount());
             bundle.putBoolean("isLiked", tweet.isLiked());
             bundle.putParcelable("avatarBitmap", tweet.getAvatar_bit());
             bundle.putParcelable("imageBitmap", tweet.getImage_bit());
-            bundle.putInt("commentCount", tweet.getCommentCount());
-            bundle.putInt("reTweetCount", tweet.getReTweetCount());
-            bundle.putInt("seenCount", tweet.getSeenCount());
+
 
             // Add avatar bitmap if available
             if (tweet.getAvatar_bit() != null) {

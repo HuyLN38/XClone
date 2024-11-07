@@ -85,7 +85,7 @@ public class ResponseTweet extends Fragment implements CommentManager.CommentUpd
     @Override
     public void onCommentUpdated(String tweetId) {
         commentCount++;
-        viewHolder.commentCountView.setText(String.valueOf(commentCount));
+        rootView.post(() -> viewHolder.commentCountView.setText(String.valueOf(commentCount)));
     }
 
     private static class ViewHolder {
@@ -101,9 +101,8 @@ public class ResponseTweet extends Fragment implements CommentManager.CommentUpd
         final ImageView postReplyButton;
         final ImageView tweetImageView;
         final Button followButton;
-        final TextView seenCountView;
-
         TweetAdapterOnline adapter;
+        final TextView seenCountView;
         final ImageView likeButton;
         final TextView likeCountView;
         final TextView commentCountView;
@@ -119,11 +118,11 @@ public class ResponseTweet extends Fragment implements CommentManager.CommentUpd
             followButton = view.findViewById(R.id.follow_button);
             recyclerView = view.findViewById(R.id.response_tweet_recycle);
             likeButton = view.findViewById(R.id.btn_anim);
-            seenCountView = view.findViewById(R.id.seen_count);
+            seenCountView = view.findViewById(R.id.view_count_root);
             likeCountView = view.findViewById(R.id.like_count);
             bookmarkButton = view.findViewById(R.id.bookmark);
             replyEditText = view.findViewById(R.id.edit_text_comment);
-            commentCountView = view.findViewById(R.id.comment_count);
+            commentCountView = view.findViewById(R.id.comment_count_root);
             addMediaButton = view.findViewById(R.id.add_picture_button_comment);
             selectedMediaPreview = view.findViewById(R.id.previewImage);
             postReplyButton = view.findViewById(R.id.add_button);
@@ -321,7 +320,7 @@ public class ResponseTweet extends Fragment implements CommentManager.CommentUpd
 
                         // Fetch and decode avatar
                         AvatarManager.getInstance(getContext())
-                                .getAvatar( replyJson.getString("user_id"))
+                                .getAvatar(replyJson.getString("user_id"))
                                 .thenAccept(bitmap -> {
                                     if (bitmap != null) {
                                         avatarBitmap.set(bitmap);
@@ -533,13 +532,20 @@ public class ResponseTweet extends Fragment implements CommentManager.CommentUpd
         viewHolder.timeTextView.setText(args.getString("time", ""));
         viewHolder.avatarImageView.setImageBitmap(args.getParcelable("avatarBitmap"));
         viewHolder.tweetImageView.setImageBitmap(args.getParcelable("imageBitmap"));
-        seenCount = args.getInt("seenCount", 0);
-        viewHolder.seenCountView.setText(String.valueOf(args.getInt("seenCount", 0)));
-        commentCount = args.getInt("commentCount", 0);
-        viewHolder.commentCountView.setText(String.valueOf(commentCount));
-        viewHolder.likeCountView.setText(String.valueOf(args.getInt("likeCount", 0)));
+        Log.e("TESTT", String.valueOf(args.getInt("ViewCount", 0)));
+        Log.e("TESTT", String.valueOf(args.getInt("likeCount", 0)));
+        ;
+        Log.e("TESTT", String.valueOf(args.getInt("CommentCount", 0)));
+        viewHolder.seenCountView.setText(String.valueOf(args.getInt("ViewCount")));
+
+        viewHolder.commentCountView.setText(String.valueOf(args.getInt("CommentCount")));
+
+        viewHolder.likeCountView.setText(String.valueOf(args.getInt("likeCount")));
 
         likeCount = args.getInt("likeCount", 0);
+        commentCount = args.getInt("commentCount", 0);
+        seenCount = args.getInt("seenCount", 0);
+
         isLiked = args.getBoolean("isLiked", false);
         updateLikeState();
 
@@ -574,4 +580,5 @@ public class ResponseTweet extends Fragment implements CommentManager.CommentUpd
         super.onDestroyView();
         viewHolder = null;
     }
+
 }

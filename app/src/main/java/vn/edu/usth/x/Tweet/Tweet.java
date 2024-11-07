@@ -101,11 +101,11 @@ public class Tweet {
         return this.isLike;
     }
 
-    public int getCommentCount() {return commentCount;}
+    public int getCommentCount() {return this.commentCount;}
 
-    public int getReTweetCount() {return reTweetCount;}
+    public int getReTweetCount() {return this.reTweetCount;}
 
-    public int getSeenCount() {return seenCount;}
+    public int getSeenCount() {return this.seenCount;}
 
     public void setCommentCount(int commentCount) {this.commentCount = commentCount;}
 

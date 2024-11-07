@@ -199,6 +199,12 @@ public class InboxFragment extends Fragment implements ChatAdapter.OnChatClickLi
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        loadChats();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         if (requestQueue != null) {

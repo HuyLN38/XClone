@@ -40,10 +40,6 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
 
     private ActivityHomeBinding binding;
     private DrawerLayout drawerLayout;
-    private static final String PREFS_NAME = "UserPrefs";
-    private static final String USER_ID_KEY = "userId";
-    private boolean isWebSocketInitialized = false;
-
     private Fragment homeFragment;
     private Fragment searchFragment;
     private Fragment notificationFragment;
@@ -87,7 +83,7 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.drawer_layout);
 
         // Initialize fragments
-        initializeWebSocket();
+
         homeFragment = new HomeMenuFragment();
         searchFragment = new SearchFragment();
         notificationFragment = new NotificationFragment();
@@ -197,34 +193,6 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
         outState.putString(CURRENT_FRAGMENT_TAG, currentFragmentTag);
     }
 
-    private void initializeWebSocket() {
-        SharedPreferences sharedPreferences = getApplicationContext()
-                .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        String userId = sharedPreferences.getString(USER_ID_KEY, null);
-
-        if (userId != null && !isWebSocketInitialized) {
-            GlobalWebSocketManager wsManager = GlobalWebSocketManager.getInstance();
-
-            // Observe connection state
-            wsManager.getConnectionStateLiveData().observe(this, isConnected -> {
-                if (!isConnected) {
-                    Toast.makeText(this, "Reconnecting...", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            // Initialize connection
-            wsManager.connect(this);
-            isWebSocketInitialized = true;
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (!isWebSocketInitialized) {
-            initializeWebSocket();
-        }
-    }
 
     private Fragment getTopBarFragment(String tag) {
         switch (tag) {
@@ -242,4 +210,5 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
                 return null;
         }
     }
+
 }

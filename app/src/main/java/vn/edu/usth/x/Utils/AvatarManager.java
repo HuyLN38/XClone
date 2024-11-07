@@ -113,14 +113,4 @@ public class AvatarManager {
         }
     }
 
-    public void clearCache() {
-        memoryCache.evictAll();
-        File cacheDir = context.getFilesDir();
-        File[] files = cacheDir.listFiles((dir, name) -> name.endsWith(".png"));
-        if (files != null) {
-            for (File file : files) {
-                file.delete();
-            }
-        }
-    }
 }

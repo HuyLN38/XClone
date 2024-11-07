@@ -17,6 +17,7 @@ import vn.edu.usth.x.Utils.GlobalWebSocketManager;
 public class MainActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "UserPrefs";
     private static final String USER_ID_KEY = "userId";
+
     private static final long SPLASH_DELAY = 1000; // 1 second
     private final Handler handler = new Handler(Looper.getMainLooper());
     private boolean isWebSocketInitialized = false;
@@ -28,7 +29,29 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setupSystemUI();
         scheduleNavigation();
+        initializeWebSocket();
 
+    }
+
+    private void initializeWebSocket() {
+        SharedPreferences sharedPreferences = getApplicationContext()
+                .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String userId = sharedPreferences.getString(USER_ID_KEY, null);
+
+        if (userId != null && !isWebSocketInitialized) {
+            GlobalWebSocketManager wsManager = GlobalWebSocketManager.getInstance();
+
+            // Observe connection state
+            wsManager.getConnectionStateLiveData().observe(this, isConnected -> {
+                if (!isConnected) {
+                    Toast.makeText(this, "Reconnecting...", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            // Initialize connection
+            wsManager.connect(this);
+            isWebSocketInitialized = true;
+        }
     }
 
     private void setupSystemUI() {
@@ -57,19 +80,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        handler.removeCallbacksAndMessages(null);
-
-        if (isFinishing()) {
-            GlobalWebSocketManager.getInstance().disconnect();
-            isWebSocketInitialized = false;
+    protected void onResume() {
+        super.onResume();
+        if (!isWebSocketInitialized) {
+            initializeWebSocket();
         }
-
-        super.onDestroy();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+    }
+
+    private long backPressedTime;
+    private Toast backToast;
+
+    @Override
+    public void onBackPressed() {
+        if (backPressedTime + 2000 > System.currentTimeMillis()) {
+            backToast.cancel();
+            super.onBackPressed();
+            return;
+        } else {
+            backToast = Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_SHORT);
+            backToast.show();
+        }
+        backPressedTime = System.currentTimeMillis();
     }
 }

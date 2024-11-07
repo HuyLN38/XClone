@@ -73,7 +73,7 @@ public class HomeForYou extends Fragment {
 
         // Refresh
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @SuppressLint("StaticFieldLeak")
+            @SuppressLint({"StaticFieldLeak", "NotifyDataSetChanged"})
             @Override
             public void onRefresh() {
                 // Clear the existing tweet list
