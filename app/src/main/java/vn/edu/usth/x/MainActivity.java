@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 
 import vn.edu.usth.x.HomePage.HomeForYou;
 import vn.edu.usth.x.Login.LoginPage;
@@ -32,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         setupSystemUI();
         initializeWebSocket();
         scheduleNavigation();
-        initializeHomeData();
+
     }
 
     private void setupSystemUI() {
@@ -53,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
             // Observe connection state
             wsManager.getConnectionStateLiveData().observe(this, isConnected -> {
                 if (!isConnected) {
-                    // Optional: Show reconnection status to user
                     Toast.makeText(this, "Reconnecting...", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -78,12 +76,8 @@ public class MainActivity extends AppCompatActivity {
             }
             startActivity(intent);
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            finish(); // Finish MainActivity to prevent returning to it
         }, SPLASH_DELAY);
-    }
-
-    private void initializeHomeData() {
-        HomeForYou homeForYou = new HomeForYou();
-        homeForYou.fetchTweets(1);
     }
 
     @Override

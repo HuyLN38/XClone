@@ -119,7 +119,7 @@ public class HomeForYou extends Fragment {
     }
 
     @SuppressLint("StaticFieldLeak")
-    private class FetchTweetsTask extends AsyncTask<Void, Void, List<Tweet>> {
+    public class FetchTweetsTask extends AsyncTask<Void, Void, List<Tweet>> {
         private final int page;
 
         public FetchTweetsTask(int page) {

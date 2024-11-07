@@ -350,7 +350,7 @@ public class ResponseTweet extends Fragment {
         @SuppressLint("NotifyDataSetChanged")
         @Override
         protected void onPostExecute(List<Tweet> replies) {
-            if (replies != null && !replies.isEmpty()) {
+            if (viewHolder != null && replies != null && !replies.isEmpty()) {
                 viewHolder.adapter = new TweetAdapterOnline(replies);
                 viewHolder.recyclerView.setAdapter(viewHolder.adapter);
                 viewHolder.adapter.notifyDataSetChanged();

@@ -86,15 +86,12 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
                 }
             });
 
-            bookmarkButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    v.setSelected(!v.isSelected());
-                    if (v.isSelected()) {
-                        bookmarkButton.setImageResource(R.drawable.bookmark_after);
-                    } else {
-                        bookmarkButton.setImageResource(R.drawable.bookmark);
-                    }
+            bookmarkButton.setOnClickListener(v -> {
+                v.setSelected(!v.isSelected());
+                if (v.isSelected()) {
+                    bookmarkButton.setImageResource(R.drawable.bookmark_after);
+                } else {
+                    bookmarkButton.setImageResource(R.drawable.bookmark);
                 }
             });
         }
