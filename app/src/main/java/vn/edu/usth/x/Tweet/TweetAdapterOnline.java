@@ -34,9 +34,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import vn.edu.usth.x.Blog.ResponseTweet;
 import vn.edu.usth.x.Blog.CommentFragment;
 import vn.edu.usth.x.R;
+import vn.edu.usth.x.Utils.LikeEventManager;
 import vn.edu.usth.x.Utils.UserFunction;
 
-public class TweetAdapterOnline extends RecyclerView.Adapter<TweetAdapterOnline.TweetViewHolder> {
+public class TweetAdapterOnline extends RecyclerView.Adapter<TweetAdapterOnline.TweetViewHolder>
+        implements LikeEventManager.LikeUpdateListener {
     private static final String TAG = "TweetAdapterOnline";
     private final List<Tweet> tweetList;
     private final Object lock = new Object(); // For thread safety
@@ -45,6 +47,32 @@ public class TweetAdapterOnline extends RecyclerView.Adapter<TweetAdapterOnline.
         this.tweetList = tweetList;
     }
 
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        LikeEventManager.getInstance().addListener(this);
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        LikeEventManager.getInstance().removeListener(this);
+    }
+
+    @Override
+    public void onLikeUpdated(String tweetId, boolean isLiked, int newLikeCount) {
+        synchronized (lock) {
+            for (int i = 0; i < tweetList.size(); i++) {
+                Tweet tweet = tweetList.get(i);
+                if (tweet.getTweet_id().equals(tweetId)) {
+                    tweet.setLiked(isLiked);
+                    tweet.setLikeCount(newLikeCount);
+                    notifyItemChanged(i);
+                    break;
+                }
+            }
+        }
+    }
 
     @NonNull
     @Override
@@ -78,6 +106,9 @@ public class TweetAdapterOnline extends RecyclerView.Adapter<TweetAdapterOnline.
         private final TextView username;
         private final TextView tweetText;
         private final TextView tweetlink;
+        private final TextView commentCount;
+        private final TextView reTweetCount;
+        private final TextView seenCount;
         private final TextView time;
         private final ImageView image;
         private final ImageView btnAnim;
@@ -99,6 +130,9 @@ public class TweetAdapterOnline extends RecyclerView.Adapter<TweetAdapterOnline.
             bookmarkButton = itemView.findViewById(R.id.bookmark);
             commentButton = itemView.findViewById(R.id.comment_button);
             tweetContent = itemView.findViewById(R.id.tweet_content);
+            commentCount = itemView.findViewById(R.id.comment_count);
+            reTweetCount = itemView.findViewById(R.id.reTweet_count);
+            seenCount = itemView.findViewById(R.id.seen_count);
         }
 
         public void bind(Tweet tweet) {
@@ -114,6 +148,9 @@ public class TweetAdapterOnline extends RecyclerView.Adapter<TweetAdapterOnline.
             username.setText(tweet.getUsername());
             tweetText.setText(tweet.getTweetText());
             tweetlink.setText(tweet.getTweetlink());
+            commentCount.setText(String.valueOf(tweet.getCommentCount()));
+            reTweetCount.setText(String.valueOf(tweet.getReTweetCount()));
+            seenCount.setText(String.valueOf(tweet.getSeenCount()));
             time.setText(tweet.getTime());
             likeCountView.setText(String.valueOf(tweet.getLikeCount()));
         }
@@ -164,8 +201,6 @@ public class TweetAdapterOnline extends RecyclerView.Adapter<TweetAdapterOnline.
             anim.selectDrawable(0);
             anim.start();
 
-            int lastFrameIndex = anim.getNumberOfFrames() - 1;
-
             boolean isCurrentlyLiked = tweet.isLiked();
 
             if (isCurrentlyLiked) {
@@ -186,6 +221,7 @@ public class TweetAdapterOnline extends RecyclerView.Adapter<TweetAdapterOnline.
             anim.stop();
             likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.gray));
             updateLikeCount(tweet);
+
         }
 
         private void handleLike(Tweet tweet, AnimationDrawable anim) {
@@ -200,10 +236,7 @@ public class TweetAdapterOnline extends RecyclerView.Adapter<TweetAdapterOnline.
                 int newCount = tweet.getLikeCount() + (tweet.isLiked() ? 1 : -1);
                 tweet.setLikeCount(newCount);
                 likeCountView.setText(String.valueOf(newCount));
-
-                // Post like update to server
                 toggleLikeOnServer(UserFunction.getUserId(itemView.getContext()), tweet.getTweet_id());
-
             } catch (Exception e) {
                 Log.e(TAG, "Error updating like count", e);
             }
@@ -299,6 +332,9 @@ public class TweetAdapterOnline extends RecyclerView.Adapter<TweetAdapterOnline.
             bundle.putBoolean("isLiked", tweet.isLiked());
             bundle.putParcelable("avatarBitmap", tweet.getAvatar_bit());
             bundle.putParcelable("imageBitmap", tweet.getImage_bit());
+            bundle.putInt("commentCount", tweet.getCommentCount());
+            bundle.putInt("reTweetCount", tweet.getReTweetCount());
+            bundle.putInt("seenCount", tweet.getSeenCount());
 
             // Add avatar bitmap if available
             if (tweet.getAvatar_bit() != null) {

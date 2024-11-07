@@ -1,41 +1,62 @@
 package vn.edu.usth.x.Blog;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.AsyncTask;
+import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicReference;
 
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Tweet.Tweet;
 import vn.edu.usth.x.Tweet.TweetAdapterOnline;
+import vn.edu.usth.x.Utils.AvatarManager;
+import vn.edu.usth.x.Utils.LikeEventManager;
 import vn.edu.usth.x.Utils.UserFunction;
 
 public class ResponseTweet extends Fragment {
@@ -45,8 +66,11 @@ public class ResponseTweet extends Fragment {
     private String tweet_id;
     private boolean isDataBound = false;
     private RequestQueue requestQueue;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private String base64Image = "";
     private boolean isLiked = false;
     private int likeCount = 0;
+    private static final String API_REPLIES_URL = "https://huyln.info/xclone/api/tweets/%s/replies";
 
     public static ResponseTweet newInstance(Bundle args) {
         ResponseTweet fragment = new ResponseTweet();
@@ -60,10 +84,14 @@ public class ResponseTweet extends Fragment {
         final TextView tweetLinkTextView;
         final TextView tweetTextView;
         final TextView timeTextView;
+        final EditText replyEditText;
+        final ImageView addMediaButton;
+        final ImageView selectedMediaPreview;
+        final ImageView postReplyButton;
         final ImageView tweetImageView;
         final Button followButton;
         final RecyclerView recyclerView;
-        final TweetAdapterOnline adapter;
+        TweetAdapterOnline adapter;
         final ImageView likeButton;
         final TextView likeCountView;
         final ImageView bookmarkButton;
@@ -80,6 +108,10 @@ public class ResponseTweet extends Fragment {
             likeButton = view.findViewById(R.id.btn_anim);
             likeCountView = view.findViewById(R.id.like_count);
             bookmarkButton = view.findViewById(R.id.bookmark);
+            replyEditText = view.findViewById(R.id.edit_text_comment);
+            addMediaButton = view.findViewById(R.id.add_picture_button_comment);
+            selectedMediaPreview = view.findViewById(R.id.previewImage);
+            postReplyButton = view.findViewById(R.id.add_button);
 
             recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
             adapter = new TweetAdapterOnline(new ArrayList<>());
@@ -94,6 +126,28 @@ public class ResponseTweet extends Fragment {
         requestQueue = Volley.newRequestQueue(requireContext());
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == requireActivity().RESULT_OK
+                && data != null && data.getData() != null) {
+            Uri imageUri = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(
+                        requireActivity().getContentResolver(),
+                        imageUri
+                );
+                viewHolder.selectedMediaPreview.setImageBitmap(bitmap);
+                viewHolder.selectedMediaPreview.setVisibility(View.VISIBLE);
+                base64Image = bitmapToBase64(bitmap);
+            } catch (IOException e) {
+                Log.e(TAG, "Error processing image: " + e.getMessage());
+                Toast.makeText(getContext(), "Error processing image", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -104,8 +158,236 @@ public class ResponseTweet extends Fragment {
         setupButtons();
         setupLikeButton();
         setupBookmarkButton();
+        setupRecyclerView();
+        setupReplyUI();
+
 
         return rootView;
+    }
+
+    private void setupReplyUI() {
+        viewHolder.addMediaButton.setOnClickListener(v -> openGallery());
+
+        viewHolder.postReplyButton.setOnClickListener(v -> {
+            String content = viewHolder.replyEditText.getText().toString().trim();
+            if (content.isEmpty()) {
+                Toast.makeText(getContext(), "Please enter some content", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            postReply(content);
+        });
+    }
+
+    private String bitmapToBase64(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+
+    private void postReply(String content) {
+        String userId = UserFunction.getUserId(requireContext());
+        if (userId == null || tweet_id == null) {
+            Toast.makeText(getContext(), "Error: User not logged in", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Disable post button to prevent double posting
+        viewHolder.postReplyButton.setEnabled(false);
+
+        String url = "https://huyln.info/xclone/api/tweets";
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("user_id", userId);
+            jsonBody.put("content", content);
+            jsonBody.put("reply_to_tweet_id", tweet_id);
+
+            if (!base64Image.isEmpty()) {
+                jsonBody.put("media_url", base64Image);
+            }
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.POST,
+                    url,
+                    jsonBody,
+                    response -> {
+                        Log.d(TAG, "Reply posted successfully");
+                        Toast.makeText(getContext(), "Reply posted successfully", Toast.LENGTH_SHORT).show();
+                        // Clear the input fields
+                        viewHolder.replyEditText.setText("");
+                        viewHolder.selectedMediaPreview.setVisibility(View.GONE);
+                        base64Image = "";
+                        // Refresh the replies
+                        new FetchRepliesTask().execute(tweet_id);
+                        viewHolder.postReplyButton.setEnabled(true);
+                    },
+                    error -> {
+                        Log.e(TAG, "Error posting reply: " + error.getMessage());
+                        Toast.makeText(getContext(), "Error posting reply", Toast.LENGTH_SHORT).show();
+                        viewHolder.postReplyButton.setEnabled(true);
+                    }
+            ) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Content-Type", "application/json");
+                    return headers;
+                }
+            };
+
+            requestQueue.add(request);
+
+        } catch (JSONException e) {
+            Log.e(TAG, "Error creating reply request", e);
+            Toast.makeText(getContext(), "Error creating reply", Toast.LENGTH_SHORT).show();
+            viewHolder.postReplyButton.setEnabled(true);
+        }
+    }
+
+
+    private void openGallery() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    private void setupRecyclerView() {
+        viewHolder.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        viewHolder.adapter = new TweetAdapterOnline(new ArrayList<>());
+        viewHolder.recyclerView.setAdapter(viewHolder.adapter);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (!isDataBound) {
+            bindData();
+        }
+
+        // Fetch replies after binding data
+        if (tweet_id != null) {
+            new FetchRepliesTask().execute(tweet_id);
+        }
+
+        startPostponedEnterTransition();
+    }
+
+    private class FetchRepliesTask extends AsyncTask<String, Void, List<Tweet>> {
+        @Override
+        protected List<Tweet> doInBackground(String... params) {
+            List<Tweet> replies = new ArrayList<>();
+            String tweetId = params[0];
+
+            try {
+                String urlString = String.format(API_REPLIES_URL, tweetId);
+                URL url = new URL(urlString);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+
+                int responseCode = conn.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+
+                    JSONObject jsonResponse = new JSONObject(response.toString());
+                    JSONArray jsonArray = jsonResponse.getJSONArray("items");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject replyJson = jsonArray.getJSONObject(i);
+
+                        // Convert base64 avatar to bitmap
+                        AtomicReference<Bitmap> avatarBitmap = new AtomicReference<>();
+
+                        // Fetch and decode avatar
+                        AvatarManager.getInstance(getContext())
+                                .getAvatar( replyJson.getString("user_id"))
+                                .thenAccept(bitmap -> {
+                                    if (bitmap != null) {
+                                        avatarBitmap.set(bitmap);
+                                    } else
+                                        avatarBitmap.set(BitmapFactory.decodeResource(getResources(), R.drawable.avatar));
+                                });
+
+                        // Convert base64 media to bitmap if exists
+                        Bitmap mediaBitmap = null;
+                        if (replyJson.has("media_url") && !replyJson.isNull("media_url")) {
+                            mediaBitmap = fetchBitmapFromBase64(replyJson.getString("media_url"));
+                        }
+
+                        String timeAgo = formatTimeAgo(replyJson.getString("created_at"));
+
+                        Tweet reply = new Tweet(
+                                replyJson.getString("id"),
+                                avatarBitmap,
+                                replyJson.getString("display_name"),
+                                replyJson.getString("username"),
+                                replyJson.getString("content"),
+                                timeAgo,
+                                mediaBitmap,
+                                replyJson.getInt("likes_count"),
+                                replyJson.getBoolean("user_has_liked"),
+                                replyJson.getInt("reply_count"),
+                                replyJson.getInt("retweet_count"),
+                                replyJson.getInt("view_count")
+                        );
+                        replies.add(reply);
+                    }
+                }
+                conn.disconnect();
+            } catch (Exception e) {
+                Log.e(TAG, "Error fetching replies: " + e.getMessage());
+            }
+
+            return replies;
+        }
+
+        @SuppressLint("NotifyDataSetChanged")
+        @Override
+        protected void onPostExecute(List<Tweet> replies) {
+            if (replies != null && !replies.isEmpty()) {
+                viewHolder.adapter = new TweetAdapterOnline(replies);
+                viewHolder.recyclerView.setAdapter(viewHolder.adapter);
+                viewHolder.adapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    private Bitmap fetchBitmapFromBase64(String base64String) {
+        if (base64String != null && !base64String.isEmpty()) {
+            byte[] decodedString = Base64.decode(base64String, Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        }
+        return null;
+    }
+
+    private String formatTimeAgo(String timestamp) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Date date = sdf.parse(timestamp);
+            long timeInMillis = date.getTime();
+            long now = System.currentTimeMillis();
+            long diff = now - timeInMillis;
+
+            if (diff < 60000) { // less than 1 minute
+                return "just now";
+            } else if (diff < 3600000) { // less than 1 hour
+                return (diff / 60000) + "m";
+            } else if (diff < 86400000) { // less than 24 hours
+                return (diff / 3600000) + "h";
+            } else { // days
+                return (diff / 86400000) + "d";
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error formatting time: " + e.getMessage());
+            return "";
+        }
     }
 
     private void setupButtons() {
@@ -188,6 +470,8 @@ public class ResponseTweet extends Fragment {
         try {
             likeCount += (isLiked ? 1 : -1);
             viewHolder.likeCountView.setText(String.valueOf(likeCount));
+            LikeEventManager.getInstance().notifyLikeUpdate(tweet_id, isLiked, likeCount);
+
             toggleLikeOnServer();
         } catch (Exception e) {
             Log.e(TAG, "Error updating like count", e);
@@ -221,17 +505,6 @@ public class ResponseTweet extends Fragment {
         } catch (JSONException e) {
             Log.e(TAG, "Error creating like request", e);
         }
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        if (!isDataBound) {
-            bindData();
-        }
-
-        startPostponedEnterTransition();
     }
 
     private void bindData() {

@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicReference;
 
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Tweet.Tweet;
@@ -100,19 +101,20 @@ public class HomeFollowing extends Fragment {
 
                         String tweetId = tweetJson.getString("id");
                         int likeCount = fetchLikeCount(tweetId);
-                        Tweet tweet = new Tweet(
-                                tweetJson.getString("id"),
-                                avatarBitmap,
-                                tweetJson.getString("display_name"),
-                                tweetJson.getString("username"),
-                                tweetJson.getString("content"),
-                                timeAgo,
-                                mediaBitmap,
-                                0,true
-                        );
-                        tweet.setLikeCount(likeCount);
-                        tweet.setLiked(isTweetLikedByUser(tweetId, userId));
-                        fetchedTweets.add(tweet);
+//                        Tweet tweet = new Tweet(
+//                                tweetJson.getString("id"),
+//                                avatarBitmap.,
+//                                tweetJson.getString("display_name"),
+//                                tweetJson.getString("username"),
+//                                tweetJson.getString("content"),
+//                                timeAgo,
+//                                mediaBitmap,
+//                                0,true
+//                                ,0,0,0
+//                        );
+//                        tweet.setLikeCount(likeCount);
+//                        tweet.setLiked(isTweetLikedByUser(tweetId, userId));
+//                        fetchedTweets.add(tweet);
                     }
                 }
                 conn.disconnect();

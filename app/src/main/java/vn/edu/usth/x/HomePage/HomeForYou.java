@@ -179,21 +179,25 @@ public class HomeForYou extends Fragment {
 
                         int likeCount = tweetJson.getInt("likes_count");
                         boolean isTweetLikedByUser = tweetJson.getBoolean("user_has_liked");
+                        int commentCount = tweetJson.getInt("reply_count");
+                        int reTweetCount = tweetJson.getInt("retweet_count");
+                        int seenCount = tweetJson.getInt("view_count");
 
                         Tweet tweet = new Tweet(
                                 tweetId,
-                                avatarBitmap.get(),
+                                avatarBitmap,
                                 tweetJson.getString("display_name"),
                                 tweetJson.getString("username"),
                                 tweetJson.getString("content"),
                                 timeAgo,
                                 mediaBitmap,
                                 likeCount,
-                                isTweetLikedByUser
+                                isTweetLikedByUser,
+                                commentCount,
+                                reTweetCount,
+                                seenCount
                         );
-
                         fetchedTweets.add(tweet);
-
                     }
                 }
                 conn.disconnect();
