@@ -91,16 +91,7 @@ public class LoginPage1 extends AppCompatActivity {
                     Log.d("LoginTask", "User ID: " + id);
 
                     // Remake the avatar
-                    UserFunction.onUuidChanged(getApplicationContext(), id, new UserFunction.AvatarCallback() {
-                        @Override
-                        public void onSuccess(Bitmap avatarBitmap) {
-
-                        }
-                        @Override
-                        public void onFailure(String errorMessage) {
-                            Log.e("RegisterUserTask", errorMessage);
-                        }
-                    });
+                    UserFunction.onUuidChanged(getApplicationContext(), id);
 
                     Intent intent = new Intent(LoginPage1.this, HomeFragment.class);
                     startActivity(intent);

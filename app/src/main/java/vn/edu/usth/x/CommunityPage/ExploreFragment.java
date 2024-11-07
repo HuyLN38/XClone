@@ -10,9 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import vn.edu.usth.x.R;
@@ -46,8 +43,7 @@ public class ExploreFragment extends Fragment {
     private List<Tweet> getTweetData() {
         // Return an ArrayList of tweets
         return asList(
-                new Tweet(R.drawable.avatar,"Elon Musk", "elonmusk",  getString(R.string.ElonMusk),  "2h",R.drawable.avatar),
-                new Tweet(R.drawable.tokuda, "Tokuda", "tokuda123", getString(R.string.tokuda), "3h", R.drawable.tokuda)
+
         );
     }
 }

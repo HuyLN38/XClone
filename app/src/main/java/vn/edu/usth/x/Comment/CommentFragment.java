@@ -29,12 +29,9 @@ public class CommentFragment extends Fragment {
         Button cancelButton = view.findViewById(R.id.comment_cancel);
         Button postButton = view.findViewById(R.id.comment_post);
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                fragmentManager.popBackStack();
-            }
+        cancelButton.setOnClickListener(v -> {
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+            fragmentManager.popBackStack();
         });
 
         postButton.setOnClickListener(v -> {

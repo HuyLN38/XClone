@@ -99,7 +99,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="-10dp"
+            android:layout_marginTop="5dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:clipChildren="false"
@@ -114,15 +114,17 @@
                 app:tint="@color/gray" />
 
             <TextView
+                android:id="@+id/comment_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2,383"
+                android:text="0"
                 android:textColor="@color/gray"
                 />
             <!--retweet-->
             <Space
-                android:layout_width="10dp"
-                android:layout_height="0dp"/>
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
@@ -130,12 +132,14 @@
                 app:tint="@color/gray"/>
 
             <TextView
+                android:id="@+id/reTweet_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1,395"
+                android:text="0"
                 android:textColor="@color/gray"/>
             <Space
-                android:layout_width="10dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="0dp"/>
             <!--heart-->
             <FrameLayout
@@ -160,10 +164,11 @@
                 android:id="@+id/like_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="28.6K"
+                android:text="0"
                 android:textColor="@color/gray"/>
             <Space
-                android:layout_width="10dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="0dp"/>
 
             <!--bar-->
@@ -175,13 +180,16 @@
                 app:tint="@color/gray"
                 />
             <TextView
+                android:id="@+id/seen_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="28.6K"
+                android:text="0"
                 android:layout_marginStart="3dp"
                 android:textColor="@color/gray"/>
             <Space
-                android:layout_width="10dp"
+                android:layout_width="0dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
                 android:layout_height="0dp"/>
             <!--bookmark-->
             <ImageView

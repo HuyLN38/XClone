@@ -8,7 +8,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import vn.edu.usth.x.Login.Data.User;
-import vn.edu.usth.x.Login.Data.UserManager;
+import vn.edu.usth.x.Utils.UserManager;
 import vn.edu.usth.x.R;
 
 public class RegisterPage2 extends AppCompatActivity {

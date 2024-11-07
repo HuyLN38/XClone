@@ -1,7 +1,6 @@
 package vn.edu.usth.x.Topbar;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,7 +8,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +18,7 @@ import com.bumptech.glide.Glide;
 
 import vn.edu.usth.x.HomeFragment;
 import vn.edu.usth.x.InboxPage.SettingsInboxFragment;
+import vn.edu.usth.x.Utils.AvatarManager;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Utils.UserFunction;
 
@@ -59,19 +58,18 @@ public class InboxTopBar extends Fragment {
 
         Context context = getContext();
         if (context != null) {
-            UserFunction.getAvatar(context, new UserFunction.AvatarCallback() {
-                @Override
-                public void onSuccess(Bitmap avatarBitmap) {
-                    Glide.with(context)
-                            .load(avatarBitmap)
-                            .into(avatar);
-                }
-
-                @Override
-                public void onFailure(String errorMessage) {
-                    Log.e("SearchTopBarFragment", errorMessage);
-                }
-            });
+            AvatarManager.getInstance(context)
+                    .getAvatar(UserFunction.getUserId(context))
+                    .thenAccept(bitmap -> {
+                        if (bitmap != null) {Glide.with(context)
+                                .load(bitmap)
+                                .into(avatar);
+                        } else {
+                            Glide.with(context)
+                                    .load(R.drawable.avatar3)
+                                    .into(avatar);
+                        }
+                    });
         }
         avatar.setOnClickListener(v -> {
             if (drawerLayout != null) {

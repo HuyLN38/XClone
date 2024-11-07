@@ -40,33 +40,21 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
+import vn.edu.usth.x.Utils.AvatarManager;
 import vn.edu.usth.x.R;
+import vn.edu.usth.x.Utils.CommentManager;
+import vn.edu.usth.x.Utils.LikeEventManager;
 import vn.edu.usth.x.Utils.UserFunction;
 
 public class CommentFragment extends Fragment {
     private static final String TAG = "Comment_Tweet";
     private static final int PICK_IMAGE_REQUEST = 1;
 
-    private static final String API_URL = "https://huyln.info/xclone/api/comments";
+    private static final String API_URL = "https://huyln.info/xclone/api/tweets";
     private EditText commentEditText;
     private String tweet_id;
-
     private Button postButton;
-
-    private ImageView avatarImageView;
-    private TextView usernameTextView;
-
-    private TextView tweetLinkTextView;
-    private TextView responseUsernameView;
-
-
-    private TextView tweetTextView;
-
-    private TextView timeTextView;
-    private ImageView tweetImageView;
-
     private ImageView selectedImageView;
-
     private String base64Image = "";
 
     @Override
@@ -80,13 +68,13 @@ public class CommentFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Initialize view
-        avatarImageView = view.findViewById(R.id.tweet_avatar);
-        usernameTextView = view.findViewById(R.id.tweet_name);
-        tweetLinkTextView = view.findViewById(R.id.tweet_username);
-        responseUsernameView = view.findViewById(R.id.response_username);
-        tweetTextView = view.findViewById(R.id.tweet_text);
-        timeTextView = view.findViewById(R.id.tweet_time);
-        tweetImageView = view.findViewById(R.id.tweet_image);
+        ImageView avatarImageView = view.findViewById(R.id.tweet_avatar);
+        TextView usernameTextView = view.findViewById(R.id.tweet_name);
+        TextView tweetLinkTextView = view.findViewById(R.id.tweet_username);
+        TextView responseUsernameView = view.findViewById(R.id.response_username);
+        TextView tweetTextView = view.findViewById(R.id.tweet_text);
+        TextView timeTextView = view.findViewById(R.id.tweet_time);
+        ImageView tweetImageView = view.findViewById(R.id.tweet_image);
         commentEditText = view.findViewById(R.id.edit_text_comment);
         selectedImageView = view.findViewById(R.id.selected_image_view_comment);
 
@@ -94,12 +82,9 @@ public class CommentFragment extends Fragment {
         Button cancelButton = view.findViewById(R.id.comment_cancel);
         postButton = view.findViewById(R.id.comment_post);
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                fragmentManager.popBackStack();
-            }
+        cancelButton.setOnClickListener(v -> {
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+            fragmentManager.popBackStack();
         });
 
         postButton.setOnClickListener(v -> {
@@ -119,19 +104,18 @@ public class CommentFragment extends Fragment {
 
         Context context = getContext();
         if (context != null) {
-            UserFunction.getAvatar(context, new UserFunction.AvatarCallback() {
-                @Override
-                public void onSuccess(Bitmap avatarBitmap) {
-                    Glide.with(context)
-                            .load(avatarBitmap)
-                            .into(avatar);
-                }
-
-                @Override
-                public void onFailure(String errorMessage) {
-                    Log.e("Error Avatar: ", errorMessage);
-                }
-            });
+            AvatarManager.getInstance(context)
+                    .getAvatar(UserFunction.getUserId(context))
+                    .thenAccept(bitmap -> {
+                        if (bitmap != null) {Glide.with(context)
+                                .load(bitmap)
+                                .into(avatar);
+                        } else {
+                            Glide.with(context)
+                                    .load(R.drawable.avatar3)
+                                    .into(avatar);
+                        }
+                    });
         }
 
         // Get in4 from Bundle
@@ -198,7 +182,7 @@ public class CommentFragment extends Fragment {
     //encode image
     private String bitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
@@ -262,8 +246,8 @@ public class CommentFragment extends Fragment {
     private class PostTweetTask extends AsyncTask<String, Void, Boolean> {
         @Override
         protected Boolean doInBackground(String... params) {
-            String content = params[0];
-            String userId = params[1];
+            String userId = params[0];
+            String content = params[1];
             String tweetId = params[2];
             HttpURLConnection conn = null;
 
@@ -282,38 +266,28 @@ public class CommentFragment extends Fragment {
                 JSONObject jsonBody = new JSONObject();
                 jsonBody.put("content", content);
                 jsonBody.put("user_id", userId);
-                jsonBody.put("tweet_id", tweetId);
+                jsonBody.put("reply_to_tweet_id", tweetId);
 
                 if (!base64Image.isEmpty()) {
-                    jsonBody.put("image_url", base64Image);
-
+                    jsonBody.put("media_url", base64Image);
                 }
                 String jsonString = jsonBody.toString();
                 Log.d(TAG, "Request JSON body: " + jsonString);
 
-                // Write to output stream
                 try (OutputStream os = conn.getOutputStream()) {
                     byte[] input = jsonString.getBytes(StandardCharsets.UTF_8);
                     os.write(input, 0, input.length);
                 }
 
                 int responseCode = conn.getResponseCode();
-                Log.d(TAG, "Response code: " + responseCode);
 
                 if (responseCode == HttpURLConnection.HTTP_CREATED) {
                     // Read and log the successful response
-                    InputStream is = conn.getInputStream();
-                    String responseJson = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))
-                            .lines().collect(Collectors.joining("\n"));
-                    Log.d(TAG, "Success response: " + responseJson);
+                    CommentManager.getInstance().notifyCommentUpdate(tweet_id);
+                    Log.d(TAG, "Success response: responseCode = " + responseCode);
                     return true;
                 } else {
-                    // Read and log the error response
-                    InputStream es = conn.getErrorStream();
-                    String errorResponse = new BufferedReader(new InputStreamReader(es, StandardCharsets.UTF_8))
-                            .lines().collect(Collectors.joining("\n"));
-                    Log.e(TAG, "Error response: " + errorResponse);
-                    Log.e(TAG, "Response message: " + conn.getResponseMessage());
+                    Log.e(TAG, "Response message: ");
                     return false;
                 }
 

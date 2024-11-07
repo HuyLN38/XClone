@@ -38,6 +38,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
+import vn.edu.usth.x.Utils.AvatarManager;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Utils.UserFunction;
 
@@ -89,19 +90,18 @@ public class PostNewsFeed extends Fragment {
 
         Context context = getContext();
         if (context != null) {
-            UserFunction.getAvatar(context, new UserFunction.AvatarCallback() {
-                @Override
-                public void onSuccess(Bitmap avatarBitmap) {
-                    Glide.with(context)
-                            .load(avatarBitmap)
-                            .into(avatar);
-                }
-
-                @Override
-                public void onFailure(String errorMessage) {
-                    Log.e("Error Avatar: ", errorMessage);
-                }
-            });
+            AvatarManager.getInstance(context)
+                    .getAvatar(UserFunction.getUserId(context))
+                    .thenAccept(bitmap -> {
+                        if (bitmap != null) {Glide.with(context)
+                                .load(bitmap)
+                                .into(avatar);
+                        } else {
+                            Glide.with(context)
+                                    .load(R.drawable.avatar3)
+                                    .into(avatar);
+                        }
+                    });
         }
     }
 

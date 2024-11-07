@@ -2,13 +2,13 @@ package vn.edu.usth.x;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -24,6 +24,7 @@ import androidx.fragment.app.FragmentTransaction;
 import vn.edu.usth.x.CommunityPage.CommunityFragment;
 import vn.edu.usth.x.HomePage.HomeMenuFragment;
 import vn.edu.usth.x.InboxPage.InboxFragment;
+import vn.edu.usth.x.Utils.AvatarManager;
 import vn.edu.usth.x.NotificationPage.NotificationFragment;
 import vn.edu.usth.x.SearchPage.SearchFragment;
 import vn.edu.usth.x.Topbar.CommunityTopBarFragment;
@@ -31,6 +32,7 @@ import vn.edu.usth.x.Topbar.HomeTopBarFragment;
 import vn.edu.usth.x.Topbar.InboxTopBar;
 import vn.edu.usth.x.Topbar.NotificationTopBarFragment;
 import vn.edu.usth.x.Topbar.SearchTopBarFragment;
+import vn.edu.usth.x.Utils.GlobalWebSocketManager;
 import vn.edu.usth.x.Utils.UserFunction;
 import vn.edu.usth.x.databinding.ActivityHomeBinding;
 
@@ -38,7 +40,6 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
 
     private ActivityHomeBinding binding;
     private DrawerLayout drawerLayout;
-
     private Fragment homeFragment;
     private Fragment searchFragment;
     private Fragment notificationFragment;
@@ -64,31 +65,31 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
         View headerView = navigationView.getHeaderView(0);
         ImageView avatar = headerView.findViewById(R.id.avatar);
 
-        Context context = this.getApplicationContext();
-        if (context != null) {
-            UserFunction.getAvatar(context, new UserFunction.AvatarCallback() {
-                @Override
-                public void onSuccess(Bitmap avatarBitmap) {
-                    Glide.with(context)
-                            .load(avatarBitmap)
-                            .into(avatar);
-                }
 
-                @Override
-                public void onFailure(String errorMessage) {
-                    Log.e("SearchTopBarFragment", errorMessage);
-                }
-            });
-        }
+
+            AvatarManager.getInstance(this)
+                    .getAvatar(UserFunction.getUserId(this))
+                    .thenAccept(bitmap -> {
+                        if (bitmap != null) {Glide.with(this)
+                                .load(bitmap)
+                                .into(avatar);
+                        } else {
+                            Glide.with(this)
+                                    .load(R.drawable.avatar3)
+                                    .into(avatar);
+                        }
+                    });
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
         // Initialize fragments
+
         homeFragment = new HomeMenuFragment();
         searchFragment = new SearchFragment();
         notificationFragment = new NotificationFragment();
         inboxFragment = new InboxFragment();
         communityFragment = new CommunityFragment();
+
 
         if (savedInstanceState != null) {
             currentFragmentTag = savedInstanceState.getString(CURRENT_FRAGMENT_TAG);
@@ -102,30 +103,27 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
             currentFragmentTag = "home";
         }
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int id = item.getItemId();
-                bottomNavigationView.setItemIconTintList(null);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            int id = item.getItemId();
+            bottomNavigationView.setItemIconTintList(null);
 
-                if (id == R.id.home) {
-                    showFragment(homeFragment, new HomeTopBarFragment(), "home");
-                    return true;
-                } else if (id == R.id.search) {
-                    showFragment(searchFragment, new SearchTopBarFragment(), "search");
-                    return true;
-                } else if (id == R.id.notification) {
-                    showFragment(notificationFragment, new NotificationTopBarFragment(), "notification");
-                    return true;
-                } else if (id == R.id.mail) {
-                    showFragment(inboxFragment, new InboxTopBar(), "mail");
-                    return true;
-                } else if (id == R.id.community) {
-                    showFragment(communityFragment, new CommunityTopBarFragment(), "community");
-                    return true;
-                }
-                return false;
+            if (id == R.id.home) {
+                showFragment(homeFragment, new HomeTopBarFragment(), "home");
+                return true;
+            } else if (id == R.id.search) {
+                showFragment(searchFragment, new SearchTopBarFragment(), "search");
+                return true;
+            } else if (id == R.id.notification) {
+                showFragment(notificationFragment, new NotificationTopBarFragment(), "notification");
+                return true;
+            } else if (id == R.id.mail) {
+                showFragment(inboxFragment, new InboxTopBar(), "mail");
+                return true;
+            } else if (id == R.id.community) {
+                showFragment(communityFragment, new CommunityTopBarFragment(), "community");
+                return true;
             }
+            return false;
         });
 
         int currentMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
@@ -195,6 +193,7 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
         outState.putString(CURRENT_FRAGMENT_TAG, currentFragmentTag);
     }
 
+
     private Fragment getTopBarFragment(String tag) {
         switch (tag) {
             case "home":
@@ -211,4 +210,5 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
                 return null;
         }
     }
+
 }

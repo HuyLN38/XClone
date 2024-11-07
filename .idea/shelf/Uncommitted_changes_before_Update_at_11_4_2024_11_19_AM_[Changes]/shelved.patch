@@ -1,0 +1,823 @@
+Index: app/src/main/java/vn/edu/usth/x/InboxPage/MessageActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package vn.edu.usth.x.InboxPage;\r\n\r\nimport android.graphics.Bitmap;\r\nimport android.graphics.BitmapFactory;\r\nimport android.os.Bundle;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageButton;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\nimport org.json.JSONArray;\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\n\r\nimport java.io.BufferedInputStream;\r\nimport java.io.InputStream;\r\nimport java.io.OutputStream;\r\nimport java.net.HttpURLConnection;\r\nimport java.net.URL;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\nimport java.util.Scanner;\r\nimport android.content.SharedPreferences;\r\n\r\nimport vn.edu.usth.x.R;\r\n\r\npublic class MessageActivity extends AppCompatActivity {\r\n\r\n    private ImageView avatarImageView;\r\n    private TextView textUserName;\r\n    private RecyclerView recyclerViewMessages;\r\n    private EditText editTextMessage;\r\n    private ImageButton buttonSendMessage;\r\n    private MessageAdapter messageAdapter;\r\n    private List<Message> messageList;\r\n    private SharedPreferences sharedPreferences;\r\n    private static final String USER_ID_KEY = \"userId\";\r\n    private String senderId;\r\n    private String recipientId;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_message);\r\n\r\n        // Initialize SharedPreferences inside onCreate\r\n        sharedPreferences = getSharedPreferences(\"UserPrefs\", MODE_PRIVATE);\r\n        senderId = sharedPreferences.getString(USER_ID_KEY, null);\r\n\r\n        avatarImageView = findViewById(R.id.avatarImageView);\r\n        textUserName = findViewById(R.id.textUserName);\r\n        recyclerViewMessages = findViewById(R.id.recyclerViewMessages);\r\n        editTextMessage = findViewById(R.id.editTextMessage);\r\n        buttonSendMessage = findViewById(R.id.buttonSendMessage);\r\n\r\n        // Set up RecyclerView\r\n        messageList = new ArrayList<>();\r\n        messageAdapter = new MessageAdapter(messageList);\r\n        recyclerViewMessages.setLayoutManager(new LinearLayoutManager(this));\r\n        recyclerViewMessages.setAdapter(messageAdapter);\r\n\r\n        // Get the user data from intent\r\n        String userName = getIntent().getStringExtra(\"USER_NAME\");\r\n        recipientId = getIntent().getStringExtra(\"RECIPIENT_ID\"); // Define recipientId globally\r\n        String avatarFilePath = getIntent().getStringExtra(\"AVATAR_FILE_PATH\");\r\n\r\n        if (userName != null) {\r\n            textUserName.setText(userName);\r\n        }\r\n\r\n        // Decode and set avatar\r\n        if (avatarFilePath != null) {\r\n            Bitmap avatarBitmap = BitmapFactory.decodeFile(avatarFilePath);\r\n            avatarImageView.setImageBitmap(avatarBitmap);\r\n        }\r\n\r\n        // Load messages (fetch from API or local database)\r\n        fetchMessages(senderId, recipientId);\r\n\r\n        // Handle message sending\r\n        buttonSendMessage.setOnClickListener(v -> {\r\n            String messageText = editTextMessage.getText().toString().trim();\r\n            if (!messageText.isEmpty()) {\r\n                sendMessage(messageText, recipientId); // Pass recipientId\r\n                editTextMessage.setText(\"\");\r\n            }\r\n        });\r\n    }\r\n\r\n    private void sendMessage(String messageText, String recipientId) { // Add recipientId parameter\r\n        // Prepare the JSON payload\r\n        JSONObject postData = new JSONObject();\r\n        try {\r\n            postData.put(\"sender_id\", senderId);\r\n            postData.put(\"recipient_id\", recipientId);\r\n            postData.put(\"content\", messageText);\r\n        } catch (JSONException e) {\r\n            e.printStackTrace();\r\n        }\r\n\r\n        // Create a new Thread to send the message in the background\r\n        new Thread(() -> {\r\n            try {\r\n                URL url = new URL(\"https://huyln.info/xclone/api/messages\");\r\n                HttpURLConnection conn = (HttpURLConnection) url.openConnection();\r\n                conn.setRequestMethod(\"POST\");\r\n                conn.setRequestProperty(\"Content-Type\", \"application/json; charset=UTF-8\");\r\n                conn.setDoOutput(true);\r\n\r\n                // Write the data to the output stream\r\n                OutputStream os = conn.getOutputStream();\r\n                os.write(postData.toString().getBytes(\"UTF-8\"));\r\n                os.close();\r\n\r\n                // Get the response\r\n                int responseCode = conn.getResponseCode();\r\n                if (responseCode == HttpURLConnection.HTTP_OK) {\r\n                    InputStream in = new BufferedInputStream(conn.getInputStream());\r\n                    String result = convertStreamToString(in);\r\n                    // Process the returned message\r\n                    runOnUiThread(() -> processPostedMessage(result));\r\n                }\r\n\r\n            } catch (Exception e) {\r\n                e.printStackTrace();\r\n            }\r\n        }).start();\r\n    }\r\n\r\n    // Helper function to convert InputStream to String\r\n    private String convertStreamToString(InputStream is) {\r\n        Scanner scanner = new Scanner(is).useDelimiter(\"\\\\A\");\r\n        return scanner.hasNext() ? scanner.next() : \"\";\r\n    }\r\n\r\n    // Process the posted message\r\n    private void processPostedMessage(String result) {\r\n        try {\r\n            // Parse the returned JSON\r\n            JSONObject jsonResponse = new JSONObject(result);\r\n            String messageId = jsonResponse.getString(\"id\");\r\n            String messageContent = jsonResponse.getString(\"content\");\r\n            String createdAt = jsonResponse.getString(\"created_at\");\r\n\r\n            // Add the message to the list and update the UI\r\n            Message newMessage = new Message(messageContent, true);\r\n            newMessage.setCreatedAt(createdAt);\r\n            messageList.add(newMessage);\r\n            messageAdapter.notifyItemInserted(messageList.size() - 1);\r\n            recyclerViewMessages.scrollToPosition(messageList.size() - 1);\r\n\r\n        } catch (JSONException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    private void fetchMessages(String senderId, String recipientId) { // Fetch messages with both senderId and recipientId\r\n        new Thread(() -> {\r\n            try {\r\n                // Prepare the URL with user1_id and user2_id\r\n                URL url = new URL(\"https://huyln.info/xclone/api/messages?user1_id=\" + senderId + \"&user2_id=\" + recipientId);\r\n                HttpURLConnection conn = (HttpURLConnection) url.openConnection();\r\n                conn.setRequestMethod(\"GET\");\r\n                conn.setRequestProperty(\"Content-Type\", \"application/json\");\r\n\r\n                // Get the response\r\n                int responseCode = conn.getResponseCode();\r\n                if (responseCode == HttpURLConnection.HTTP_OK) {\r\n                    InputStream in = new BufferedInputStream(conn.getInputStream());\r\n                    String result = convertStreamToString(in);\r\n                    // Process the received messages\r\n                    runOnUiThread(() -> processReceivedMessages(result));\r\n                }\r\n\r\n            } catch (Exception e) {\r\n                e.printStackTrace();\r\n            }\r\n        }).start();\r\n    }\r\n\r\n    // Process the received messages\r\n    private void processReceivedMessages(String result) {\r\n        try {\r\n            // Parse the JSON array\r\n            JSONArray jsonArray = new JSONArray(result);\r\n            for (int i = 0; i < jsonArray.length(); i++) {\r\n                JSONObject jsonMessage = jsonArray.getJSONObject(i);\r\n                String content = jsonMessage.getString(\"content\");\r\n                String senderId = jsonMessage.getString(\"sender_id\");\r\n                String createdAt = jsonMessage.getString(\"created_at\");\r\n\r\n                boolean isSentByUser = this.senderId.equals(senderId); // Check if the message is sent by the current user\r\n                Message message = new Message(content, isSentByUser);\r\n                message.setCreatedAt(createdAt);\r\n\r\n                // Add the message to the list\r\n                messageList.add(message);\r\n            }\r\n\r\n            // Notify the adapter to update the RecyclerView\r\n            messageAdapter.notifyDataSetChanged();\r\n            recyclerViewMessages.scrollToPosition(messageList.size() - 1);\r\n\r\n        } catch (JSONException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/vn/edu/usth/x/InboxPage/MessageActivity.java b/app/src/main/java/vn/edu/usth/x/InboxPage/MessageActivity.java
+--- a/app/src/main/java/vn/edu/usth/x/InboxPage/MessageActivity.java	(revision 4f05351eb62d8ced7e00e1e1c4de5d2e44d300f4)
++++ b/app/src/main/java/vn/edu/usth/x/InboxPage/MessageActivity.java	(date 1730431204279)
+@@ -3,6 +3,12 @@
+ import android.graphics.Bitmap;
+ import android.graphics.BitmapFactory;
+ import android.os.Bundle;
++import android.os.Handler;
++import android.os.Looper;
++import android.text.Editable;
++import android.text.TextWatcher;
++import android.util.Log;
++import android.view.View;
+ import android.widget.EditText;
+ import android.widget.ImageButton;
+ import android.widget.ImageView;
+@@ -10,6 +16,8 @@
+ import androidx.appcompat.app.AppCompatActivity;
+ import androidx.recyclerview.widget.LinearLayoutManager;
+ import androidx.recyclerview.widget.RecyclerView;
++import org.java_websocket.client.WebSocketClient;
++import org.java_websocket.handshake.ServerHandshake;
+ import org.json.JSONArray;
+ import org.json.JSONException;
+ import org.json.JSONObject;
+@@ -18,6 +26,7 @@
+ import java.io.InputStream;
+ import java.io.OutputStream;
+ import java.net.HttpURLConnection;
++import java.net.URI;
+ import java.net.URL;
+ import java.util.ArrayList;
+ import java.util.List;
+@@ -27,9 +36,9 @@
+ import vn.edu.usth.x.R;
+ 
+ public class MessageActivity extends AppCompatActivity {
+-
+     private ImageView avatarImageView;
+     private TextView textUserName;
++    private TextView typingStatusView;
+     private RecyclerView recyclerViewMessages;
+     private EditText editTextMessage;
+     private ImageButton buttonSendMessage;
+@@ -39,68 +48,208 @@
+     private static final String USER_ID_KEY = "userId";
+     private String senderId;
+     private String recipientId;
++    private WebSocketClient webSocketClient;
++    private Handler mainHandler = new Handler(Looper.getMainLooper());
++    private boolean isTyping = false;
++    private Handler typingHandler = new Handler();
++    private static final long TYPING_TIMEOUT = 1000; // 1 second
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_message);
+ 
+-        // Initialize SharedPreferences inside onCreate
++        // Initialize SharedPreferences
+         sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+         senderId = sharedPreferences.getString(USER_ID_KEY, null);
+ 
++        // Initialize views
++        initializeViews();
++
++        // Set up RecyclerView
++        setupRecyclerView();
++
++        // Get user data from intent
++        getUserDataFromIntent();
++
++        // Initialize WebSocket
++        initializeWebSocket();
++
++        // Set up text change listener for typing status
++        setupTypingListener();
++
++        // Load initial messages
++        fetchMessages(senderId, recipientId);
++
++        // Set up send button
++        setupSendButton();
++    }
++
++    private void initializeViews() {
+         avatarImageView = findViewById(R.id.avatarImageView);
+         textUserName = findViewById(R.id.textUserName);
++        typingStatusView = findViewById(R.id.typingStatusView);
+         recyclerViewMessages = findViewById(R.id.recyclerViewMessages);
+         editTextMessage = findViewById(R.id.editTextMessage);
+         buttonSendMessage = findViewById(R.id.buttonSendMessage);
++    }
+ 
+-        // Set up RecyclerView
++    private void setupRecyclerView() {
+         messageList = new ArrayList<>();
+         messageAdapter = new MessageAdapter(messageList);
+         recyclerViewMessages.setLayoutManager(new LinearLayoutManager(this));
+         recyclerViewMessages.setAdapter(messageAdapter);
++    }
+ 
+-        // Get the user data from intent
++    private void getUserDataFromIntent() {
+         String userName = getIntent().getStringExtra("USER_NAME");
+-        recipientId = getIntent().getStringExtra("RECIPIENT_ID"); // Define recipientId globally
++        recipientId = getIntent().getStringExtra("RECIPIENT_ID");
+         String avatarFilePath = getIntent().getStringExtra("AVATAR_FILE_PATH");
+ 
+         if (userName != null) {
+             textUserName.setText(userName);
+         }
+ 
+-        // Decode and set avatar
+         if (avatarFilePath != null) {
+             Bitmap avatarBitmap = BitmapFactory.decodeFile(avatarFilePath);
+             avatarImageView.setImageBitmap(avatarBitmap);
+         }
++    }
++
++    private void setupTypingListener() {
++        editTextMessage.addTextChangedListener(new TextWatcher() {
++            @Override
++            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+ 
+-        // Load messages (fetch from API or local database)
+-        fetchMessages(senderId, recipientId);
++            @Override
++            public void onTextChanged(CharSequence s, int start, int before, int count) {
++                if (!isTyping) {
++                    isTyping = true;
++                    sendTypingStatus(true);
++                }
+ 
+-        // Handle message sending
++                typingHandler.removeCallbacksAndMessages(null);
++                typingHandler.postDelayed(() -> {
++                    isTyping = false;
++                    sendTypingStatus(false);
++                }, TYPING_TIMEOUT);
++            }
++
++            @Override
++            public void afterTextChanged(Editable s) {}
++        });
++    }
++
++    private void setupSendButton() {
+         buttonSendMessage.setOnClickListener(v -> {
+             String messageText = editTextMessage.getText().toString().trim();
+             if (!messageText.isEmpty()) {
+-                sendMessage(messageText, recipientId); // Pass recipientId
++                sendWebSocketMessage(messageText);
+                 editTextMessage.setText("");
+             }
+         });
+     }
+ 
+-    private void sendMessage(String messageText, String recipientId) { // Add recipientId parameter
+-        // Prepare the JSON payload
+-        JSONObject postData = new JSONObject();
++    private void initializeWebSocket() {
+         try {
+-            postData.put("sender_id", senderId);
+-            postData.put("recipient_id", recipientId);
+-            postData.put("content", messageText);
+-        } catch (JSONException e) {
++            URI uri = new URI("ws://huyln.info/xclone/ws?userId=" + senderId);
++            webSocketClient = new WebSocketClient(uri) {
++                @Override
++                public void onOpen(ServerHandshake handshakedata) {
++                    Log.d("WebSocket", "Connection opened");
++                }
++
++                @Override
++                public void onMessage(String message) {
++                    try {
++                        JSONObject jsonMessage = new JSONObject(message);
++                        String type = jsonMessage.getString("type");
++
++                        switch (type) {
++                            case "new_message":
++                                JSONObject messageData = jsonMessage.getJSONObject("message");
++                                mainHandler.post(() -> processIncomingMessage(messageData.toString()));
++                                break;
++                            case "typing_status":
++                                boolean isTyping = jsonMessage.getBoolean("is_typing");
++                                String senderId = jsonMessage.getString("sender_id");
++                                mainHandler.post(() -> updateTypingStatus(senderId, isTyping));
++                                break;
++                            case "message_sent":
++                                JSONObject sentMessageData = jsonMessage.getJSONObject("message");
++                                mainHandler.post(() -> {
++                                    processPostedMessage(sentMessageData.toString());
++                                });
++                                break;
++                        }
++                    } catch (Exception e) {
++                        e.printStackTrace();
++                    }
++                }
++
++                @Override
++                public void onClose(int code, String reason, boolean remote) {
++                    Log.d("WebSocket", "Connection closed: " + reason);
++                    mainHandler.postDelayed(() -> initializeWebSocket(), 5000);
++                }
++
++                @Override
++                public void onError(Exception ex) {
++                    Log.e("WebSocket", "Error: " + ex.getMessage());
++                }
++            };
++            webSocketClient.connect();
++        } catch (Exception e) {
++            e.printStackTrace();
++        }
++    }
++
++    private void sendWebSocketMessage(String messageText) {
++        try {
++            JSONObject message = new JSONObject();
++            message.put("type", "message");
++            message.put("sender_id", senderId);
++            message.put("recipient_id", recipientId);
++            message.put("content", messageText);
++
++            if (webSocketClient != null && webSocketClient.isOpen()) {
++                webSocketClient.send(message.toString());
++            } else {
++                // Fallback to HTTP
++                sendMessage(messageText, recipientId);
++            }
++        } catch (Exception e) {
++            e.printStackTrace();
++            sendMessage(messageText, recipientId);
++        }
++    }
++
++    private void sendTypingStatus(boolean isTyping) {
++        try {
++            JSONObject typingStatus = new JSONObject();
++            typingStatus.put("type", "typing");
++            typingStatus.put("sender_id", senderId);
++            typingStatus.put("recipient_id", recipientId);
++            typingStatus.put("is_typing", isTyping);
++
++            if (webSocketClient != null && webSocketClient.isOpen()) {
++                webSocketClient.send(typingStatus.toString());
++            }
++        } catch (Exception e) {
+             e.printStackTrace();
+         }
++    }
+ 
+-        // Create a new Thread to send the message in the background
++    private void updateTypingStatus(String senderId, boolean isTyping) {
++        if (isTyping) {
++            typingStatusView.setVisibility(View.VISIBLE);
++            typingStatusView.setText("Typing...");
++        } else {
++            typingStatusView.setVisibility(View.GONE);
++        }
++    }
++
++    private void sendMessage(String messageText, String recipientId) {
+         new Thread(() -> {
+             try {
+                 URL url = new URL("https://huyln.info/xclone/api/messages");
+@@ -109,102 +258,104 @@
+                 conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                 conn.setDoOutput(true);
+ 
+-                // Write the data to the output stream
++                JSONObject postData = new JSONObject();
++                postData.put("sender_id", senderId);
++                postData.put("recipient_id", recipientId);
++                postData.put("content", messageText);
++
+                 OutputStream os = conn.getOutputStream();
+                 os.write(postData.toString().getBytes("UTF-8"));
+                 os.close();
+ 
+-                // Get the response
+                 int responseCode = conn.getResponseCode();
+                 if (responseCode == HttpURLConnection.HTTP_OK) {
+                     InputStream in = new BufferedInputStream(conn.getInputStream());
+                     String result = convertStreamToString(in);
+-                    // Process the returned message
+-                    runOnUiThread(() -> processPostedMessage(result));
++                    mainHandler.post(() -> processPostedMessage(result));
+                 }
+-
+             } catch (Exception e) {
+                 e.printStackTrace();
+             }
+         }).start();
+     }
+ 
+-    // Helper function to convert InputStream to String
+     private String convertStreamToString(InputStream is) {
+         Scanner scanner = new Scanner(is).useDelimiter("\\A");
+         return scanner.hasNext() ? scanner.next() : "";
+     }
+ 
+-    // Process the posted message
+     private void processPostedMessage(String result) {
+         try {
+-            // Parse the returned JSON
+             JSONObject jsonResponse = new JSONObject(result);
+-            String messageId = jsonResponse.getString("id");
+             String messageContent = jsonResponse.getString("content");
+             String createdAt = jsonResponse.getString("created_at");
+ 
+-            // Add the message to the list and update the UI
+             Message newMessage = new Message(messageContent, true);
+             newMessage.setCreatedAt(createdAt);
+             messageList.add(newMessage);
+             messageAdapter.notifyItemInserted(messageList.size() - 1);
+             recyclerViewMessages.scrollToPosition(messageList.size() - 1);
+-
+         } catch (JSONException e) {
+             e.printStackTrace();
+         }
+     }
+ 
+-    private void fetchMessages(String senderId, String recipientId) { // Fetch messages with both senderId and recipientId
++    private void processIncomingMessage(String messageJson) {
++        try {
++            JSONObject jsonResponse = new JSONObject(messageJson);
++            String messageContent = jsonResponse.getString("content");
++            String createdAt = jsonResponse.getString("created_at");
++            boolean isSentByUser = jsonResponse.getString("sender_id").equals(senderId);
++
++            Message newMessage = new Message(messageContent, isSentByUser);
++            newMessage.setCreatedAt(createdAt);
++
++            messageList.add(newMessage);
++            messageAdapter.notifyItemInserted(messageList.size() - 1);
++            recyclerViewMessages.scrollToPosition(messageList.size() - 1);
++        } catch (JSONException e) {
++            e.printStackTrace();
++        }
++    }
++
++    private void fetchMessages(String senderId, String recipientId) {
+         new Thread(() -> {
+             try {
+-                // Prepare the URL with user1_id and user2_id
+                 URL url = new URL("https://huyln.info/xclone/api/messages?user1_id=" + senderId + "&user2_id=" + recipientId);
+                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                 conn.setRequestMethod("GET");
+                 conn.setRequestProperty("Content-Type", "application/json");
+ 
+-                // Get the response
+                 int responseCode = conn.getResponseCode();
+                 if (responseCode == HttpURLConnection.HTTP_OK) {
+                     InputStream in = new BufferedInputStream(conn.getInputStream());
+                     String result = convertStreamToString(in);
+-                    // Process the received messages
+-                    runOnUiThread(() -> processReceivedMessages(result));
++                    mainHandler.post(() -> processReceivedMessages(result));
+                 }
+-
+             } catch (Exception e) {
+                 e.printStackTrace();
+             }
+         }).start();
+     }
+ 
+-    // Process the received messages
+     private void processReceivedMessages(String result) {
+         try {
+-            // Parse the JSON array
+             JSONArray jsonArray = new JSONArray(result);
++            messageList.clear();
+             for (int i = 0; i < jsonArray.length(); i++) {
+                 JSONObject jsonMessage = jsonArray.getJSONObject(i);
+                 String content = jsonMessage.getString("content");
+-                String senderId = jsonMessage.getString("sender_id");
+                 String createdAt = jsonMessage.getString("created_at");
+-
+-                boolean isSentByUser = this.senderId.equals(senderId); // Check if the message is sent by the current user
+-                Message message = new Message(content, isSentByUser);
+-                message.setCreatedAt(createdAt);
++                boolean isSentByUser = jsonMessage.getString("sender_id").equals(senderId);
+ 
+-                // Add the message to the list
+-                messageList.add(message);
++                Message newMessage = new Message(content, isSentByUser);
++                newMessage.setCreatedAt(createdAt);
++                messageList.add(newMessage);
+             }
+-
+-            // Notify the adapter to update the RecyclerView
+             messageAdapter.notifyDataSetChanged();
+             recyclerViewMessages.scrollToPosition(messageList.size() - 1);
+-
+         } catch (JSONException e) {
+             e.printStackTrace();
+         }
+     }
+-}
++}
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_message.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:orientation=\"vertical\"\r\n    android:padding=\"16dp\">\r\n\r\n    <!-- User Information and Avatar -->\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\"\r\n        android:gravity=\"center_vertical|center_horizontal\"\r\n        android:padding=\"8dp\">\r\n\r\n        <de.hdodenhof.circleimageview.CircleImageView\r\n            android:id=\"@+id/avatarImageView\"\r\n            android:layout_width=\"50dp\"\r\n            android:layout_height=\"50dp\"\r\n            android:src=\"@drawable/potter\"\r\n            android:scaleType=\"centerCrop\" /> <!-- Rounded avatar -->\r\n\r\n        <TextView\r\n            android:id=\"@+id/textUserName\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Username\"\r\n            android:textSize=\"18sp\"\r\n            android:textColor=\"@android:color/white\"\r\n            android:layout_marginStart=\"10dp\"/>\r\n    </LinearLayout>\r\n\r\n    <!-- Messages RecyclerView -->\r\n    <androidx.recyclerview.widget.RecyclerView\r\n        android:id=\"@+id/recyclerViewMessages\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"0dp\"\r\n        android:layout_weight=\"1\"\r\n        android:padding=\"8dp\" />\r\n\r\n    <!-- Message Input Area -->\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\"\r\n        android:gravity=\"center_vertical\"\r\n        android:padding=\"8dp\">\r\n\r\n        <EditText\r\n            android:id=\"@+id/editTextMessage\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"1\"\r\n            android:hint=\"Start a message\"\r\n            android:textColor=\"@android:color/white\"\r\n            android:background=\"@drawable/button_border_custom\"\r\n            android:padding=\"10dp\" />\r\n\r\n        <ImageButton\r\n            android:id=\"@+id/buttonSendMessage\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:backgroundTint=\"@color/light_blue\"\r\n            android:src=\"@drawable/icon_send_48\" />\r\n    </LinearLayout>\r\n\r\n</LinearLayout>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_message.xml b/app/src/main/res/layout/activity_message.xml
+--- a/app/src/main/res/layout/activity_message.xml	(revision 4f05351eb62d8ced7e00e1e1c4de5d2e44d300f4)
++++ b/app/src/main/res/layout/activity_message.xml	(date 1730431421229)
+@@ -38,6 +38,16 @@
+         android:layout_weight="1"
+         android:padding="8dp" />
+ 
++    <TextView
++        android:id="@+id/typingStatusView"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginStart="8dp"
++        android:layout_marginBottom="4dp"
++        android:text="Typing..."
++        android:textStyle="italic"
++        android:visibility="gone" />
++
+     <!-- Message Input Area -->
+     <LinearLayout
+         android:layout_width="match_parent"
+@@ -64,4 +74,15 @@
+             android:src="@drawable/icon_send_48" />
+     </LinearLayout>
+ 
++    <TextView
++        android:id="@+id/typingIndicatorText"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_above="@id/editTextMessage"
++        android:layout_marginStart="8dp"
++        android:layout_marginBottom="4dp"
++        android:text="Typing..."
++        android:textStyle="italic"
++        android:visibility="gone" />
++
+ </LinearLayout>
+Index: app/src/main/java/vn/edu/usth/x/InboxPage/InboxFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package vn.edu.usth.x.InboxPage;\r\n\r\nimport android.content.Intent;\r\nimport android.graphics.Bitmap;\r\nimport android.graphics.BitmapFactory;\r\nimport android.os.Bundle;\r\nimport androidx.annotation.Nullable;\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\n\r\nimport java.io.File;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\nimport de.hdodenhof.circleimageview.CircleImageView;\r\nimport vn.edu.usth.x.R;\r\n\r\npublic class InboxFragment extends Fragment implements ChatAdapter.OnChatClickListener{\r\n\r\n    private static final int ADD_MESSAGE_REQUEST_CODE = 1;  // Request code for starting add_message_activity\r\n    private CircleImageView addMessageButton;\r\n    private RecyclerView chatRecyclerView;\r\n    private ChatAdapter chatAdapter;\r\n    private List<Chat> chatList;\r\n\r\n    @Override\r\n    public View onCreateView(LayoutInflater inflater, ViewGroup container,\r\n                             Bundle savedInstanceState) {\r\n        View rootView = inflater.inflate(R.layout.fragment_inbox, container, false);\r\n\r\n        // Initialize the RecyclerView\r\n        chatRecyclerView = rootView.findViewById(R.id.chatRecyclerView);\r\n        chatRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));\r\n\r\n        // Initialize the chat list\r\n        chatList = new ArrayList<>();\r\n//        chatList.add(new Chat(\"Eimi Fukada\", \"You: Wanna hangout with me?\"));\r\n//        chatList.add(new Chat(\"Johnny Sins\", \"You: Just want to tell you that ilysm\"));\r\n//        chatList.add(new Chat(\"Lionel Messi\", \"Messi: Mes que un club\"));\r\n//        chatList.add(new Chat(\"The Boy Who Lived\", \"The Experliamus\"));\r\n//        chatList.add(new Chat(\"Jack Dorsey\", \"You: I'm gonna block your account\"));\r\n\r\n        // Set up the adapter\r\n        chatAdapter = new ChatAdapter(chatList, getContext(),this);\r\n        chatRecyclerView.setAdapter(chatAdapter);\r\n\r\n        // Initialize and set OnClickListener for addMessageButton\r\n        addMessageButton = rootView.findViewById(R.id.add_msg_button);\r\n        addMessageButton.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Intent intent = new Intent(getActivity(), add_message_activity.class);\r\n                startActivityForResult(intent, ADD_MESSAGE_REQUEST_CODE);\r\n            }\r\n        });\r\n\r\n        return rootView;\r\n    }\r\n\r\n    @Override\r\n    public void onChatClick(Chat chat) {\r\n        Intent intent = new Intent(getActivity(), MessageActivity.class);\r\n        intent.putExtra(\"USER_NAME\", chat.getDisplayName());\r\n        intent.putExtra(\"RECIPIENT_ID\", chat.getRecipientId());// Pass the avatar if needed\r\n        startActivity(intent);\r\n    }\r\n\r\n    // Handle result from add_message_activity\r\n    @Override\r\n    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {\r\n        super.onActivityResult(requestCode, resultCode, data);\r\n\r\n        if (requestCode == ADD_MESSAGE_REQUEST_CODE && resultCode == getActivity().RESULT_OK) {\r\n            // Extract data from the intent\r\n            String userName = data.getStringExtra(\"USER_NAME\");\r\n            String message = data.getStringExtra(\"MESSAGE\");\r\n            String avatarFilePath = data.getStringExtra(\"AVATAR_FILE_PATH\");\r\n            String recipientId = data.getStringExtra(\"RECIPIENT_ID\");\r\n\r\n            // Decode the image file into a Bitmap\r\n            Bitmap avatarBitmap = null;\r\n            if (avatarFilePath != null) {\r\n                File imgFile = new File(avatarFilePath);\r\n                if (imgFile.exists()) {\r\n                    avatarBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());\r\n                }\r\n            }\r\n\r\n            // Add new chat to the list and notify the adapter\r\n            addNewChat(userName, message, avatarBitmap, recipientId);\r\n        }\r\n    }\r\n\r\n    // Method to dynamically add a new chat\r\n    private void addNewChat(String displayName, String message, Bitmap avatarBitmap, String recipientId) {\r\n        Chat newChat = new Chat(displayName, message, recipientId);\r\n        newChat.setAvatarBitmap(avatarBitmap);  // Assuming your Chat model has this method\r\n        chatList.add(newChat);\r\n        chatAdapter.notifyItemInserted(chatList.size() - 1);  // Notify adapter to update the RecyclerView\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/vn/edu/usth/x/InboxPage/InboxFragment.java b/app/src/main/java/vn/edu/usth/x/InboxPage/InboxFragment.java
+--- a/app/src/main/java/vn/edu/usth/x/InboxPage/InboxFragment.java	(revision 4f05351eb62d8ced7e00e1e1c4de5d2e44d300f4)
++++ b/app/src/main/java/vn/edu/usth/x/InboxPage/InboxFragment.java	(date 1728869898438)
+@@ -1,5 +1,6 @@
+ package vn.edu.usth.x.InboxPage;
+ 
++import android.app.Activity;
+ import android.content.Intent;
+ import android.graphics.Bitmap;
+ import android.graphics.BitmapFactory;
+@@ -39,7 +40,7 @@
+ 
+         // Initialize the chat list
+         chatList = new ArrayList<>();
+-//        chatList.add(new Chat("Eimi Fukada", "You: Wanna hangout with me?"));
++//        chatList.add(new Chat("HuyLN", "You: Hello there!", "79831e81-0b02-4441-8297-5a85e468a56f"));
+ //        chatList.add(new Chat("Johnny Sins", "You: Just want to tell you that ilysm"));
+ //        chatList.add(new Chat("Lionel Messi", "Messi: Mes que un club"));
+ //        chatList.add(new Chat("The Boy Who Lived", "The Experliamus"));
+@@ -51,12 +52,9 @@
+ 
+         // Initialize and set OnClickListener for addMessageButton
+         addMessageButton = rootView.findViewById(R.id.add_msg_button);
+-        addMessageButton.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                Intent intent = new Intent(getActivity(), add_message_activity.class);
+-                startActivityForResult(intent, ADD_MESSAGE_REQUEST_CODE);
+-            }
++        addMessageButton.setOnClickListener(v -> {
++            Intent intent = new Intent(getActivity(), add_message_activity.class);
++            startActivityForResult(intent, ADD_MESSAGE_REQUEST_CODE);
+         });
+ 
+         return rootView;
+@@ -75,8 +73,9 @@
+     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+         super.onActivityResult(requestCode, resultCode, data);
+ 
+-        if (requestCode == ADD_MESSAGE_REQUEST_CODE && resultCode == getActivity().RESULT_OK) {
++        if (requestCode == ADD_MESSAGE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+             // Extract data from the intent
++            assert data != null;
+             String userName = data.getStringExtra("USER_NAME");
+             String message = data.getStringExtra("MESSAGE");
+             String avatarFilePath = data.getStringExtra("AVATAR_FILE_PATH");
+Index: app/src/main/java/vn/edu/usth/x/InboxPage/MessageAdapter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package vn.edu.usth.x.InboxPage;\r\n\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.TextView;\r\nimport androidx.annotation.NonNull;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\nimport java.util.List;\r\nimport vn.edu.usth.x.R;\r\n\r\npublic class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {\r\n\r\n    private List<Message> messageList;\r\n\r\n    public MessageAdapter(List<Message> messageList) {\r\n        this.messageList = messageList;\r\n    }\r\n\r\n    @NonNull\r\n    @Override\r\n    public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {\r\n        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message, parent, false);\r\n        return new MessageViewHolder(view);\r\n    }\r\n\r\n    @Override\r\n    public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {\r\n        Message message = messageList.get(position);\r\n\r\n        if (message.isSentByUser()) {\r\n            holder.textMessageSent.setText(message.getText());\r\n            holder.textMessageSent.setVisibility(View.VISIBLE);\r\n            holder.textMessageReceived.setVisibility(View.GONE);\r\n        } else {\r\n            holder.textMessageReceived.setText(message.getText());\r\n            holder.textMessageReceived.setVisibility(View.VISIBLE);\r\n            holder.textMessageSent.setVisibility(View.GONE);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public int getItemCount() {\r\n        return messageList.size();\r\n    }\r\n\r\n    public static class MessageViewHolder extends RecyclerView.ViewHolder {\r\n\r\n        TextView textMessageSent, textMessageReceived;\r\n\r\n        public MessageViewHolder(@NonNull View itemView) {\r\n            super(itemView);\r\n            textMessageSent = itemView.findViewById(R.id.textMessageSent);\r\n            textMessageReceived = itemView.findViewById(R.id.textMessageReceived);\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/vn/edu/usth/x/InboxPage/MessageAdapter.java b/app/src/main/java/vn/edu/usth/x/InboxPage/MessageAdapter.java
+--- a/app/src/main/java/vn/edu/usth/x/InboxPage/MessageAdapter.java	(revision 4f05351eb62d8ced7e00e1e1c4de5d2e44d300f4)
++++ b/app/src/main/java/vn/edu/usth/x/InboxPage/MessageAdapter.java	(date 1730430917790)
+@@ -4,38 +4,44 @@
+ import android.view.View;
+ import android.view.ViewGroup;
+ import android.widget.TextView;
+-import androidx.annotation.NonNull;
+ import androidx.recyclerview.widget.RecyclerView;
+ import java.util.List;
+ import vn.edu.usth.x.R;
+ 
+ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
+-
++    private static final int VIEW_TYPE_MESSAGE_SENT = 1;
++    private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
+     private List<Message> messageList;
+ 
+     public MessageAdapter(List<Message> messageList) {
+         this.messageList = messageList;
+     }
+ 
+-    @NonNull
++    @Override
++    public int getItemViewType(int position) {
++        Message message = messageList.get(position);
++        return message.isSentByUser() ? VIEW_TYPE_MESSAGE_SENT : VIEW_TYPE_MESSAGE_RECEIVED;
++    }
++
+     @Override
+-    public MessageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message, parent, false);
++    public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
++        View view;
++        if (viewType == VIEW_TYPE_MESSAGE_SENT) {
++            view = LayoutInflater.from(parent.getContext())
++                    .inflate(R.layout.item_message_sent, parent, false);
++        } else {
++            view = LayoutInflater.from(parent.getContext())
++                    .inflate(R.layout.item_message_received, parent, false);
++        }
+         return new MessageViewHolder(view);
+     }
+ 
+     @Override
+-    public void onBindViewHolder(@NonNull MessageViewHolder holder, int position) {
++    public void onBindViewHolder(MessageViewHolder holder, int position) {
+         Message message = messageList.get(position);
+-
+-        if (message.isSentByUser()) {
+-            holder.textMessageSent.setText(message.getText());
+-            holder.textMessageSent.setVisibility(View.VISIBLE);
+-            holder.textMessageReceived.setVisibility(View.GONE);
+-        } else {
+-            holder.textMessageReceived.setText(message.getText());
+-            holder.textMessageReceived.setVisibility(View.VISIBLE);
+-            holder.textMessageSent.setVisibility(View.GONE);
++        holder.messageText.setText(message.getContent());
++        if (message.getCreatedAt() != null) {
++            holder.timeText.setText(message.getCreatedAt());
+         }
+     }
+ 
+@@ -45,13 +51,13 @@
+     }
+ 
+     public static class MessageViewHolder extends RecyclerView.ViewHolder {
++        TextView messageText;
++        TextView timeText;
+ 
+-        TextView textMessageSent, textMessageReceived;
+-
+-        public MessageViewHolder(@NonNull View itemView) {
++        public MessageViewHolder(View itemView) {
+             super(itemView);
+-            textMessageSent = itemView.findViewById(R.id.textMessageSent);
+-            textMessageReceived = itemView.findViewById(R.id.textMessageReceived);
++            messageText = itemView.findViewById(R.id.text_message_body);
++            timeText = itemView.findViewById(R.id.text_message_time);
+         }
+     }
+-}
++}
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_first.xml
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_first.xml b/app/src/main/res/layout/fragment_first.xml
+deleted file mode 100644
+--- a/app/src/main/res/layout/fragment_first.xml	(revision 4f05351eb62d8ced7e00e1e1c4de5d2e44d300f4)
++++ /dev/null	(revision 4f05351eb62d8ced7e00e1e1c4de5d2e44d300f4)
+@@ -1,34 +0,0 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<androidx.core.widget.NestedScrollView
+-    xmlns:android="http://schemas.android.com/apk/res/android"
+-    xmlns:app="http://schemas.android.com/apk/res-auto"
+-    xmlns:tools="http://schemas.android.com/tools"
+-    android:layout_width="match_parent"
+-    android:layout_height="match_parent"
+-    tools:context=".FirstFragment">
+-    <androidx.constraintlayout.widget.ConstraintLayout
+-        android:layout_width="match_parent"
+-        android:layout_height="match_parent"
+-        android:padding="16dp">
+-    <Button
+-        android:id="@+id/button_first"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:text="@string/next"
+-        app:layout_constraintBottom_toTopOf="@id/textview_first"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toTopOf="parent" />
+-
+-    <TextView
+-        android:id="@+id/textview_first"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_marginTop="16dp"
+-        android:text="@string/lorem_ipsum"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@id/button_first" />
+-    </androidx.constraintlayout.widget.ConstraintLayout>
+-</androidx.core.widget.NestedScrollView>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_login_page0.xml
+===================================================================
+diff --git a/app/src/main/res/layout/activity_login_page0.xml b/app/src/main/res/layout/activity_login_page0.xml
+deleted file mode 100644
+--- a/app/src/main/res/layout/activity_login_page0.xml	(revision 4f05351eb62d8ced7e00e1e1c4de5d2e44d300f4)
++++ /dev/null	(revision 4f05351eb62d8ced7e00e1e1c4de5d2e44d300f4)
+@@ -1,10 +0,0 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-    xmlns:app="http://schemas.android.com/apk/res-auto"
+-    xmlns:tools="http://schemas.android.com/tools"
+-    android:id="@+id/main"
+-    android:layout_width="match_parent"
+-    android:layout_height="match_parent"
+-    tools:context=".Login.LoginPage0">
+-
+-</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_second.xml
+===================================================================
+diff --git a/app/src/main/res/layout/fragment_second.xml b/app/src/main/res/layout/fragment_second.xml
+deleted file mode 100644
+--- a/app/src/main/res/layout/fragment_second.xml	(revision 4f05351eb62d8ced7e00e1e1c4de5d2e44d300f4)
++++ /dev/null	(revision 4f05351eb62d8ced7e00e1e1c4de5d2e44d300f4)
+@@ -1,34 +0,0 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<androidx.core.widget.NestedScrollView
+-    xmlns:android="http://schemas.android.com/apk/res/android"
+-    xmlns:app="http://schemas.android.com/apk/res-auto"
+-    xmlns:tools="http://schemas.android.com/tools"
+-    android:layout_width="match_parent"
+-    android:layout_height="match_parent"
+-    tools:context=".SecondFragment">
+-    <androidx.constraintlayout.widget.ConstraintLayout
+-        android:layout_width="match_parent"
+-        android:layout_height="match_parent"
+-        android:padding="16dp">
+-    <Button
+-        android:id="@+id/button_second"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:text="@string/previous"
+-        app:layout_constraintBottom_toTopOf="@id/textview_second"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toTopOf="parent" />
+-
+-    <TextView
+-        android:id="@+id/textview_second"
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:layout_marginTop="16dp"
+-        android:text="@string/lorem_ipsum"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@id/button_second" />
+-    </androidx.constraintlayout.widget.ConstraintLayout>
+-</androidx.core.widget.NestedScrollView>
+\ No newline at end of file
+Index: .idea/deploymentTargetSelector.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"deploymentTargetSelector\">\r\n    <selectionStates>\r\n      <SelectionState runConfigName=\"app\">\r\n        <option name=\"selectionMode\" value=\"DROPDOWN\" />\r\n        <DropdownSelection timestamp=\"2024-10-06T18:33:43.658402900Z\">\r\n          <Target type=\"DEFAULT_BOOT\">\r\n            <handle>\r\n              <DeviceId pluginId=\"PhysicalDevice\" identifier=\"serial=d08feb8\" />\r\n            </handle>\r\n          </Target>\r\n        </DropdownSelection>\r\n        <DialogSelection />\r\n      </SelectionState>\r\n    </selectionStates>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/deploymentTargetSelector.xml b/.idea/deploymentTargetSelector.xml
+--- a/.idea/deploymentTargetSelector.xml	(revision 4f05351eb62d8ced7e00e1e1c4de5d2e44d300f4)
++++ b/.idea/deploymentTargetSelector.xml	(date 1730433858534)
+@@ -4,7 +4,7 @@
+     <selectionStates>
+       <SelectionState runConfigName="app">
+         <option name="selectionMode" value="DROPDOWN" />
+-        <DropdownSelection timestamp="2024-10-06T18:33:43.658402900Z">
++        <DropdownSelection timestamp="2024-11-01T03:57:18.352797500Z">
+           <Target type="DEFAULT_BOOT">
+             <handle>
+               <DeviceId pluginId="PhysicalDevice" identifier="serial=d08feb8" />
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    alias(libs.plugins.android.application)\r\n}\r\n\r\nandroid {\r\n    namespace 'vn.edu.usth.x'\r\n    compileSdk 34\r\n\r\n    defaultConfig {\r\n        applicationId \"vn.edu.usth.x\"\r\n        minSdk 33\r\n        targetSdk 34\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility JavaVersion.VERSION_1_8\r\n        targetCompatibility JavaVersion.VERSION_1_8\r\n    }\r\n    buildFeatures {\r\n        viewBinding true\r\n    }\r\n    sourceSets {\r\n        main {\r\n            res.srcDirs =\r\n                    [\r\n                            'src\\\\main\\\\res',\r\n                            'src\\\\main\\\\res\\\\layouts',\r\n                            'src\\\\main\\\\res\\\\layouts\\\\search',\r\n                            'src\\\\main\\\\res\\\\layouts\\\\home',\r\n                            'src\\\\main\\\\res\\\\layouts\\\\profile',\r\n                            'src\\\\main\\\\res\\\\layouts\\\\notification',\r\n                            'src\\\\main\\\\res\\\\layouts\\\\message',\r\n                            'src\\\\main\\\\res\\\\layouts\\\\inbox',\r\n                            'src\\\\main\\\\res\\\\layouts\\\\community',\r\n                            'src\\\\main\\\\res\\\\layouts\\\\topbar',\r\n                            'src\\\\main\\\\res\\\\layouts\\\\sidebar',\r\n                            'src\\\\main\\\\res\\\\layouts\\\\components',\r\n                            'src\\\\main\\\\res\\\\layouts\\\\settings', 'src\\\\main\\\\res\\\\animated', 'src\\\\main\\\\res\\\\animated\\\\heartlogo', 'src\\\\main\\\\res\\\\layouts\\\\login',\r\n                    ]\r\n        }\r\n    }\r\n}\r\n\r\ndependencies {\r\n\r\n    implementation libs.appcompat\r\n    implementation libs.material\r\n    implementation libs.activity\r\n    implementation libs.constraintlayout\r\n    implementation libs.preference\r\n    implementation libs.annotation\r\n    implementation libs.lifecycle.livedata.ktx\r\n    implementation libs.lifecycle.viewmodel.ktx\r\n    implementation libs.navigation.fragment\r\n    implementation libs.navigation.ui\r\n    implementation libs.swiperefreshlayout\r\n    testImplementation libs.junit\r\n    androidTestImplementation libs.ext.junit\r\n    androidTestImplementation libs.espresso.core\r\n    implementation libs.circleimageview\r\n    implementation libs.glide\r\n    annotationProcessor libs.compiler\r\n    //noinspection UseTomlInstead,GradleDependency\r\n    implementation 'androidx.fragment:fragment:1.8.3'\r\n    //noinspection UseTomlInstead,GradleDependency\r\n    implementation 'androidx.viewpager2:viewpager2:1.0.0'\r\n    //noinspection UseTomlInstead,GradleDependency\r\n    implementation 'com.google.android.material:material:1.9.0'\r\n    //noinspection UseTomlInstead,GradleDependency\r\n    implementation(\"androidx.preference:preference-ktx:1.2.0\")\r\n    //noinspection UseTomlInstead,GradleDependency\r\n    implementation(\"at.favre.lib:bcrypt:0.10.2\")\r\n    implementation 'com.android.volley:volley:1.2.1'\r\n\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle b/app/build.gradle
+--- a/app/build.gradle	(revision 4f05351eb62d8ced7e00e1e1c4de5d2e44d300f4)
++++ b/app/build.gradle	(date 1728837954605)
+@@ -81,6 +81,7 @@
+     //noinspection UseTomlInstead,GradleDependency
+     implementation("at.favre.lib:bcrypt:0.10.2")
+     implementation 'com.android.volley:volley:1.2.1'
++    implementation 'org.java-websocket:Java-WebSocket:1.5.2'
+ 
+ 
+ 
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"GradleMigrationSettings\" migrationVersion=\"1\" />\r\n  <component name=\"GradleSettings\">\r\n    <option name=\"linkedExternalProjectsSettings\">\r\n      <GradleProjectSettings>\r\n        <option name=\"testRunner\" value=\"CHOOSE_PER_TEST\" />\r\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\r\n        <option name=\"gradleJvm\" value=\"#GRADLE_LOCAL_JAVA_HOME\" />\r\n        <option name=\"modules\">\r\n          <set>\r\n            <option value=\"$PROJECT_DIR$\" />\r\n            <option value=\"$PROJECT_DIR$/app\" />\r\n          </set>\r\n        </option>\r\n        <option name=\"resolveExternalAnnotations\" value=\"false\" />\r\n      </GradleProjectSettings>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/gradle.xml b/.idea/gradle.xml
+--- a/.idea/gradle.xml	(revision 4f05351eb62d8ced7e00e1e1c4de5d2e44d300f4)
++++ b/.idea/gradle.xml	(date 1728715903196)
+@@ -4,7 +4,6 @@
+   <component name="GradleSettings">
+     <option name="linkedExternalProjectsSettings">
+       <GradleProjectSettings>
+-        <option name="testRunner" value="CHOOSE_PER_TEST" />
+         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+         <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
+         <option name="modules">
+Index: app/src/main/java/vn/edu/usth/x/InboxPage/Message.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package vn.edu.usth.x.InboxPage;\r\n\r\npublic class Message {\r\n    private String text;\r\n    private boolean sentByUser;\r\n    private String createdAt;\r\n\r\n    public Message(String text, boolean sentByUser) {\r\n        this.text = text;\r\n        this.sentByUser = sentByUser;\r\n    }\r\n\r\n    public String getText() {\r\n        return text;\r\n    }\r\n\r\n    public boolean isSentByUser() {\r\n        return sentByUser;\r\n    }\r\n\r\n    public String getCreatedAt() {\r\n        return createdAt;\r\n    }\r\n\r\n    public void setCreatedAt(String createdAt) {\r\n        this.createdAt = createdAt;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/vn/edu/usth/x/InboxPage/Message.java b/app/src/main/java/vn/edu/usth/x/InboxPage/Message.java
+--- a/app/src/main/java/vn/edu/usth/x/InboxPage/Message.java	(revision 4f05351eb62d8ced7e00e1e1c4de5d2e44d300f4)
++++ b/app/src/main/java/vn/edu/usth/x/InboxPage/Message.java	(date 1730431768251)
+@@ -1,17 +1,17 @@
+ package vn.edu.usth.x.InboxPage;
+ 
+ public class Message {
+-    private String text;
++    private String content;
+     private boolean sentByUser;
+     private String createdAt;
+ 
+-    public Message(String text, boolean sentByUser) {
+-        this.text = text;
++    public Message(String content, boolean sentByUser) {
++        this.content = content;
+         this.sentByUser = sentByUser;
+     }
+ 
+-    public String getText() {
+-        return text;
++    public String getContent() {
++        return content;
+     }
+ 
+     public boolean isSentByUser() {
+@@ -25,4 +25,4 @@
+     public void setCreatedAt(String createdAt) {
+         this.createdAt = createdAt;
+     }
+-}
++}
+\ No newline at end of file
+Index: app/src/main/java/vn/edu/usth/x/HomeFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package vn.edu.usth.x;\r\n\r\nimport android.annotation.SuppressLint;\r\nimport android.content.Context;\r\nimport android.content.res.Configuration;\r\nimport android.graphics.Bitmap;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.MenuItem;\r\nimport android.view.View;\r\nimport android.widget.ImageView;\r\n\r\nimport com.bumptech.glide.Glide;\r\nimport com.google.android.material.bottomnavigation.BottomNavigationView;\r\nimport com.google.android.material.navigation.NavigationView;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.drawerlayout.widget.DrawerLayout;\r\nimport androidx.fragment.app.Fragment;\r\nimport androidx.fragment.app.FragmentManager;\r\nimport androidx.fragment.app.FragmentTransaction;\r\n\r\nimport vn.edu.usth.x.CommunityPage.CommunityFragment;\r\nimport vn.edu.usth.x.HomePage.HomeMenuFragment;\r\nimport vn.edu.usth.x.InboxPage.InboxFragment;\r\nimport vn.edu.usth.x.NotificationPage.NotificationFragment;\r\nimport vn.edu.usth.x.SearchPage.SearchFragment;\r\nimport vn.edu.usth.x.Topbar.CommunityTopBarFragment;\r\nimport vn.edu.usth.x.Topbar.HomeTopBarFragment;\r\nimport vn.edu.usth.x.Topbar.InboxTopBar;\r\nimport vn.edu.usth.x.Topbar.NotificationTopBarFragment;\r\nimport vn.edu.usth.x.Topbar.SearchTopBarFragment;\r\nimport vn.edu.usth.x.Utils.UserFunction;\r\nimport vn.edu.usth.x.databinding.ActivityHomeBinding;\r\n\r\npublic class HomeFragment extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {\r\n\r\n    private ActivityHomeBinding binding;\r\n    private DrawerLayout drawerLayout;\r\n\r\n    private Fragment homeFragment;\r\n    private Fragment searchFragment;\r\n    private Fragment notificationFragment;\r\n    private Fragment inboxFragment;\r\n    private Fragment communityFragment;\r\n\r\n    private static final String CURRENT_FRAGMENT_TAG = \"current_fragment_tag\";\r\n    private String currentFragmentTag;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n\r\n        binding = ActivityHomeBinding.inflate(getLayoutInflater());\r\n        setContentView(binding.getRoot());\r\n\r\n        getWindow().getDecorView().setSystemUiVisibility(\r\n                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION\r\n                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);\r\n\r\n        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);\r\n        NavigationView navigationView = findViewById(R.id.sidebar_view);\r\n        View headerView = navigationView.getHeaderView(0);\r\n        ImageView avatar = headerView.findViewById(R.id.avatar);\r\n\r\n        Context context = this.getApplicationContext();\r\n        if (context != null) {\r\n            UserFunction.getAvatar(context, new UserFunction.AvatarCallback() {\r\n                @Override\r\n                public void onSuccess(Bitmap avatarBitmap) {\r\n                    Glide.with(context)\r\n                            .load(avatarBitmap)\r\n                            .into(avatar);\r\n                }\r\n\r\n                @Override\r\n                public void onFailure(String errorMessage) {\r\n                    Log.e(\"SearchTopBarFragment\", errorMessage);\r\n                }\r\n            });\r\n        }\r\n\r\n        drawerLayout = findViewById(R.id.drawer_layout);\r\n\r\n        // Initialize fragments\r\n        homeFragment = new HomeMenuFragment();\r\n        searchFragment = new SearchFragment();\r\n        notificationFragment = new NotificationFragment();\r\n        inboxFragment = new InboxFragment();\r\n        communityFragment = new CommunityFragment();\r\n\r\n        if (savedInstanceState != null) {\r\n            currentFragmentTag = savedInstanceState.getString(CURRENT_FRAGMENT_TAG);\r\n            Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(currentFragmentTag);\r\n            if (currentFragment != null) {\r\n                showFragment(currentFragment, getTopBarFragment(currentFragmentTag), currentFragmentTag);\r\n            }\r\n        } else {\r\n            bottomNavigationView.setSelectedItemId(R.id.home);\r\n            addFragment(homeFragment, new HomeTopBarFragment(), \"home\");\r\n            currentFragmentTag = \"home\";\r\n        }\r\n\r\n        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {\r\n            @Override\r\n            public boolean onNavigationItemSelected(@NonNull MenuItem item) {\r\n                int id = item.getItemId();\r\n                bottomNavigationView.setItemIconTintList(null);\r\n\r\n                if (id == R.id.home) {\r\n                    showFragment(homeFragment, new HomeTopBarFragment(), \"home\");\r\n                    return true;\r\n                } else if (id == R.id.search) {\r\n                    showFragment(searchFragment, new SearchTopBarFragment(), \"search\");\r\n                    return true;\r\n                } else if (id == R.id.notification) {\r\n                    showFragment(notificationFragment, new NotificationTopBarFragment(), \"notification\");\r\n                    return true;\r\n                } else if (id == R.id.mail) {\r\n                    showFragment(inboxFragment, new InboxTopBar(), \"mail\");\r\n                    return true;\r\n                } else if (id == R.id.community) {\r\n                    showFragment(communityFragment, new CommunityTopBarFragment(), \"community\");\r\n                    return true;\r\n                }\r\n                return false;\r\n            }\r\n        });\r\n\r\n        int currentMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;\r\n        if (currentMode == Configuration.UI_MODE_NIGHT_YES) {\r\n            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);\r\n        } else {\r\n            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);\r\n        }\r\n    }\r\n\r\n    private void addFragment(Fragment fragment, Fragment topBarFragment, String tag) {\r\n        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();\r\n        transaction.add(R.id.frameLayout, fragment, tag);\r\n        transaction.add(R.id.home_toolbar, topBarFragment);\r\n        transaction.commit();\r\n    }\r\n\r\n    private void showFragment(Fragment fragment, Fragment topBarFragment, String tag) {\r\n        FragmentManager fragmentManager = getSupportFragmentManager();\r\n        FragmentTransaction transaction = fragmentManager.beginTransaction();\r\n\r\n        for (Fragment frag : fragmentManager.getFragments()) {\r\n            if (frag != fragment) {\r\n                transaction.hide(frag);\r\n            }\r\n        }\r\n\r\n        if (fragment.isAdded()) {\r\n            transaction.show(fragment);\r\n        } else {\r\n            transaction.add(R.id.frameLayout, fragment, tag);\r\n        }\r\n\r\n        transaction.replace(R.id.home_toolbar, topBarFragment);\r\n        transaction.commit();\r\n\r\n        currentFragmentTag = tag;\r\n    }\r\n\r\n    @Override\r\n    public boolean onNavigationItemSelected(@NonNull MenuItem item) {\r\n        return false;\r\n    }\r\n\r\n    public DrawerLayout getDrawerLayout() {\r\n        return drawerLayout;\r\n    }\r\n\r\n    @SuppressLint(\"MissingSuperCall\")\r\n    @Override\r\n    public void onBackPressed() {\r\n        if (drawerLayout.isDrawerOpen(binding.sidebarView)) {\r\n            drawerLayout.closeDrawer(binding.sidebarView);\r\n        } else {\r\n            int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();\r\n            if (backStackEntryCount > 0) {\r\n                getSupportFragmentManager().popBackStack();\r\n            } else {\r\n                drawerLayout.openDrawer(binding.sidebarView);\r\n            }\r\n        }\r\n    }\r\n\r\n    @Override\r\n    protected void onSaveInstanceState(@NonNull Bundle outState) {\r\n        super.onSaveInstanceState(outState);\r\n        outState.putString(CURRENT_FRAGMENT_TAG, currentFragmentTag);\r\n    }\r\n\r\n    private Fragment getTopBarFragment(String tag) {\r\n        switch (tag) {\r\n            case \"home\":\r\n                return new HomeTopBarFragment();\r\n            case \"search\":\r\n                return new SearchTopBarFragment();\r\n            case \"notification\":\r\n                return new NotificationTopBarFragment();\r\n            case \"mail\":\r\n                return new InboxTopBar();\r\n            case \"community\":\r\n                return new CommunityTopBarFragment();\r\n            default:\r\n                return null;\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/vn/edu/usth/x/HomeFragment.java b/app/src/main/java/vn/edu/usth/x/HomeFragment.java
+--- a/app/src/main/java/vn/edu/usth/x/HomeFragment.java	(revision 4f05351eb62d8ced7e00e1e1c4de5d2e44d300f4)
++++ b/app/src/main/java/vn/edu/usth/x/HomeFragment.java	(date 1728867154995)
+@@ -64,6 +64,7 @@
+         View headerView = navigationView.getHeaderView(0);
+         ImageView avatar = headerView.findViewById(R.id.avatar);
+ 
++
+         Context context = this.getApplicationContext();
+         if (context != null) {
+             UserFunction.getAvatar(context, new UserFunction.AvatarCallback() {
+@@ -90,6 +91,7 @@
+         inboxFragment = new InboxFragment();
+         communityFragment = new CommunityFragment();
+ 
++
+         if (savedInstanceState != null) {
+             currentFragmentTag = savedInstanceState.getString(CURRENT_FRAGMENT_TAG);
+             Fragment currentFragment = getSupportFragmentManager().findFragmentByTag(currentFragmentTag);

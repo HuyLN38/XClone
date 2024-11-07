@@ -1,5 +1,7 @@
 // File: UserManager.java
-package vn.edu.usth.x.Login.Data;
+package vn.edu.usth.x.Utils;
+
+import vn.edu.usth.x.Login.Data.User;
 
 public class UserManager {
     private static User user;

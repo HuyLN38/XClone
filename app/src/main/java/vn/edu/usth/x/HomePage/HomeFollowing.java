@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicReference;
 
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Tweet.Tweet;
@@ -87,14 +88,9 @@ public class HomeFollowing extends Fragment {
                     JSONArray jsonArray = new JSONArray(response.toString());
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject tweetJson = jsonArray.getJSONObject(i);
-                        // Fetch and decode avatar
                         Bitmap avatarBitmap = fetchBitmapFromBase64(tweetJson.getString("avatar_url"));
-                        // Fetch and decode media
                         Bitmap mediaBitmap = fetchBitmapFromBase64(tweetJson.optString("media_url", null));
-                        // Format the created_at timestamp
                         String timeAgo = formatTimeAgo(tweetJson.getString("created_at"));
-
-                        // Extract userId from SharedPreferences
                         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("UserPrefs", requireContext().MODE_PRIVATE);
                         String userId = sharedPreferences.getString("userId", null);
                         if (userId != null) {
@@ -105,18 +101,20 @@ public class HomeFollowing extends Fragment {
 
                         String tweetId = tweetJson.getString("id");
                         int likeCount = fetchLikeCount(tweetId);
-                        Tweet tweet = new Tweet(
-                                tweetJson.getString("id"),
-                                avatarBitmap,
-                                tweetJson.getString("display_name"),
-                                tweetJson.getString("username"),
-                                tweetJson.getString("content"),
-                                timeAgo,
-                                mediaBitmap
-                        );
-                        tweet.setLikeCount(likeCount);
-                        tweet.setLiked(isTweetLikedByUser(tweetId, userId));
-                        fetchedTweets.add(tweet);
+//                        Tweet tweet = new Tweet(
+//                                tweetJson.getString("id"),
+//                                avatarBitmap.,
+//                                tweetJson.getString("display_name"),
+//                                tweetJson.getString("username"),
+//                                tweetJson.getString("content"),
+//                                timeAgo,
+//                                mediaBitmap,
+//                                0,true
+//                                ,0,0,0
+//                        );
+//                        tweet.setLikeCount(likeCount);
+//                        tweet.setLiked(isTweetLikedByUser(tweetId, userId));
+//                        fetchedTweets.add(tweet);
                     }
                 }
                 conn.disconnect();

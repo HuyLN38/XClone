@@ -3,10 +3,10 @@ package vn.edu.usth.x.InboxPage;
 import android.graphics.Bitmap;
 
 public class Chat {
-    private String displayName;
+    private final String displayName;
     private String lastMessage;
     private Bitmap avatarBitmap;
-    private String recipientId;
+    private final String recipientId;
 
     public Chat(String displayName, String lastMessage, String recipientId) {
         this.displayName = displayName;
@@ -30,7 +30,13 @@ public class Chat {
         return avatarBitmap;
     }
 
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+
     public String getRecipientId() {
         return recipientId;
     }
+
+
 }

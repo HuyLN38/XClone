@@ -23,7 +23,6 @@ import vn.edu.usth.x.Blog.CommentFragment;
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHolder> {
 
     private static AnimationDrawable animationDrawable;
-    private int flag = 0;
     private List<Tweet> tweetList;
 
     public static class TweetViewHolder extends RecyclerView.ViewHolder {
@@ -87,15 +86,12 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
                 }
             });
 
-            bookmarkButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    v.setSelected(!v.isSelected());
-                    if (v.isSelected()) {
-                        bookmarkButton.setImageResource(R.drawable.bookmark_after);
-                    } else {
-                        bookmarkButton.setImageResource(R.drawable.bookmark);
-                    }
+            bookmarkButton.setOnClickListener(v -> {
+                v.setSelected(!v.isSelected());
+                if (v.isSelected()) {
+                    bookmarkButton.setImageResource(R.drawable.bookmark_after);
+                } else {
+                    bookmarkButton.setImageResource(R.drawable.bookmark);
                 }
             });
         }
@@ -104,6 +100,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
     public TweetAdapter(List<Tweet> tweetList) {
         this.tweetList = tweetList;
     }
+
+
 
     @NonNull
     @Override
