@@ -11,7 +11,6 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import vn.edu.usth.x.HomePage.HomeForYou;
 import vn.edu.usth.x.Login.LoginPage;
 import vn.edu.usth.x.Utils.GlobalWebSocketManager;
 
@@ -27,9 +26,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
         setupSystemUI();
-        initializeWebSocket();
         scheduleNavigation();
 
     }
@@ -39,27 +36,6 @@ public class MainActivity extends AppCompatActivity {
                 View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         );
-    }
-
-    private void initializeWebSocket() {
-        SharedPreferences sharedPreferences = getApplicationContext()
-                .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        String userId = sharedPreferences.getString(USER_ID_KEY, null);
-
-        if (userId != null && !isWebSocketInitialized) {
-            GlobalWebSocketManager wsManager = GlobalWebSocketManager.getInstance();
-
-            // Observe connection state
-            wsManager.getConnectionStateLiveData().observe(this, isConnected -> {
-                if (!isConnected) {
-                    Toast.makeText(this, "Reconnecting...", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            // Initialize connection
-            wsManager.connect(this);
-            isWebSocketInitialized = true;
-        }
     }
 
     private void scheduleNavigation() {
@@ -95,13 +71,5 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (!isWebSocketInitialized) {
-            initializeWebSocket();
-        }
     }
 }

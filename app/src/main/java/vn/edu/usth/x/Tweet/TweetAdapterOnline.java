@@ -34,11 +34,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import vn.edu.usth.x.Blog.ResponseTweet;
 import vn.edu.usth.x.Blog.CommentFragment;
 import vn.edu.usth.x.R;
+import vn.edu.usth.x.Utils.CommentManager;
 import vn.edu.usth.x.Utils.LikeEventManager;
 import vn.edu.usth.x.Utils.UserFunction;
 
 public class TweetAdapterOnline extends RecyclerView.Adapter<TweetAdapterOnline.TweetViewHolder>
-        implements LikeEventManager.LikeUpdateListener {
+        implements LikeEventManager.LikeUpdateListener, CommentManager.CommentUpdateListener {
     private static final String TAG = "TweetAdapterOnline";
     private final List<Tweet> tweetList;
     private final Object lock = new Object(); // For thread safety
@@ -98,6 +99,20 @@ public class TweetAdapterOnline extends RecyclerView.Adapter<TweetAdapterOnline.
     public int getItemCount() {
         synchronized (lock) {
             return tweetList.size();
+        }
+    }
+
+    @Override
+    public void onCommentUpdated(String tweetId) {
+        synchronized (lock) {
+            for (int i = 0; i < tweetList.size(); i++) {
+                Tweet tweet = tweetList.get(i);
+                if (tweet.getTweet_id().equals(tweetId)) {
+                    tweet.setCommentCount(tweet.getCommentCount() + 1);
+                    notifyItemChanged(i);
+                    break;
+                }
+            }
         }
     }
 

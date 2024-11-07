@@ -56,13 +56,15 @@ import vn.edu.usth.x.R;
 import vn.edu.usth.x.Tweet.Tweet;
 import vn.edu.usth.x.Tweet.TweetAdapterOnline;
 import vn.edu.usth.x.Utils.AvatarManager;
+import vn.edu.usth.x.Utils.CommentManager;
 import vn.edu.usth.x.Utils.LikeEventManager;
 import vn.edu.usth.x.Utils.UserFunction;
 
-public class ResponseTweet extends Fragment {
+public class ResponseTweet extends Fragment implements CommentManager.CommentUpdateListener {
     private static final String TAG = "ResponseTweet";
     private View rootView;
     private ViewHolder viewHolder;
+    private final Object lock = new Object();
     private String tweet_id;
     private boolean isDataBound = false;
     private RequestQueue requestQueue;
@@ -70,6 +72,8 @@ public class ResponseTweet extends Fragment {
     private String base64Image = "";
     private boolean isLiked = false;
     private int likeCount = 0;
+    private int commentCount = 0;
+    private int seenCount = 0;
     private static final String API_REPLIES_URL = "https://huyln.info/xclone/api/tweets/%s/replies";
 
     public static ResponseTweet newInstance(Bundle args) {
@@ -78,22 +82,31 @@ public class ResponseTweet extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onCommentUpdated(String tweetId) {
+        commentCount++;
+        viewHolder.commentCountView.setText(String.valueOf(commentCount));
+    }
+
     private static class ViewHolder {
         final ImageView avatarImageView;
         final TextView usernameTextView;
         final TextView tweetLinkTextView;
         final TextView tweetTextView;
         final TextView timeTextView;
+        final RecyclerView recyclerView;
         final EditText replyEditText;
         final ImageView addMediaButton;
         final ImageView selectedMediaPreview;
         final ImageView postReplyButton;
         final ImageView tweetImageView;
         final Button followButton;
-        final RecyclerView recyclerView;
+        final TextView seenCountView;
+
         TweetAdapterOnline adapter;
         final ImageView likeButton;
         final TextView likeCountView;
+        final TextView commentCountView;
         final ImageView bookmarkButton;
 
         ViewHolder(View view) {
@@ -106,9 +119,11 @@ public class ResponseTweet extends Fragment {
             followButton = view.findViewById(R.id.follow_button);
             recyclerView = view.findViewById(R.id.response_tweet_recycle);
             likeButton = view.findViewById(R.id.btn_anim);
+            seenCountView = view.findViewById(R.id.seen_count);
             likeCountView = view.findViewById(R.id.like_count);
             bookmarkButton = view.findViewById(R.id.bookmark);
             replyEditText = view.findViewById(R.id.edit_text_comment);
+            commentCountView = view.findViewById(R.id.comment_count);
             addMediaButton = view.findViewById(R.id.add_picture_button_comment);
             selectedMediaPreview = view.findViewById(R.id.previewImage);
             postReplyButton = view.findViewById(R.id.add_button);
@@ -518,6 +533,11 @@ public class ResponseTweet extends Fragment {
         viewHolder.timeTextView.setText(args.getString("time", ""));
         viewHolder.avatarImageView.setImageBitmap(args.getParcelable("avatarBitmap"));
         viewHolder.tweetImageView.setImageBitmap(args.getParcelable("imageBitmap"));
+        seenCount = args.getInt("seenCount", 0);
+        viewHolder.seenCountView.setText(String.valueOf(args.getInt("seenCount", 0)));
+        commentCount = args.getInt("commentCount", 0);
+        viewHolder.commentCountView.setText(String.valueOf(commentCount));
+        viewHolder.likeCountView.setText(String.valueOf(args.getInt("likeCount", 0)));
 
         likeCount = args.getInt("likeCount", 0);
         isLiked = args.getBoolean("isLiked", false);

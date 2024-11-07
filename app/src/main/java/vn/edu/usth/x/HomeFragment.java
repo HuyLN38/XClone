@@ -1,11 +1,14 @@
 package vn.edu.usth.x;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -29,6 +32,7 @@ import vn.edu.usth.x.Topbar.HomeTopBarFragment;
 import vn.edu.usth.x.Topbar.InboxTopBar;
 import vn.edu.usth.x.Topbar.NotificationTopBarFragment;
 import vn.edu.usth.x.Topbar.SearchTopBarFragment;
+import vn.edu.usth.x.Utils.GlobalWebSocketManager;
 import vn.edu.usth.x.Utils.UserFunction;
 import vn.edu.usth.x.databinding.ActivityHomeBinding;
 
@@ -36,6 +40,9 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
 
     private ActivityHomeBinding binding;
     private DrawerLayout drawerLayout;
+    private static final String PREFS_NAME = "UserPrefs";
+    private static final String USER_ID_KEY = "userId";
+    private boolean isWebSocketInitialized = false;
 
     private Fragment homeFragment;
     private Fragment searchFragment;
@@ -63,6 +70,7 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
         ImageView avatar = headerView.findViewById(R.id.avatar);
 
 
+
             AvatarManager.getInstance(this)
                     .getAvatar(UserFunction.getUserId(this))
                     .thenAccept(bitmap -> {
@@ -79,6 +87,7 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.drawer_layout);
 
         // Initialize fragments
+        initializeWebSocket();
         homeFragment = new HomeMenuFragment();
         searchFragment = new SearchFragment();
         notificationFragment = new NotificationFragment();
@@ -186,6 +195,35 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(CURRENT_FRAGMENT_TAG, currentFragmentTag);
+    }
+
+    private void initializeWebSocket() {
+        SharedPreferences sharedPreferences = getApplicationContext()
+                .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String userId = sharedPreferences.getString(USER_ID_KEY, null);
+
+        if (userId != null && !isWebSocketInitialized) {
+            GlobalWebSocketManager wsManager = GlobalWebSocketManager.getInstance();
+
+            // Observe connection state
+            wsManager.getConnectionStateLiveData().observe(this, isConnected -> {
+                if (!isConnected) {
+                    Toast.makeText(this, "Reconnecting...", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            // Initialize connection
+            wsManager.connect(this);
+            isWebSocketInitialized = true;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!isWebSocketInitialized) {
+            initializeWebSocket();
+        }
     }
 
     private Fragment getTopBarFragment(String tag) {

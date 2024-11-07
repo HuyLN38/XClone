@@ -42,6 +42,8 @@ import java.util.stream.Collectors;
 
 import vn.edu.usth.x.Utils.AvatarManager;
 import vn.edu.usth.x.R;
+import vn.edu.usth.x.Utils.CommentManager;
+import vn.edu.usth.x.Utils.LikeEventManager;
 import vn.edu.usth.x.Utils.UserFunction;
 
 public class CommentFragment extends Fragment {
@@ -80,12 +82,9 @@ public class CommentFragment extends Fragment {
         Button cancelButton = view.findViewById(R.id.comment_cancel);
         postButton = view.findViewById(R.id.comment_post);
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                fragmentManager.popBackStack();
-            }
+        cancelButton.setOnClickListener(v -> {
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+            fragmentManager.popBackStack();
         });
 
         postButton.setOnClickListener(v -> {
@@ -251,6 +250,7 @@ public class CommentFragment extends Fragment {
 
                 if (responseCode == HttpURLConnection.HTTP_CREATED) {
                     // Read and log the successful response
+                    CommentManager.getInstance().notifyCommentUpdate(tweet_id);
                     Log.d(TAG, "Success response: responseCode = " + responseCode);
                     return true;
                 } else {
