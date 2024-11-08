@@ -29,6 +29,14 @@ public class UserManager {
         return user;
     }
 
+    public static void followerIncrement() {
+        followers++;
+    }
+
+    public static void followerDecrement() {
+        followers--;
+    }
+
     public static String getCurrentID() {
         return currentID;
     }

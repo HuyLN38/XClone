@@ -629,6 +629,8 @@ public class ResponseTweet extends Fragment implements CommentManager.CommentUpd
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST, url, jsonBody,
                     response -> {
+                        UserManager.followerIncrement();
+                        viewHolder.followButton.setText("Following");
                         Log.d(TAG, "Followed successfully");
                         Toast.makeText(getContext(), "Followed successfully", Toast.LENGTH_SHORT).show();
                     },
@@ -672,10 +674,14 @@ public class ResponseTweet extends Fragment implements CommentManager.CommentUpd
             JsonObjectRequest request = new JsonObjectRequest(
                     Request.Method.POST, url, jsonBody,
                     response -> {
+                        UserManager.followerDecrement();
+                        viewHolder.followButton.setText("Follow");
                         Log.d(TAG, "Unfollowed successfully");
                         Toast.makeText(getContext(), "Unfollowed successfully", Toast.LENGTH_SHORT).show();
                     },
                     error -> {
+                        UserManager.followerDecrement();
+                        viewHolder.followButton.setText("Follow");
                         Log.d(TAG, "Unfollowed successfully");
                         Toast.makeText(getContext(), "Unfollowed successfully", Toast.LENGTH_SHORT).show();
                     }

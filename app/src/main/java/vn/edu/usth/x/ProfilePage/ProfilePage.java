@@ -155,8 +155,8 @@ public class ProfilePage extends AppCompatActivity {
         TextView usernameView = findViewById(R.id.username_profile);
         TextView displayNameView = findViewById(R.id.display_name);
         TextView joinDateView = findViewById(R.id.join_date);
-        TextView followingCountView = findViewById(R.id.following_count);
-        TextView followerCountView = findViewById(R.id.follower_count);
+        TextView followingCountView = findViewById(R.id.follower_count);
+        TextView followerCountView = findViewById(R.id.following_count);
         ImageView Tick = findViewById(R.id.verified_tick);
 
         // Set data from API response
@@ -174,6 +174,7 @@ public class ProfilePage extends AppCompatActivity {
         new FetchTweetsTask().execute(page);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void refreshContent(int tabPosition) {
         // Clear existing content
         tweetList.clear();
