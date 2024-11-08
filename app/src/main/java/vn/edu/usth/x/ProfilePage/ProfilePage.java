@@ -10,6 +10,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -156,6 +157,7 @@ public class ProfilePage extends AppCompatActivity {
         TextView joinDateView = findViewById(R.id.join_date);
         TextView followingCountView = findViewById(R.id.following_count);
         TextView followerCountView = findViewById(R.id.follower_count);
+        ImageView Tick = findViewById(R.id.verified);
 
         // Set data from API response
         // This is placeholder data
@@ -165,6 +167,8 @@ public class ProfilePage extends AppCompatActivity {
         joinDateView.setText("Joined Sep 2024");
         followingCountView.setText(userManager.getFollowing() + " Following");
         followerCountView.setText(userManager.getFollowers() + " Followers");
+        Tick.setVisibility(userManager.isIsVerified() ? View.VISIBLE : View.GONE);
+
     }
 
     private void fetchTweets(int page) {
@@ -315,18 +319,18 @@ public class ProfilePage extends AppCompatActivity {
 
     // Placeholder methods for other tab content
     private void fetchReplies() {
-        // Implement fetching replies
+
     }
 
     private void fetchHighlights() {
-        // Implement fetching highlights
+
     }
 
     private void fetchArticles() {
-        // Implement fetching articles
+
     }
 
     private void fetchMedia() {
-        // Implement fetching media
+
     }
 }
