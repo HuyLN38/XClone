@@ -369,6 +369,7 @@ public class TweetAdapterOnline extends RecyclerView.Adapter<TweetAdapterOnline.
             bundle.putBoolean("isLiked", tweet.isLiked());
             bundle.putParcelable("avatarBitmap", tweet.getAvatar_bit());
             bundle.putParcelable("imageBitmap", tweet.getImage_bit());
+            bundle.putBoolean("followed", tweet.isFollowed());
 
 
             // Add avatar bitmap if available

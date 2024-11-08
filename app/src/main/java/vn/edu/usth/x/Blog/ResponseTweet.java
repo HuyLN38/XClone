@@ -431,7 +431,8 @@ public class ResponseTweet extends Fragment implements CommentManager.CommentUpd
         }
 
         viewHolder.followButton.setOnClickListener(v -> {
-            boolean isFollowing = viewHolder.followButton.getText().toString().equals("Following");
+            args = getArguments();
+            boolean isFollowing = args.getBoolean("followed");
             viewHolder.followButton.setText(isFollowing ? "Follow" : "Following");
             if (isFollowing) {
                 unfollowUser();
@@ -566,15 +567,27 @@ public class ResponseTweet extends Fragment implements CommentManager.CommentUpd
         viewHolder.timeTextView.setText(args.getString("time", ""));
         viewHolder.avatarImageView.setImageBitmap(args.getParcelable("avatarBitmap"));
         viewHolder.tweetImageView.setImageBitmap(args.getParcelable("imageBitmap"));
-        Log.e("TESTT", String.valueOf(args.getInt("ViewCount", 0)));
-        Log.e("TESTT", String.valueOf(args.getInt("likeCount", 0)));
-        ;
-        Log.e("TESTT", String.valueOf(args.getInt("CommentCount", 0)));
         viewHolder.seenCountView.setText(String.valueOf(args.getInt("ViewCount")));
-
         viewHolder.commentCountView.setText(String.valueOf(args.getInt("CommentCount")));
-
         viewHolder.likeCountView.setText(String.valueOf(args.getInt("likeCount")));
+        if (args.getBoolean("followed")) {
+            viewHolder.followButton.setText("Following");
+            args.putBoolean("followed", true);
+            GlobalWebSocketManager.getInstance().sendNotification(
+                    new NotificationModel(
+                            args.getString("user_id"),
+                            UserManager.getCurrentID(),
+                            UserManager.getCurrentUsername(),
+                            args.getString("id"),
+                            "follow",
+                            "had followed you"
+                    )
+            );
+        } else {
+            viewHolder.followButton.setText("Follow");
+            args.putBoolean("followed", false);
+        }
+
 
         likeCount = args.getInt("likeCount", 0);
         commentCount = args.getInt("commentCount", 0);
@@ -600,13 +613,87 @@ public class ResponseTweet extends Fragment implements CommentManager.CommentUpd
     }
 
     private void followUser() {
-        if (tweet_id == null) return;
-        // Implementation of follow API call
+        String userId = UserManager.getCurrentID();
+        if (userId == null || tweet_id == null) {
+            Toast.makeText(getContext(), "Error: User not logged in", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String url = "https://huyln.info/xclone/api/follows";
+        JSONObject jsonBody = new JSONObject();
+        try {
+            args = getArguments();
+            jsonBody.put("follower_id", userId);
+            jsonBody.put("followed_id", args.getString("user_id"));
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.POST, url, jsonBody,
+                    response -> {
+                        Log.d(TAG, "Followed successfully");
+                        Toast.makeText(getContext(), "Followed successfully", Toast.LENGTH_SHORT).show();
+                    },
+                    error -> {
+                        Log.e(TAG, "Error following user: " + error.getMessage());
+                        Toast.makeText(getContext(), "Error following user", Toast.LENGTH_SHORT).show();
+                    }
+            ) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Content-Type", "application/json");
+                    return headers;
+                }
+            };
+
+            requestQueue.add(request);
+
+        } catch (JSONException e) {
+            Log.e(TAG, "Error creating follow request", e);
+            Toast.makeText(getContext(), "Error creating follow request", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void unfollowUser() {
-        if (tweet_id == null) return;
-        // Implementation of unfollow API call
+        String userId = UserManager.getCurrentID();
+        if (userId == null) {
+            Toast.makeText(getContext(), "Error: User not logged in", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String url = "https://huyln.info/xclone/api/follows-delete";
+        JSONObject jsonBody = new JSONObject();
+        try {
+            args = getArguments();
+            jsonBody.put("follower_id", userId);
+            Log.e ("follower_id", userId);
+            jsonBody.put("followed_id", args.getString("user_id"));
+            Log.e ("followed_id", args.getString("user_id"));
+
+            JsonObjectRequest request = new JsonObjectRequest(
+                    Request.Method.POST, url, jsonBody,
+                    response -> {
+                        Log.d(TAG, "Unfollowed successfully");
+                        Toast.makeText(getContext(), "Unfollowed successfully", Toast.LENGTH_SHORT).show();
+                    },
+                    error -> {
+                        Log.d(TAG, "Unfollowed successfully");
+                        Toast.makeText(getContext(), "Unfollowed successfully", Toast.LENGTH_SHORT).show();
+                    }
+            ) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Content-Type", "application/json");
+                    return headers;
+                }
+            };
+
+            requestQueue.add(request);
+
+        } catch (JSONException e) {
+            Log.e(TAG, "Error creating follow request", e);
+            Toast.makeText(getContext(), "Error creating follow request", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

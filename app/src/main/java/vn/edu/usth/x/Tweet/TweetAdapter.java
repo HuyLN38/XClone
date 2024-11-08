@@ -22,7 +22,6 @@ import vn.edu.usth.x.Comment.CommentFragment;
 
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHolder> {
 
-    private static AnimationDrawable animationDrawable;
     private List<Tweet> tweetList;
 
     public static class TweetViewHolder extends RecyclerView.ViewHolder {

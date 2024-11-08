@@ -193,7 +193,8 @@ public class HomeForYou extends Fragment {
                                 isTweetLikedByUser,
                                 commentCount,
                                 reTweetCount,
-                                seenCount
+                                seenCount,
+                                tweetJson.getBoolean("user_follows_author")
                         );
                         fetchedTweets.add(tweet);
                     }
