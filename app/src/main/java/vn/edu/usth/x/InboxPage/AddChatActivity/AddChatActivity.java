@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ChatActivity;
+import vn.edu.usth.x.InboxPage.Message.MessageActivity;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Utils.UserFunction;
 
@@ -212,7 +212,7 @@ public class AddChatActivity extends AppCompatActivity implements UserListAdapte
 
     @Override
     public void onUserClick(UserItem user) {
-        Intent intent = new Intent(this, ChatActivity.class);
+        Intent intent = new Intent(this, MessageActivity.class);
         intent.putExtra("RECIPIENT_ID", user.getId());
         intent.putExtra("DISPLAY_NAME", user.getDisplayName());
         intent.putExtra("CURRENT_USER_ID", UserFunction.getUserId(this));

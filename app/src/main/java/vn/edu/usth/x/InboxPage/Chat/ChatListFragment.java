@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vn.edu.usth.x.InboxPage.AddChatActivity.AddChatActivity;
-import ChatActivity;
+import vn.edu.usth.x.InboxPage.Message.MessageActivity;
 import vn.edu.usth.x.Utils.AvatarManager;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Utils.GlobalWebSocketManager;
@@ -192,7 +192,7 @@ public class ChatListFragment extends Fragment implements ChatAdapter.OnChatClic
 
     @Override
     public void onChatClick(Chat chat) {
-        Intent intent = new Intent(getActivity(), ChatActivity.class);
+        Intent intent = new Intent(getActivity(), MessageActivity.class);
         intent.putExtra("RECIPIENT_ID", chat.getRecipientId());
         intent.putExtra("DISPLAY_NAME", chat.getDisplayName());
         intent.putExtra("CURRENT_USER_ID", UserFunction.getUserId(requireContext()));
