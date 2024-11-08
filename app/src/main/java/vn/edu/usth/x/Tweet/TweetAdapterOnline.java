@@ -32,8 +32,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import vn.edu.usth.x.Blog.ResponseTweet;
-import vn.edu.usth.x.Comment.CommentFragment;
+import vn.edu.usth.x.HomePage.Interact.ResponseTweet;
+import vn.edu.usth.x.HomePage.Interact.PostComment;
 import vn.edu.usth.x.NotificationPage.NotificationRecycle.NotificationModel;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Utils.CommentManager;
@@ -333,7 +333,7 @@ public class TweetAdapterOnline extends RecyclerView.Adapter<TweetAdapterOnline.
             FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
             transaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down);
 
-            CommentFragment commentFragment = new CommentFragment();
+            PostComment commentFragment = new PostComment();
             commentFragment.setArguments(createTweetBundle(tweet));
 
             transaction.replace(R.id.drawer_layout, commentFragment)

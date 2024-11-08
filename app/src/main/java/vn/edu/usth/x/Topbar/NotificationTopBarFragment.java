@@ -18,7 +18,7 @@ import com.bumptech.glide.Glide;
 
 import vn.edu.usth.x.HomeFragment;
 import vn.edu.usth.x.Utils.AvatarManager;
-import vn.edu.usth.x.NotificationPage.NotificationSettings;
+import vn.edu.usth.x.NotificationPage.TopBar.NotificationSettings;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Utils.UserFunction;
 

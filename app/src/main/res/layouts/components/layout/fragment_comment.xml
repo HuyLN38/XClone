@@ -5,7 +5,7 @@
     android:id="@+id/comment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Comment.CommentFragment">
+    tools:context=".HomePage.Interact.PostComment">
 
     <LinearLayout
         android:layout_width="match_parent"

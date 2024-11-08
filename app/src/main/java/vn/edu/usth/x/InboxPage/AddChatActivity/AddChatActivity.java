@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import vn.edu.usth.x.InboxPage.ChatActivity;
+import ChatActivity;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Utils.UserFunction;
 

@@ -16,7 +16,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.Objects;
 
-import vn.edu.usth.x.Blog.PostNewsFeed;
+import vn.edu.usth.x.HomePage.Interact.PostNewsFeed;
 import vn.edu.usth.x.R;
 
 

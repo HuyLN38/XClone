@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.X">
         <activity
-            android:name=".InboxPage.ChatActivity"
+            android:name=".InboxPage.Message.MessageActivity"
             android:exported="false" />
         <activity
             android:name=".Login.LoginPage1"
@@ -56,7 +56,7 @@
             android:label="LoginPage"
             android:theme="@style/Theme.X" />
         <activity
-            android:name=".NotificationPage.NotificationSettings"
+            android:name=".NotificationPage.TopBar.NotificationSettings"
             android:exported="false"
             android:label="@string/title_activity_notification_settings"
             android:theme="@style/CustomPreferenceTheme" />

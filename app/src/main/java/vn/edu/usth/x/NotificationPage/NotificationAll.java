@@ -21,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import vn.edu.usth.x.NotificationPage.NotificationRecycle.NotificationGetWidget;
 import vn.edu.usth.x.NotificationPage.NotificationRecycle.NotificationModel;
 import vn.edu.usth.x.NotificationPage.NotificationRecycle.NotificationRecycleAdapter;
 import vn.edu.usth.x.R;
@@ -31,7 +33,7 @@ public class NotificationAll extends Fragment {
     private RecyclerView recyclerView;
     private TextView emptyText;
     private NotificationRecycleAdapter adapter;
-    private NotificationRepository repository;
+    private NotificationGetWidget repository;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressBar loadingMore;
     private final ArrayList<NotificationModel> notificationList = new ArrayList<>();
@@ -145,7 +147,7 @@ public class NotificationAll extends Fragment {
     }
 
     private void setupRepository() {
-        repository = new NotificationRepository();
+        repository = new NotificationGetWidget();
 
         repository.getLoadingState().observe(getViewLifecycleOwner(), state -> {
             switch (state) {

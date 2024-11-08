@@ -13,8 +13,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
-import vn.edu.usth.x.InboxPage.Chat;
-import vn.edu.usth.x.InboxPage.Message;
+import vn.edu.usth.x.InboxPage.Chat.Chat;
+import vn.edu.usth.x.InboxPage.Message.Message;
 import vn.edu.usth.x.NotificationPage.NotificationRecycle.NotificationModel;
 
 public class GlobalWebSocketManager {

@@ -18,7 +18,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import vn.edu.usth.x.R;
-import vn.edu.usth.x.Comment.CommentFragment;
+import vn.edu.usth.x.HomePage.Interact.PostComment;
 
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHolder> {
 
@@ -114,7 +114,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.TweetViewHol
             FragmentTransaction fragmentTransaction = activity.getSupportFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_out_down);
             fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.replace(R.id.drawer_layout, new CommentFragment()).commit();
+            fragmentTransaction.replace(R.id.drawer_layout, new PostComment()).commit();
         });
 
         return new TweetViewHolder(itemView);

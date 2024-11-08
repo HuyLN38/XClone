@@ -1,4 +1,4 @@
-package vn.edu.usth.x.InboxPage;
+package vn.edu.usth.x.InboxPage.Message;
 
 import java.util.UUID;
 

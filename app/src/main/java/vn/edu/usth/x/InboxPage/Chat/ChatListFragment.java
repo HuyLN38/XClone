@@ -1,4 +1,4 @@
-package vn.edu.usth.x.InboxPage;
+package vn.edu.usth.x.InboxPage.Chat;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -28,12 +28,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vn.edu.usth.x.InboxPage.AddChatActivity.AddChatActivity;
+import ChatActivity;
 import vn.edu.usth.x.Utils.AvatarManager;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Utils.GlobalWebSocketManager;
 import vn.edu.usth.x.Utils.UserFunction;
 
-public class InboxFragment extends Fragment implements ChatAdapter.OnChatClickListener {
+public class ChatListFragment extends Fragment implements ChatAdapter.OnChatClickListener {
     private static final String BASE_URL = "https://huyln.info/xclone/api";
     private RecyclerView chatRecyclerView;
     private ChatAdapter chatAdapter;

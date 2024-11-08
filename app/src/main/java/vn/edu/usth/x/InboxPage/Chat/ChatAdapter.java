@@ -1,4 +1,4 @@
-package vn.edu.usth.x.InboxPage;
+package vn.edu.usth.x.InboxPage.Chat;
 
 import android.content.Context;
 import android.view.LayoutInflater;

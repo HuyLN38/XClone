@@ -1,4 +1,4 @@
-package vn.edu.usth.x.InboxPage;
+package vn.edu.usth.x.InboxPage.Message;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -32,7 +32,7 @@ import vn.edu.usth.x.Utils.AvatarManager;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Utils.GlobalWebSocketManager;
 
-public class ChatActivity extends AppCompatActivity {
+public class MessageActivity extends AppCompatActivity {
     private static final String BASE_URL = "https://huyln.info/xclone/api";
     private RecyclerView recyclerView;
     private EditText messageInput;

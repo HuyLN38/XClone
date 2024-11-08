@@ -20,12 +20,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import org.w3c.dom.Text;
-
 import vn.edu.usth.x.CommunityPage.CommunityFragment;
 import vn.edu.usth.x.HomePage.HomeMenuFragment;
-import vn.edu.usth.x.InboxPage.InboxFragment;
-import vn.edu.usth.x.Login.Data.User;
+import vn.edu.usth.x.InboxPage.Chat.ChatListFragment;
 import vn.edu.usth.x.NotificationPage.NotificationAll;
 import vn.edu.usth.x.ProfilePage.ProfilePage;
 import vn.edu.usth.x.Utils.AvatarManager;
@@ -119,7 +116,7 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
         homeFragment = new HomeMenuFragment();
         searchFragment = new SearchFragment();
         notificationFragment = new NotificationAll();
-        inboxFragment = new InboxFragment();
+        inboxFragment = new ChatListFragment();
         communityFragment = new CommunityFragment();
 
 

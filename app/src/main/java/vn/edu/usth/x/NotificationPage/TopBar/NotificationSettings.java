@@ -1,4 +1,4 @@
-package vn.edu.usth.x.NotificationPage;
+package vn.edu.usth.x.NotificationPage.TopBar;
 
 import android.os.Bundle;
 import android.widget.ImageView;

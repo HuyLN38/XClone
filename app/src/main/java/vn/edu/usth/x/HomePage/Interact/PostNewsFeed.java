@@ -1,11 +1,9 @@
-package vn.edu.usth.x.Comment;
+package vn.edu.usth.x.HomePage.Interact;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,18 +11,15 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -32,67 +27,47 @@ import com.bumptech.glide.Glide;
 
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
 
-import vn.edu.usth.x.NotificationPage.NotificationRecycle.NotificationModel;
 import vn.edu.usth.x.Utils.AvatarManager;
 import vn.edu.usth.x.R;
-import vn.edu.usth.x.Utils.CommentManager;
-import vn.edu.usth.x.Utils.GlobalWebSocketManager;
 import vn.edu.usth.x.Utils.UserFunction;
-import vn.edu.usth.x.Utils.UserManager;
 
-public class CommentFragment extends DialogFragment {
-    private static final String TAG = "Comment_Tweet";
+public class PostNewsFeed extends Fragment {
+    private static final String TAG = "PostNewsFeed";
+    private static final String API_URL = "https://huyln.info/xclone/api/tweets";
     private static final int PICK_IMAGE_REQUEST = 1;
 
-    private static final String API_URL = "https://huyln.info/xclone/api/tweets";
-    private EditText commentEditText;
-    private String tweet_id;
-    private Button postButton;
     private ImageView selectedImageView;
-    Bundle args;
+    private EditText contentEditText;
     private String base64Image = "";
+    private Button postButton;
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_comment, container, false);
-
-        // Prevent touches outside the fragment
-//        view.setOnTouchListener((v, event) -> {
-//            if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
-//                return true;
-//            }
-//            return false;
-//        });
-
-        return view;
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_post_news_feed, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize view
-        ImageView avatarImageView = view.findViewById(R.id.tweet_avatar);
-        TextView usernameTextView = view.findViewById(R.id.tweet_name);
-        TextView tweetLinkTextView = view.findViewById(R.id.tweet_username);
-        TextView responseUsernameView = view.findViewById(R.id.response_username);
-        TextView tweetTextView = view.findViewById(R.id.tweet_text);
-        TextView timeTextView = view.findViewById(R.id.tweet_time);
-        ImageView tweetImageView = view.findViewById(R.id.tweet_image);
-        commentEditText = view.findViewById(R.id.edit_text_comment);
-        selectedImageView = view.findViewById(R.id.selected_image_view_comment);
-
-        ImageView addPictureButton = view.findViewById(R.id.add_picture_button_comment);
-        Button cancelButton = view.findViewById(R.id.comment_cancel);
-        postButton = view.findViewById(R.id.comment_post);
+        // Initialize views
+        Button cancelButton = view.findViewById(R.id.post_cancel);
+        postButton = view.findViewById(R.id.post_button);
+        ImageView addPictureButton = view.findViewById(R.id.add_picture_button);
+        selectedImageView = view.findViewById(R.id.selected_image_view);
+        contentEditText = view.findViewById(R.id.content_edit_text);
 
         cancelButton.setOnClickListener(v -> {
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
@@ -100,19 +75,18 @@ public class CommentFragment extends DialogFragment {
         });
 
         postButton.setOnClickListener(v -> {
-            String content = commentEditText.getText().toString().trim();
+            String content = contentEditText.getText().toString().trim();
             if (content.isEmpty()) {
                 Toast.makeText(getContext(), "Please enter some content", Toast.LENGTH_SHORT).show();
                 return;
             }
-            //transmit comment to postTweet
             postTweet(content);
         });
 
         addPictureButton.setOnClickListener(v -> openGallery());
 
         //set avatar of current user
-        ImageView avatar = view.findViewById(R.id.user_avatar);
+        ImageView avatar = view.findViewById(R.id.avatar_post);
 
         Context context = getContext();
         if (context != null) {
@@ -128,38 +102,6 @@ public class CommentFragment extends DialogFragment {
                                     .into(avatar);
                         }
                     });
-        }
-
-        // Get in4 from Bundle
-        args = getArguments();
-        if (args != null) {
-
-            String username = args.getString("username");
-            String tweetLink = args.getString("tweetLink");
-            String tweetText = args.getString("tweetText");
-            String time = args.getString("time");
-            tweet_id = args.getString("id");
-
-            usernameTextView.setText(username);
-            tweetLinkTextView.setText(tweetLink);
-            tweetTextView.setText(tweetText);
-            timeTextView.setText(time);
-            responseUsernameView.setText(tweetLink);
-
-            byte[] avatarByteArray = args.getByteArray("avatar");
-            if (avatarByteArray != null) {
-                Bitmap avatarBitmap = BitmapFactory.decodeByteArray(avatarByteArray, 0, avatarByteArray.length);
-                avatarImageView.setImageBitmap(avatarBitmap);
-            }
-
-            byte[] imageByteArray = args.getByteArray("tweetImage");
-            if (imageByteArray != null) {
-                Bitmap imageBitmap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
-                tweetImageView.setImageBitmap(imageBitmap);
-                tweetImageView.setVisibility(View.VISIBLE);
-            } else {
-                tweetImageView.setVisibility(View.GONE);
-            }
         }
     }
 
@@ -192,26 +134,28 @@ public class CommentFragment extends DialogFragment {
         }
     }
 
-    //encode image
     private String bitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 
-    //Handle Post Comment through API
     private void postTweet(String content) {
+        // Disable post button to prevent double posting
         postButton.setEnabled(false);
 
-
+        // Extract userId from SharedPreferences
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("UserPrefs", requireContext().MODE_PRIVATE);
         String userId = sharedPreferences.getString("userId", null);
 
+        // Check if userId was retrieved successfully
         if (userId != null) {
+            // Log the retrieved userId for debugging purposes
             Log.d("PostTweet", "User ID: " + userId);
 
-            new PostTweetTask().execute(userId, content, tweet_id);
+            // Send content and userId to API
+            new PostTweetTask().execute(content, userId);
         } else {
             // If userId is null, log an error or show a toast message
             Log.e("PostTweet", "User ID not found in SharedPreferences");
@@ -223,9 +167,8 @@ public class CommentFragment extends DialogFragment {
     private class PostTweetTask extends AsyncTask<String, Void, Boolean> {
         @Override
         protected Boolean doInBackground(String... params) {
-            String userId = params[0];
-            String content = params[1];
-            String tweetId = params[2];
+            String content = params[0];
+            String userId = params[1];
             HttpURLConnection conn = null;
 
             try {
@@ -243,40 +186,35 @@ public class CommentFragment extends DialogFragment {
                 JSONObject jsonBody = new JSONObject();
                 jsonBody.put("content", content);
                 jsonBody.put("user_id", userId);
-                jsonBody.put("reply_to_tweet_id", tweetId);
-
                 if (!base64Image.isEmpty()) {
                     jsonBody.put("media_url", base64Image);
                 }
                 String jsonString = jsonBody.toString();
                 Log.d(TAG, "Request JSON body: " + jsonString);
 
+                // Write to output stream
                 try (OutputStream os = conn.getOutputStream()) {
                     byte[] input = jsonString.getBytes(StandardCharsets.UTF_8);
                     os.write(input, 0, input.length);
                 }
 
                 int responseCode = conn.getResponseCode();
+                Log.d(TAG, "Response code: " + responseCode);
 
                 if (responseCode == HttpURLConnection.HTTP_CREATED) {
-
-                    GlobalWebSocketManager.getInstance().sendNotification(
-
-                            new NotificationModel(
-                                    args.getString("user_id"),
-                                    UserFunction.getUserId(requireContext()),
-                                    UserManager.getCurrentUsername(),
-                                    tweetId,
-                                    "comment",
-                                    "commented on your tweet"
-                            )
-                    );
                     // Read and log the successful response
-                    CommentManager.getInstance().notifyCommentUpdate(tweet_id);
-                    Log.d(TAG, "Success response: responseCode = " + responseCode);
+                    InputStream is = conn.getInputStream();
+                    String responseJson = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))
+                            .lines().collect(Collectors.joining("\n"));
+                    Log.d(TAG, "Success response: " + responseJson);
                     return true;
                 } else {
-                    Log.e(TAG, "Response message: ");
+                    // Read and log the error response
+                    InputStream es = conn.getErrorStream();
+                    String errorResponse = new BufferedReader(new InputStreamReader(es, StandardCharsets.UTF_8))
+                            .lines().collect(Collectors.joining("\n"));
+                    Log.e(TAG, "Error response: " + errorResponse);
+                    Log.e(TAG, "Response message: " + conn.getResponseMessage());
                     return false;
                 }
 
@@ -290,19 +228,18 @@ public class CommentFragment extends DialogFragment {
             }
         }
 
-
         @Override
         protected void onPostExecute(Boolean success) {
             postButton.setEnabled(true);
 
             if (success) {
-                Log.d(TAG, "Comment posted successfully");
-                Toast.makeText(getContext(), "Comment posted successfully", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Tweet posted successfully");
+                Toast.makeText(getContext(), "Tweet posted successfully", Toast.LENGTH_SHORT).show();
                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                 fragmentManager.popBackStack();
             } else {
-                Log.e(TAG, "Failed to post comment");
-                Toast.makeText(getContext(), "Failed to post comment", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Failed to post tweet");
+                Toast.makeText(getContext(), "Failed to post tweet", Toast.LENGTH_SHORT).show();
             }
         }
     }

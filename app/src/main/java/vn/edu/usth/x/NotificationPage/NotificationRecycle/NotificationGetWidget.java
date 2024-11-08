@@ -1,4 +1,4 @@
-package vn.edu.usth.x.NotificationPage;
+package vn.edu.usth.x.NotificationPage.NotificationRecycle;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
@@ -17,9 +17,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import vn.edu.usth.x.NotificationPage.NotificationRecycle.NotificationModel;
-
-public class NotificationRepository {
+public class NotificationGetWidget {
     private static final String BASE_URL = "https://huyln.info/xclone/api";
     private static final int PAGE_SIZE = 10;
 
