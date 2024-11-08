@@ -1,5 +1,6 @@
 package vn.edu.usth.x.Comment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +13,7 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -44,7 +47,7 @@ import vn.edu.usth.x.Utils.GlobalWebSocketManager;
 import vn.edu.usth.x.Utils.UserFunction;
 import vn.edu.usth.x.Utils.UserManager;
 
-public class CommentFragment extends Fragment {
+public class CommentFragment extends DialogFragment {
     private static final String TAG = "Comment_Tweet";
     private static final int PICK_IMAGE_REQUEST = 1;
 
@@ -56,10 +59,20 @@ public class CommentFragment extends Fragment {
     Bundle args;
     private String base64Image = "";
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_comment, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_comment, container, false);
+
+        // Prevent touches outside the fragment
+//        view.setOnTouchListener((v, event) -> {
+//            if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+//                return true;
+//            }
+//            return false;
+//        });
+
+        return view;
     }
 
     @Override
@@ -276,6 +289,7 @@ public class CommentFragment extends Fragment {
                 }
             }
         }
+
 
         @Override
         protected void onPostExecute(Boolean success) {

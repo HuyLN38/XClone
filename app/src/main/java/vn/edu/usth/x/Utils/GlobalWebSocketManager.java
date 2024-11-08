@@ -3,7 +3,6 @@ package vn.edu.usth.x.Utils;
 import android.content.Context;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.google.gson.Gson;
@@ -89,7 +88,6 @@ public class GlobalWebSocketManager {
                 handleMessage(text);
             }
 
-            @NonNull
             @Override
             public void onClosing(WebSocket webSocket, int code, String reason) {
                 isConnected = false;

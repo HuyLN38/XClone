@@ -47,7 +47,7 @@ public class HomeForYou extends Fragment {
     private TweetAdapterOnline adapter;
     private List<Tweet> tweetList;
     private static final String API_Tweet_URL = "https://huyln.info/xclone/api/tweets/";
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE = 3;
     private int currentPage = 1;
 
     private boolean isLoading = false;
