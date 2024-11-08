@@ -235,7 +235,18 @@ public class ResponseTweet extends Fragment implements CommentManager.CommentUpd
                         viewHolder.replyEditText.setText("");
                         viewHolder.selectedMediaPreview.setVisibility(View.GONE);
                         base64Image = "";
-                        // Refresh the replies
+                        args = getArguments();
+                        GlobalWebSocketManager.getInstance().sendNotification(
+
+                                new NotificationModel(
+                                        args.getString("user_id"),
+                                        UserFunction.getUserId(requireContext()),
+                                        UserManager.getCurrentUsername(),
+                                        args.getString("id"),
+                                        "comment",
+                                        "commented on your tweet"
+                                )
+                        );
                         new FetchRepliesTask().execute(tweet_id);
                         viewHolder.postReplyButton.setEnabled(true);
                     },
