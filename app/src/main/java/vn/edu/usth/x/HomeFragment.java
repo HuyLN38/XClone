@@ -1,14 +1,11 @@
 package vn.edu.usth.x;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -24,15 +21,14 @@ import androidx.fragment.app.FragmentTransaction;
 import vn.edu.usth.x.CommunityPage.CommunityFragment;
 import vn.edu.usth.x.HomePage.HomeMenuFragment;
 import vn.edu.usth.x.InboxPage.InboxFragment;
+import vn.edu.usth.x.NotificationPage.NotificationAll;
 import vn.edu.usth.x.Utils.AvatarManager;
-import vn.edu.usth.x.NotificationPage.NotificationFragment;
 import vn.edu.usth.x.SearchPage.SearchFragment;
 import vn.edu.usth.x.Topbar.CommunityTopBarFragment;
 import vn.edu.usth.x.Topbar.HomeTopBarFragment;
 import vn.edu.usth.x.Topbar.InboxTopBar;
 import vn.edu.usth.x.Topbar.NotificationTopBarFragment;
 import vn.edu.usth.x.Topbar.SearchTopBarFragment;
-import vn.edu.usth.x.Utils.GlobalWebSocketManager;
 import vn.edu.usth.x.Utils.UserFunction;
 import vn.edu.usth.x.databinding.ActivityHomeBinding;
 
@@ -86,7 +82,7 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
 
         homeFragment = new HomeMenuFragment();
         searchFragment = new SearchFragment();
-        notificationFragment = new NotificationFragment();
+        notificationFragment = new NotificationAll();
         inboxFragment = new InboxFragment();
         communityFragment = new CommunityFragment();
 

@@ -52,13 +52,16 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicReference;
 
+import vn.edu.usth.x.NotificationPage.NotificationRecycle.NotificationModel;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Tweet.Tweet;
 import vn.edu.usth.x.Tweet.TweetAdapterOnline;
 import vn.edu.usth.x.Utils.AvatarManager;
 import vn.edu.usth.x.Utils.CommentManager;
+import vn.edu.usth.x.Utils.GlobalWebSocketManager;
 import vn.edu.usth.x.Utils.LikeEventManager;
 import vn.edu.usth.x.Utils.UserFunction;
+import vn.edu.usth.x.Utils.UserManager;
 
 public class ResponseTweet extends Fragment implements CommentManager.CommentUpdateListener {
     private static final String TAG = "ResponseTweet";
@@ -70,6 +73,7 @@ public class ResponseTweet extends Fragment implements CommentManager.CommentUpd
     private RequestQueue requestQueue;
     private static final int PICK_IMAGE_REQUEST = 1;
     private String base64Image = "";
+    Bundle args;
     private boolean isLiked = false;
     private int likeCount = 0;
     private int commentCount = 0;
@@ -338,6 +342,7 @@ public class ResponseTweet extends Fragment implements CommentManager.CommentUpd
 
                         Tweet reply = new Tweet(
                                 replyJson.getString("id"),
+                                replyJson.getString("user_id"),
                                 avatarBitmap,
                                 replyJson.getString("display_name"),
                                 replyJson.getString("username"),
@@ -478,6 +483,18 @@ public class ResponseTweet extends Fragment implements CommentManager.CommentUpd
         viewHolder.likeCountView.setTextColor(ContextCompat.getColor(requireContext(), R.color.heart));
         anim.start();
         updateLikeCount();
+        args = getArguments();
+        GlobalWebSocketManager.getInstance().sendNotification(
+
+                new NotificationModel(
+                        args.getString("user_id"),
+                        UserFunction.getUserId(this.requireContext()),
+                        UserManager.getCurrentUsername(),
+                        args.getString("id"),
+                        "like",
+                        "liked your tweet"
+                )
+        );
     }
 
     private void updateLikeCount() {

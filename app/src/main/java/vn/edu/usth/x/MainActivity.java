@@ -6,17 +6,25 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
 import vn.edu.usth.x.Login.LoginPage;
 import vn.edu.usth.x.Utils.GlobalWebSocketManager;
+import vn.edu.usth.x.Utils.UserManager;
 
 public class MainActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "UserPrefs";
     private static final String USER_ID_KEY = "userId";
+    private RequestQueue requestQueue;
 
     private static final long SPLASH_DELAY = 1000; // 1 second
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -25,12 +33,41 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestQueue = Volley.newRequestQueue(this);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         setupSystemUI();
         scheduleNavigation();
+        setupUser();
         initializeWebSocket();
 
+    }
+
+    private void setupUser() {
+        SharedPreferences sharedPreferences = getApplicationContext()
+                .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String userId = sharedPreferences.getString(USER_ID_KEY, null);
+        if (userId != null) {
+            fetchAndSetDisplayName(userId);
+        }
+    }
+
+    private void fetchAndSetDisplayName(String userId) {
+        String url = "https://huyln.info/xclone/api/users/" + userId;
+        Log.e("URL", url);
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        String username = response.getString("display_name");
+                        UserManager.getInstance(this).setCurrentUsername(username);
+                        Log.e("username", username);
+                    } catch (Exception e) {
+                        Log.e("TAG", "Error loading user data", e);
+                    }
+                },
+                error -> Log.e("TAG", "Error loading user data", error));
+
+        requestQueue.add(jsonRequest);
     }
 
     private void initializeWebSocket() {

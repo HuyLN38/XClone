@@ -47,7 +47,6 @@ public class HomeForYou extends Fragment {
     private TweetAdapterOnline adapter;
     private List<Tweet> tweetList;
     private static final String API_Tweet_URL = "https://huyln.info/xclone/api/tweets/";
-    private static final String API_Like_URL = "https://huyln.info/xclone/api/like/";
     private static final int PAGE_SIZE = 5;
     private int currentPage = 1;
 
@@ -92,7 +91,7 @@ public class HomeForYou extends Fragment {
             public boolean canScrollVertically() { // Allow vertical scrolling
                 return true;
             }
-        };
+            };
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setNestedScrollingEnabled(true);
 
@@ -140,11 +139,9 @@ public class HomeForYou extends Fragment {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                     StringBuilder response = new StringBuilder();
                     String line;
-
                     while ((line = reader.readLine()) != null) {
                         response.append(line);
                     }
-
                     JSONObject jsonArray = new JSONObject(response.toString());
                     JSONArray itemsArray = jsonArray.getJSONArray("items");
                     for (int i = 0; i < itemsArray.length(); i++) {
@@ -185,6 +182,7 @@ public class HomeForYou extends Fragment {
 
                         Tweet tweet = new Tweet(
                                 tweetId,
+                                tweetJson.getString("user_id"),
                                 avatarBitmap,
                                 tweetJson.getString("display_name"),
                                 tweetJson.getString("username"),

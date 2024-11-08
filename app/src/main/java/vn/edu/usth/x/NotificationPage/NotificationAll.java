@@ -1,117 +1,198 @@
 package vn.edu.usth.x.NotificationPage;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-
 import vn.edu.usth.x.NotificationPage.NotificationRecycle.NotificationModel;
 import vn.edu.usth.x.NotificationPage.NotificationRecycle.NotificationRecycleAdapter;
 import vn.edu.usth.x.R;
+import vn.edu.usth.x.Utils.GlobalWebSocketManager;
+import vn.edu.usth.x.Utils.UserFunction;
 
 public class NotificationAll extends Fragment {
-
     private RecyclerView recyclerView;
+    private TextView emptyText;
     private NotificationRecycleAdapter adapter;
-    private ArrayList<NotificationModel> notificationList = new ArrayList<>();
-    private static final String API_URL = "https://huyln.info/xclone/api/notifications"; // URL API thực tế của bạn
+    private NotificationRepository repository;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private ProgressBar loadingMore;
+    private final ArrayList<NotificationModel> notificationList = new ArrayList<>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notification_all, container, false);
 
-        // Initialize RecyclerView
-        recyclerView = view.findViewById(R.id.recyclerViewNofiAll);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        // Initialize Adapter
-        adapter = new NotificationRecycleAdapter(notificationList);
-        recyclerView.setAdapter(adapter);
-
-        // Load notifications from API
-        loadNotifications();
+        initializeViews(view);
+        setupRecyclerView();
+        setupRepository();
+        setupWebSocket();
+        loadNotifications(true);
 
         return view;
     }
 
-    private void loadNotifications() {
-        // AsyncTask to load notifications from API
-        new LoadNotificationsTask().execute(API_URL);
+    private void initializeViews(View view) {
+        recyclerView = view.findViewById(R.id.recyclerViewNofiAll);
+        emptyText = view.findViewById(R.id.empty);
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefresh);
+        loadingMore = view.findViewById(R.id.loadingMore);
+
+        swipeRefreshLayout.setOnRefreshListener(() -> loadNotifications(true));
     }
 
-    private class LoadNotificationsTask extends AsyncTask<String, Void, List<NotificationModel>> {
+    private void setupRecyclerView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+
+        adapter = new NotificationRecycleAdapter(notificationList);
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                View child = rv.findChildViewUnder(e.getX(), e.getY());
+                if (child != null && e.getAction() == MotionEvent.ACTION_UP) {
+                    int position = rv.getChildAdapterPosition(child);
+                    if (position != RecyclerView.NO_POSITION) {
+                        handleNotificationClick(notificationList.get(position));
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
+        // Add pagination scroll listener
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    int visibleItemCount = layoutManager.getChildCount();
+                    int totalItemCount = layoutManager.getItemCount();
+                    int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                            && firstVisibleItemPosition >= 0) {
+                        loadNotifications(false);
+                    }
+                }
+            }
+        });
+    }
+
+
+
+    private void handleNotificationClick(NotificationModel notification) {
+        notification.setIs_read(true);
+        new GetRequestTask().execute("https://huyln.info/xclone/api/notification/" + notification.getId());
+
+        adapter.notifyItemChanged(notificationList.indexOf(notification));
+
+        switch (notification.getType().toUpperCase()) {
+            case "like":
+            case "RETWEET":
+            case "REPLY":
+                if (notification.getTweet_id() != null) {
+
+                }
+                break;
+            case "FOLLOW":
+                if (notification.getNotifier_id() != null) {
+                    // Navigate to profile
+                    // TODO: Implement navigation to user profile
+                }
+                break;
+        }
+    }
+
+    private class GetRequestTask extends AsyncTask<String, Void, Void> {
         @Override
-        protected List<NotificationModel> doInBackground(String... urls) {
-            List<NotificationModel> notifications = new ArrayList<>();
+        protected Void doInBackground(String... urls) {
+            HttpURLConnection connection = null;
             try {
                 URL url = new URL(urls[0]);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-                int responseCode = conn.getResponseCode();
-
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    StringBuilder response = new StringBuilder();
-                    String line;
-
-                    while ((line = in.readLine()) != null) {
-                        response.append(line);
-                    }
-                    in.close();
-
-                    // Parse JSON response
-                    JSONArray jsonArray = new JSONArray(response.toString());
-
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        int avatar = R.drawable.fukada; // Placeholder avatar
-                        String username = jsonObject.getString("username");
-                        String message = jsonObject.getString("message");
-
-                        NotificationModel notification = new NotificationModel(avatar, username, message);
-                        notifications.add(notification);
-                    }
-                } else {
-                    Log.e("NotificationAll", "Error: " + responseCode);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.getResponseCode();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
                 }
-                conn.disconnect();
-            } catch (Exception e) {
-                Log.e("NotificationAll", "Exception: " + e.getMessage(), e);
             }
-            return notifications;
+            return null;
         }
+    }
 
-        @Override
-        protected void onPostExecute(List<NotificationModel> notifications) {
-            if (notifications.isEmpty()) {
-                Toast.makeText(getContext(), "No notifications available", Toast.LENGTH_SHORT).show();
-            } else {
-                notificationList.clear();
-                notificationList.addAll(notifications);
-                adapter.notifyDataSetChanged();
+    private void setupRepository() {
+        repository = new NotificationRepository();
+
+        repository.getLoadingState().observe(getViewLifecycleOwner(), state -> {
+            switch (state) {
+                case LOADING:
+                    loadingMore.setVisibility(View.VISIBLE);
+                    break;
+                case SUCCESS:
+                    loadingMore.setVisibility(View.GONE);
+                    swipeRefreshLayout.setRefreshing(false);
+                    break;
+                case ERROR:
+                    loadingMore.setVisibility(View.GONE);
+                    swipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getContext(), "Error loading notifications",
+                            Toast.LENGTH_SHORT).show();
+                    break;
             }
+        });
+
+        repository.getNotifications().observe(getViewLifecycleOwner(), notifications -> {
+            notificationList.clear();
+            notificationList.addAll(notifications);
+            adapter.notifyDataSetChanged();
+            updateEmptyState();
+        });
+    }
+
+    private void setupWebSocket() {
+        GlobalWebSocketManager.getInstance().getNewNotificationLiveData()
+                .observe(getViewLifecycleOwner(), notification -> {
+                    if (notification != null) {
+                        notificationList.add(0, notification);
+                        adapter.notifyItemInserted(0);
+                        recyclerView.scrollToPosition(0);
+                        updateEmptyState();
+                    }
+                });
+    }
+
+    private void loadNotifications(boolean refresh) {
+        String userId = UserFunction.getUserId(requireContext());
+        if (userId != null) {
+            repository.loadNotifications(userId, refresh);
         }
+    }
+
+    private void updateEmptyState() {
+        emptyText.setVisibility(notificationList.isEmpty() ? View.VISIBLE : View.GONE);
     }
 }

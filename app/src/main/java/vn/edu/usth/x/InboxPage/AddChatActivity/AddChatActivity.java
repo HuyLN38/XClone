@@ -31,7 +31,7 @@ import vn.edu.usth.x.Utils.UserFunction;
 public class AddChatActivity extends AppCompatActivity implements UserListAdapter.OnUserClickListener {
     private static final String TAG = "AddChatActivity";
     private static final String BASE_URL = "https://huyln.info/xclone/api";
-    private static final int PAGE_SIZE = 3;
+    private static final int PAGE_SIZE = 10;
     private static final int SEARCH_DELAY = 500; // milliseconds
 
     private RecyclerView userRecyclerView;

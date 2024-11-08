@@ -16,6 +16,7 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import vn.edu.usth.x.InboxPage.Chat;
 import vn.edu.usth.x.InboxPage.Message;
+import vn.edu.usth.x.NotificationPage.NotificationRecycle.NotificationModel;
 
 public class GlobalWebSocketManager {
     private static final String WEBSOCKET_URL = "wss://huyln.info/socket/ws/chat?userId=";
@@ -24,14 +25,23 @@ public class GlobalWebSocketManager {
     private WebSocket webSocket;
     private final Gson gson;
     private boolean isConnected = false;
-    private final UserFunction userFunction;
 
     // LiveData for broadcasting events
     private final MutableLiveData<Message> newMessageLiveData = new MutableLiveData<>();
     private final MutableLiveData<Chat> newChatLiveData = new MutableLiveData<>();
     private final MutableLiveData<MessageStatus> messageStatusLiveData = new MutableLiveData<>();
+    private final MutableLiveData<NotificationModel> newNotificationLiveData = new MutableLiveData<>();
+    private final MutableLiveData<NotificationStatus> notificationStatusLiveData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> connectionStateLiveData = new MutableLiveData<>();
 
+
+    public static class NotificationStatus {
+        public String id;
+
+        public NotificationStatus(String notificationId) {
+            this.id = notificationId;
+        }
+    }
     public static class MessageStatus {
         public String messageId;
 
@@ -42,7 +52,6 @@ public class GlobalWebSocketManager {
 
     private GlobalWebSocketManager() {
         this.gson = new Gson();
-        this.userFunction = new UserFunction();
         this.client = new OkHttpClient.Builder()
                 .readTimeout(0, TimeUnit.MILLISECONDS)
                 .build();
@@ -112,9 +121,18 @@ public class GlobalWebSocketManager {
                     );
                     newChatLiveData.postValue(chat);
                     break;
+                case "ping":{
+                    webSocket.send("pong");
+                    Log.d("WEBSOCKET", "Pong sent in response to ping");
+                }
                 case "status":
                     String messageId = json.get("id").getAsString();
                     messageStatusLiveData.postValue(new MessageStatus(messageId));
+                    break;
+                case "new_notifications":
+                    NotificationModel notification = gson.fromJson(json.get("message"), NotificationModel.class);
+                    newNotificationLiveData.postValue(notification);
+//                    notificationStatusLiveData.postValue(new NotificationStatus(notifications));
                     break;
             }
         } catch (Exception e) {
@@ -131,9 +149,19 @@ public class GlobalWebSocketManager {
         webSocket.send(json.toString());
     }
 
+    public void sendNotification(NotificationModel notification) {
+        if (!isConnected) return;
+
+        JsonObject json = new JsonObject();
+        json.addProperty("type", "notifications");
+        json.add("data", gson.toJsonTree(notification));
+        webSocket.send(json.toString());
+        Log.d("GlobalWebSocketManager", json.toString());
+    }
+
     private void reconnect(Context context) {
         new android.os.Handler(android.os.Looper.getMainLooper())
-                .postDelayed(() -> connect(context), 5000);
+                .postDelayed(() -> connect(context), 1000);
     }
 
     public void disconnect() {
@@ -150,5 +178,9 @@ public class GlobalWebSocketManager {
 
     public LiveData<MessageStatus> getMessageStatusLiveData() {
         return messageStatusLiveData;
+    }
+
+    public LiveData<NotificationModel> getNewNotificationLiveData() {
+        return newNotificationLiveData;
     }
 }

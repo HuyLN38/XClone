@@ -1,38 +1,9 @@
 package vn.edu.usth.x.NotificationPage.NotificationRecycle;
 
 public class NotificationModel{
-    private String id;
-    private String userId;
-    private String tweetId;
-    private String type;
-    private String message;
-    private String username;
-    private String tweetText;
-    private int avatar;
 
-    public NotificationModel(String id, String tweetId, String userId, String type, String message, String username, String tweetText, int avatar) {
-        this.id = id;
-        this.tweetId = tweetId;
-        this.userId = userId;
-        this.type = type;
-        this.message = message;
-        this.username = username;
-        this.tweetText = tweetText;
-        this.avatar = avatar;
-    }
-
-    public NotificationModel(int avatar, String username, String message) {
-        this.avatar = avatar;
-        this.username = username;
-        this.message = message;
-    }
-
-    public NotificationModel(String id, String userId, String tweetId, String type, String message) {
-        this.id = id;
-        this.userId = userId;
-        this.tweetId = tweetId;
-        this.type = type;
-        this.message = message;
+    public String getUser_id() {
+        return user_id;
     }
 
     public String getId() {
@@ -43,20 +14,32 @@ public class NotificationModel{
         this.id = id;
     }
 
-    public String getUserId() {
-        return userId;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public String getNotifier_id() {
+        return notifier_id;
     }
 
-    public String getTweetId() {
-        return tweetId;
+    public void setNotifier_id(String notifier_id) {
+        this.notifier_id = notifier_id;
     }
 
-    public void setTweetId(String tweetId) {
-        this.tweetId = tweetId;
+    public String getNotifier_username() {
+        return notifier_username;
+    }
+
+    public void setNotifier_username(String notifier_username) {
+        this.notifier_username = notifier_username;
+    }
+
+    public String getTweet_id() {
+        return tweet_id;
+    }
+
+    public void setTweet_id(String tweet_id) {
+        this.tweet_id = tweet_id;
     }
 
     public String getType() {
@@ -67,35 +50,51 @@ public class NotificationModel{
         this.type = type;
     }
 
-    public String getMessage() {
-        return message;
+    public boolean isIs_read() {
+        return is_read;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setIs_read(boolean is_read) {
+        this.is_read = is_read;
     }
 
-    public String getUsername() {
-        return username;
+    public String getContent() {
+        return content;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public String getTweetText() {
-        return tweetText;
+    private String id;
+    private String user_id;
+    private String notifier_id;
+    private String notifier_username;
+    private String tweet_id;
+    private String type;
+    private boolean is_read;
+    private String content;
+
+
+    public NotificationModel(String id, String userId, String notifierId, String notifier_username, String tweetId, String type, String content) {
+        this.id = id;
+        this.user_id = userId;
+        this.notifier_id = notifierId;
+        this.notifier_username = notifier_username;
+        this.tweet_id = tweetId;
+        this.type = type;
+        this.content = content;
+        this.is_read = false;
     }
 
-    public void setTweetText(String tweetText) {
-        this.tweetText = tweetText;
+    public NotificationModel( String userId, String notifierId, String notifier_username, String tweetId, String type, String content) {
+        this.user_id = userId;
+        this.notifier_id = notifierId;
+        this.notifier_username = notifier_username;
+        this.tweet_id = tweetId;
+        this.type = type;
+        this.content = content;
+        this.is_read = false;
     }
 
-    public int getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(int avatar) {
-        this.avatar = avatar;
-    }
 }

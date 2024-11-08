@@ -8,6 +8,7 @@ public class Tweet {
 
     private String tweet_id;
     private int avatar;
+    private String user_id;
     private AtomicReference<Bitmap> avatar_bit;
     private String username;
     private String tweetlink;
@@ -22,8 +23,9 @@ public class Tweet {
     private int seenCount;
 
     //Constructor online mode
-    public Tweet(String tweet_id, AtomicReference<Bitmap> avatar_bit, String username, String tweetlink, String tweetText, String time, Bitmap image_bit, int likeCount, boolean isLike, int commentCount, int reTweetCount, int seenCount) {
+    public Tweet(String tweet_id, String userID, AtomicReference<Bitmap> avatar_bit, String username, String tweetlink, String tweetText, String time, Bitmap image_bit, int likeCount, boolean isLike, int commentCount, int reTweetCount, int seenCount) {
         this.tweet_id = tweet_id;
+        this.user_id = userID;
         this.avatar_bit = avatar_bit;
         this.username = username;
         this.tweetlink = "@"+ tweetlink;
@@ -35,6 +37,14 @@ public class Tweet {
         this.commentCount = commentCount;
         this.reTweetCount = reTweetCount;
         this.seenCount = seenCount;
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
     public int getLikeCount() {

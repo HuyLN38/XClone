@@ -3,6 +3,7 @@ package vn.edu.usth.x.Tweet;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,11 +33,14 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import vn.edu.usth.x.Blog.ResponseTweet;
-import vn.edu.usth.x.Blog.CommentFragment;
+import vn.edu.usth.x.Comment.CommentFragment;
+import vn.edu.usth.x.NotificationPage.NotificationRecycle.NotificationModel;
 import vn.edu.usth.x.R;
 import vn.edu.usth.x.Utils.CommentManager;
+import vn.edu.usth.x.Utils.GlobalWebSocketManager;
 import vn.edu.usth.x.Utils.LikeEventManager;
 import vn.edu.usth.x.Utils.UserFunction;
+import vn.edu.usth.x.Utils.UserManager;
 
 public class TweetAdapterOnline extends RecyclerView.Adapter<TweetAdapterOnline.TweetViewHolder>
         implements LikeEventManager.LikeUpdateListener, CommentManager.CommentUpdateListener {
@@ -243,6 +247,16 @@ public class TweetAdapterOnline extends RecyclerView.Adapter<TweetAdapterOnline.
             tweet.setLiked(true);
             likeCountView.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.heart));
             anim.start();
+            GlobalWebSocketManager.getInstance().sendNotification(
+                    new NotificationModel(
+                    tweet.getUser_id(),
+                    UserFunction.getUserId(itemView.getContext()),
+                    UserManager.getCurrentUsername(),
+                    tweet.getTweet_id(),
+                    "like",
+                    "liked your tweet"
+                    )
+            );
             updateLikeCount(tweet);
         }
 
@@ -330,15 +344,20 @@ public class TweetAdapterOnline extends RecyclerView.Adapter<TweetAdapterOnline.
         private void showResponseTweet(FragmentActivity activity, Tweet tweet) {
             FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
             transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left);
+
+            // Pop back stack to HomeFragment
+            activity.getSupportFragmentManager().popBackStack("HomeFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
             ResponseTweet responseTweet = ResponseTweet.newInstance(createTweetBundle(tweet));
             transaction.replace(R.id.drawer_layout, responseTweet)
-                    .addToBackStack(null)
+                    .addToBackStack("HomeFragment")
                     .commit();
         }
 
         private Bundle createTweetBundle(Tweet tweet) {
             Bundle bundle = new Bundle();
             bundle.putString("id", tweet.getTweet_id());
+            bundle.putString("user_id", tweet.getUser_id());
             bundle.putString("username", tweet.getUsername());
             bundle.putString("tweetLink", tweet.getTweetlink());
             bundle.putString("tweetText", tweet.getTweetText());

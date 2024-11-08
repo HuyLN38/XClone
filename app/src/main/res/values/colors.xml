@@ -14,6 +14,8 @@
     <color name="light_blue">#1591ea</color>
     <color name="dark_blue">#0f4c75</color>
     <color name="gray_btn">#424649</color>
+    <color name="background_read">#00000000</color>
+    <color name="background_unread">#2A2A2A</color>
     <color name="gray_bar">#bfbaba</color>
     <color name="hint_text">#7d8184</color>
     <color name="red">#FF0000</color>
