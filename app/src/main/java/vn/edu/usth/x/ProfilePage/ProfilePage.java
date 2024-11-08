@@ -157,17 +157,16 @@ public class ProfilePage extends AppCompatActivity {
         TextView joinDateView = findViewById(R.id.join_date);
         TextView followingCountView = findViewById(R.id.following_count);
         TextView followerCountView = findViewById(R.id.follower_count);
-        ImageView Tick = findViewById(R.id.verified);
+        ImageView Tick = findViewById(R.id.verified_tick);
 
         // Set data from API response
         // This is placeholder data
-        UserManager userManager = UserManager.getInstance(this);
-        usernameView.setText("@" + userManager.getDisplayName());
-        displayNameView.setText(userManager.getCurrentUsername());
+        usernameView.setText("@" + UserManager.getDisplayName());
+        displayNameView.setText( UserManager.getCurrentUsername());
         joinDateView.setText("Joined Sep 2024");
-        followingCountView.setText(userManager.getFollowing() + " Following");
-        followerCountView.setText(userManager.getFollowers() + " Followers");
-        Tick.setVisibility(userManager.isIsVerified() ? View.VISIBLE : View.GONE);
+        followingCountView.setText( UserManager.getFollowing() + " Following");
+        followerCountView.setText( UserManager.getFollowers() + " Followers");
+        Tick.setVisibility( UserManager.isIsVerified() ? View.VISIBLE : View.GONE);
 
     }
 
