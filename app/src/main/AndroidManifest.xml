@@ -36,6 +36,10 @@
             android:exported="false"
             android:label="LoginPage"
             android:theme="@style/Theme.X" />
+        <activity android:name=".ProfilePage.ProfilePage"
+            android:exported="false"
+            android:label="ProfilePage"
+            android:theme="@style/Theme.X" />
         <activity
             android:name=".Login.RegisterPage2"
             android:exported="false"

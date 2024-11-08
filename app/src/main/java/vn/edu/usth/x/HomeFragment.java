@@ -1,15 +1,17 @@
 package vn.edu.usth.x;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,10 +20,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import org.w3c.dom.Text;
+
 import vn.edu.usth.x.CommunityPage.CommunityFragment;
 import vn.edu.usth.x.HomePage.HomeMenuFragment;
 import vn.edu.usth.x.InboxPage.InboxFragment;
+import vn.edu.usth.x.Login.Data.User;
 import vn.edu.usth.x.NotificationPage.NotificationAll;
+import vn.edu.usth.x.ProfilePage.ProfilePage;
 import vn.edu.usth.x.Utils.AvatarManager;
 import vn.edu.usth.x.SearchPage.SearchFragment;
 import vn.edu.usth.x.Topbar.CommunityTopBarFragment;
@@ -30,6 +36,7 @@ import vn.edu.usth.x.Topbar.InboxTopBar;
 import vn.edu.usth.x.Topbar.NotificationTopBarFragment;
 import vn.edu.usth.x.Topbar.SearchTopBarFragment;
 import vn.edu.usth.x.Utils.UserFunction;
+import vn.edu.usth.x.Utils.UserManager;
 import vn.edu.usth.x.databinding.ActivityHomeBinding;
 
 public class HomeFragment extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -45,6 +52,7 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
     private static final String CURRENT_FRAGMENT_TAG = "current_fragment_tag";
     private String currentFragmentTag;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,24 +67,52 @@ public class HomeFragment extends AppCompatActivity implements NavigationView.On
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         NavigationView navigationView = findViewById(R.id.sidebar_view);
         View headerView = navigationView.getHeaderView(0);
-        ImageView avatar = headerView.findViewById(R.id.avatar);
+        // Find the avatar ImageView in the header
+        TextView displayNameTextView = headerView.findViewById(R.id.name_side_bar);
+        displayNameTextView.setText(UserManager.getCurrentUsername());
 
+        TextView usernameTextView = headerView.findViewById(R.id.username_side_bar);
+        usernameTextView.setText("@"+ UserManager.getDisplayName());
 
+        TextView followingTextView = headerView.findViewById(R.id.following);
+        followingTextView.setText(String.valueOf(UserManager.getFollowing()));
+
+        TextView followersTextView = headerView.findViewById(R.id.followers);
+        followersTextView.setText(String.valueOf(UserManager.getFollowers()));
+
+        CircleImageView avatarImageView = headerView.findViewById(R.id.avatar_side_bar);
+        avatarImageView.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ProfilePage.class);
+            startActivity(intent);
+        });
+
+        NavigationView.OnNavigationItemSelectedListener listener = item -> {
+            int id = item.getItemId();
+            if (id == R.id.side_profile) {
+                Intent intent = new Intent(this, ProfilePage.class);
+                startActivity(intent);
+            }
+            return true;
+        };
+
+        navigationView.setNavigationItemSelectedListener(listener);
 
             AvatarManager.getInstance(this)
                     .getAvatar(UserFunction.getUserId(this))
                     .thenAccept(bitmap -> {
                         if (bitmap != null) {Glide.with(this)
                                 .load(bitmap)
-                                .into(avatar);
+                                .into(avatarImageView);
                         } else {
                             Glide.with(this)
                                     .load(R.drawable.avatar3)
-                                    .into(avatar);
+                                    .into(avatarImageView);
                         }
                     });
 
         drawerLayout = findViewById(R.id.drawer_layout);
+
+
 
         // Initialize fragments
 

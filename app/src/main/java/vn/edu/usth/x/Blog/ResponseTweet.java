@@ -49,6 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -421,8 +422,13 @@ public class ResponseTweet extends Fragment implements CommentManager.CommentUpd
     }
 
     private void setupButtons() {
+        args = getArguments();
         ImageView turnBackButton = rootView.findViewById(R.id.reponse_turn_back);
         turnBackButton.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
+        Button follow_button = rootView.findViewById(R.id.follow_button);
+        if (Objects.equals(args.getString("user_id"), UserManager.getCurrentID())) {
+            follow_button.setVisibility(View.GONE);
+        }
 
         viewHolder.followButton.setOnClickListener(v -> {
             boolean isFollowing = viewHolder.followButton.getText().toString().equals("Following");

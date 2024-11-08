@@ -58,9 +58,12 @@ public class MainActivity extends AppCompatActivity {
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
-                        String username = response.getString("display_name");
-                        UserManager.getInstance(this).setCurrentUsername(username);
-                        Log.e("username", username);
+                        UserManager.setCurrentID(response.getString("id"));
+                        UserManager.setCurrentUsername(response.getString("display_name"));
+                        UserManager.setDisplayName(response.getString("username"));
+                        UserManager.setIsVerified(response.getBoolean("is_verified"));
+                        UserManager.setFollowing(response.getInt("following_count"));
+                        UserManager.setFollowers(response.getInt("followed_count"));
                     } catch (Exception e) {
                         Log.e("TAG", "Error loading user data", e);
                     }
