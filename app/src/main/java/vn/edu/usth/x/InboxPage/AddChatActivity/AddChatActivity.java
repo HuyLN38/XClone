@@ -169,8 +169,8 @@ public class AddChatActivity extends AppCompatActivity implements UserListAdapte
                                         userId,
                                         user.getString("display_name"),
                                         user.optBoolean("is_verified"),
-                                        user.optInt("following"),
-                                        user.optInt("followers")
+                                        user.optInt("following_count"),
+                                        user.optInt("followed_count")
                                 ));
                             }
                         }
