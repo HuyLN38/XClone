@@ -1,6 +1,9 @@
 package vn.edu.usth.x.InboxPage.AddChatActivity;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import vn.edu.usth.x.ProfilePage.ProfilePage;
 import vn.edu.usth.x.Utils.AvatarManager;
 import vn.edu.usth.x.R;
 
@@ -42,12 +46,12 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserVi
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         UserItem user = userList.get(position);
         holder.displayName.setText(user.getDisplayName());
-        holder.username.setText("@" + user.getUsername());
+        holder.username.setText("@" + user.getCurrentUsername());
         Context context = holder.itemView.getContext();
 
         AtomicReference<Bitmap> bitmapRef = new AtomicReference<>();
         AvatarManager.getInstance(context)
-                .getAvatar(user.getId())
+                .getAvatar(user.getCurrentID())
                 .thenAccept(bitmap -> {
                     if (bitmap != null) {
                         bitmapRef.set(bitmap);
@@ -56,6 +60,18 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserVi
                 });
 
         holder.itemView.setOnClickListener(v -> listener.onUserClick(user));
+
+        CircleImageView avatarImageView = holder.avatar;
+        avatarImageView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ProfilePage.class);
+            intent = intent.putExtra("userId", user.getCurrentID());
+            intent = intent.putExtra("displayName", user.getDisplayName());
+            intent = intent.putExtra("username", user.getCurrentUsername());
+            intent = intent.putExtra("isVerified", user.isVerified());
+            intent = intent.putExtra("following", user.getFollowing());
+            intent = intent.putExtra("followers", user.getFollowers());
+            context.startActivity(intent);
+        });
     }
 
     @Override

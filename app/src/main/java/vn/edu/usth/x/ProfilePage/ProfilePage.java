@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -70,7 +71,11 @@ public class ProfilePage extends AppCompatActivity {
         setupRecyclerView();
 
         // Load user data and tweets
-        userId = UserFunction.getUserId(this);
+        if (getIntent().getStringExtra("userId") != null) {
+            userId = getIntent().getStringExtra("userId");
+        } else {
+            userId = UserFunction.getUserId(this);
+        }
         loadUserProfile();
         fetchTweets(currentPage);
 
@@ -161,12 +166,21 @@ public class ProfilePage extends AppCompatActivity {
 
         // Set data from API response
         // This is placeholder data
-        usernameView.setText("@" + UserManager.getDisplayName());
-        displayNameView.setText( UserManager.getCurrentUsername());
-        joinDateView.setText("Joined Sep 2024");
-        followingCountView.setText( UserManager.getFollowing() + " Following");
-        followerCountView.setText( UserManager.getFollowers() + " Followers");
-        Tick.setVisibility( UserManager.isIsVerified() ? View.VISIBLE : View.GONE);
+        if (getIntent().getStringExtra("userId") == null) {
+            usernameView.setText("@" + UserManager.getDisplayName());
+            displayNameView.setText(UserManager.getCurrentUsername());
+            joinDateView.setText("Joined Sep 2024");
+            followingCountView.setText(UserManager.getFollowing() + " Following");
+            followerCountView.setText(UserManager.getFollowers() + " Followers");
+            Tick.setVisibility(UserManager.isIsVerified() ? View.VISIBLE : View.GONE);
+        } else {
+            usernameView.setText("@" + getIntent().getStringExtra("username"));
+            displayNameView.setText(getIntent().getStringExtra("displayName"));
+            joinDateView.setText("Joined Sep 2024");
+            followingCountView.setText(getIntent().getIntExtra("following", 0) + " Following");
+            followerCountView.setText(getIntent().getIntExtra("followers", 0) + " Followers");
+            Tick.setVisibility(getIntent().getBooleanExtra("isVerified", false) ? View.VISIBLE : View.GONE);
+        }
 
     }
 
@@ -332,5 +346,20 @@ public class ProfilePage extends AppCompatActivity {
 
     private void fetchMedia() {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Clear the intent
+        super.onBackPressed();
+        getIntent().removeExtra("userId");
+        getIntent().removeExtra("displayName");
+        getIntent().removeExtra("username");
+        getIntent().removeExtra("isVerified");
+        getIntent().removeExtra("following");
+        getIntent().removeExtra("followers");
+
+        // End the activity
+        finish();
     }
 }

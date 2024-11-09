@@ -165,10 +165,12 @@ public class AddChatActivity extends AppCompatActivity implements UserListAdapte
 
                             if (!userId.equals(currentUserId) && !existingChatUserIds.contains(userId)) {
                                 userList.add(new UserItem(
-                                        userId,
                                         user.getString("username"),
+                                        userId,
                                         user.getString("display_name"),
-                                        user.optString("avatar_url")
+                                        user.optBoolean("is_verified"),
+                                        user.optInt("following"),
+                                        user.optInt("followers")
                                 ));
                             }
                         }
@@ -213,7 +215,7 @@ public class AddChatActivity extends AppCompatActivity implements UserListAdapte
     @Override
     public void onUserClick(UserItem user) {
         Intent intent = new Intent(this, MessageActivity.class);
-        intent.putExtra("RECIPIENT_ID", user.getId());
+        intent.putExtra("RECIPIENT_ID", user.getCurrentID());
         intent.putExtra("DISPLAY_NAME", user.getDisplayName());
         intent.putExtra("CURRENT_USER_ID", UserFunction.getUserId(this));
         startActivity(intent);
